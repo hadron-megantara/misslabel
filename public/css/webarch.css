@@ -3886,7 +3886,6 @@ form legend,
   line-height: 0;
 }
 .form-horizontal {
-  display: inline-block;
   margin-right: 10px;
   position: relative;
   top: -4px;

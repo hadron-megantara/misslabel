@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Session;
 use Validator;
 
@@ -47,6 +48,11 @@ class LoginController extends Controller
 
         if($user){
             if(Hash::check($request->password, $user->password)){
+                if($request->has('remember') && $request->remember == "on"){
+                    $user->remember_token = Session::token();
+                    $user->save();
+                }
+
                 $userData = ["email" => $user->email, "name" => $user->name];
                 Session::put('user', $userData);
 
@@ -56,6 +62,13 @@ class LoginController extends Controller
             }
         } else{
             return redirect('login')->with('error', 'Email atau username tidak teerdaftar');
+        }
+    }
+
+    public function authenticate()
+    {
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            return redirect()->intended('/');
         }
     }
 

@@ -29,9 +29,37 @@
 }
 
 .modal{
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 .modal-header .modal-title{
   font-weight: bold;
+}
+
+.modal-body label{
+    font-size: 14px;
+    color: #000000;
+}
+
+table .btn{
+  height: 20px;
+  padding: 0 2px 0 5px;
+}
+
+.form-horizontal .control-label{
+    color: #000000;
+}
+
+.containerAutocomplete {
+    display: block; 
+    position:relative
+}
+
+.ui-autocomplete {
+    position: absolute;
+}
+
+.ui-autocomplete.ui-widget {
+  font-family: Verdana,Arial,sans-serif;
+  font-size: 10px;
 }

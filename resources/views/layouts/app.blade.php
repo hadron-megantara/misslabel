@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Miss Label Indonesia') }}</title>
 
     <!-- Styles -->
     <link rel="shortcut icon" type="image/png" href="/img/icon/icon.png"/>
@@ -38,7 +38,8 @@
 
     <link href="/css/style.css" rel="stylesheet">
 
-    <script src="/js/jquery-1.11.2.min.js"></script>
+    {{-- <script src="/js/jquery-1.11.2.min.js"></script> --}}
+    <script src="/js/jquery-1.12.4.min.js"></script>    
     <script src="/js/app.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
     <script src="/js/jquery.dataTables.min.js"></script>

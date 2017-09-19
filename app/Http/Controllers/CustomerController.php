@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
+use Indonesia;
 use App\Customer;
 
 class CustomerController extends Controller
@@ -20,11 +21,13 @@ class CustomerController extends Controller
             $user = $request->user;
         }
 
-        return view("customer.list", array('user' => $user));
+        $cities = Indonesia::allCities();
+
+        return view("customer.list", array('user' => $user, 'cities' => $cities));
     }
 
     public function getCustomer(){
-        $customers = Customer::select(['name', 'phone', 'store', 'city', 'description', 'id']);
+        $customers = Customer::select(['name', 'phone', 'store', 'city', 'description', 'id'])->orderBy('created_at', 'desc');
      
         return Datatables::of($customers)->make();
     }
@@ -37,7 +40,17 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $customer = new Customer;
+
+        $customer->name = $request->customerName;
+        $customer->phone = $request->customerStore;
+        $customer->store = $request->customerPhone;
+        $customer->city = $request->customerCity;
+        $customer->description = $request->customerDescription;
+
+        $customer->save();
+
+        return redirect('/customer');
     }
 
     /**
@@ -71,7 +84,11 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $customer = Customer::find($request->customerId);
+
+        $flight->name = 'New Flight Name';
+
+        $flight->save();
     }
 
     /**
@@ -80,8 +97,12 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(REQUEST $request)
     {
-        //
+        $customer = Customer::find($request->customerId);
+
+        $customer->delete();
+
+        return redirect('/customer');
     }
 }

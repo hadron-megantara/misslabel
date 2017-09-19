@@ -19,6 +19,8 @@ Route::middleware(['userAuth'])->group(function () {
 
 
 	Route::get('/customer', 'CustomerController@index');
-	Route::get('/customer/getCustomer', 'CustomerController@getCustomer')->name('customer.getCustomer');
-	Route::post('/customer/addCustomer', 'CustomerController@store')->name('customer.addCustomer');
+	Route::get('/customer/get-customer', 'CustomerController@getCustomer')->name('customer.getCustomer');
+	Route::post('/customer/add-customer', 'CustomerController@store')->name('customer.addCustomer');
+	Route::post('/customer/edit-customer', 'CustomerController@update')->name('customer.editCustomer');
+	Route::post('/customer/delete-customer', 'CustomerController@destroy')->name('customer.deleteCustomer');
 });
