@@ -37,9 +37,37 @@ class MaterialController extends Controller
     }
 
     public function getMaterialType(){
-        $materialType = MaterialType::select(['id', 'name'])->orderBy('name', 'asc');
+        $materialType = MaterialType::select(['id', 'name'])->orderBy('updated_at', 'desc');
      
         return Datatables::of($materialType)->make();
+    }
+
+    public function storeMaterialType(Request $request){
+        $materialType = new MaterialType;
+
+        $materialType->name = $request->materialTypeName;
+
+        $materialType->save();
+
+        return redirect('/material-type');
+    }
+
+    public function updateMaterialType(Request $request){
+        $materialType = MaterialType::find($request->materialTypeId);
+        
+        $materialType->name = $request->materialTypeName;
+
+        $materialType->save();
+
+        return redirect('/material-type');
+    }
+
+    public function destroyMaterialType(Request $request){
+        $materialType = MaterialType::find($request->materialTypeId);
+
+        $materialType->delete();
+
+        return redirect('/material-type');
     }
 
     public function convection(Request $request){

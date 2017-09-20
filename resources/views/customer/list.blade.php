@@ -256,7 +256,7 @@
                 { data: 'store', name: 'store' },
                 { data: 'city', name: 'city' },
                 { data: 'description', name: 'description' },
-                { data: 'id', name: 'id', render: function(data, type, full) {
+                { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
                         return '<div class="text-center"><a class="btn btn-primary detailCustomerBtn" id="detail_'+data+'" href="#userModalDetail" data-toggle="modal"id="detail_'+data+'" ><span class="fa  fa-search"></span></a> <a class="btn btn-success editCustomerBtn" id="edit_'+data+'" href="#userModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteCustomerBtn" id="delete_'+data+'" href="#userModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="customerName_'+data+'" value="'+full.name+'" /><input type="hidden" id="customerStore_'+data+'" value="'+full.store+'" /><input type="hidden" id="customerPhone_'+data+'" value="'+full.phone+'" /><input type="hidden" id="customerCity_'+data+'" value="'+full.city+'" /><input type="hidden" id="customerDescription_'+data+'" value="'+full.description+'" />';
                     }
                 }

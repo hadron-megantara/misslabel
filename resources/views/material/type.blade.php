@@ -15,7 +15,6 @@
         	<table id="materialTypeTable" class="table-bordered">
         		<thead>
         			<tr>
-                        <th></th>
         				<th>Tipe Bahan</th>
         				<th class="actions-column">Aksi</th>
         			</tr>
@@ -32,7 +31,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Tambah Pelanggan</h4>
+                <h4 class="modal-title">Tambah Tipe Bahan</h4>
             </div>
 
             <div class="modal-body">
@@ -73,7 +72,7 @@
                         <label for="editMaterialTypeName" class="col-md-4 control-label">Nama Pelanggan</label>
 
                         <div class="col-md-6">
-                            <input id="editMaterialTypeName" type="text" class="form-control" name="customerName" required>
+                            <input id="editMaterialTypeName" type="text" class="form-control" name="materialTypeName" required>
                             <input type="hidden" id="editMaterialTypeId" name="materialTypeId" />
                         </div>
                     </div>
@@ -88,7 +87,7 @@
     </div>
 </div>
 
-<div id="materialTypeDelete" class="modal fade" role="dialog">
+<div id="materialTypeModalDelete" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -122,10 +121,9 @@
             serverSide: true,
             ajax: '{{ route('material.getMaterialType') }}',
             columns: [
-                { data: 'name', name: 'name', orderable: false},
                 { data: 'name', name: 'name' },
-                { data: 'id', name: 'id', render: function(data, type, full) {
-                        return '<div class="text-center"><a class="btn btn-success editMaterialTypeBtn" id="edit_'+data+'" href="#materialTypeModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteMaterialTypeBtn" id="delete_'+data+'" href="#materialTypeModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.name+'" />';
+                { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
+                        return '<div class="text-center"><a class="btn btn-success editMaterialTypeBtn" id="edit_'+data+'" href="#materialTypeModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteMaterialTypeBtn" id="delete_'+data+'" href="#materialTypeModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="materialTypeName_'+data+'" value="'+full.name+'" />';
                     }
                 }
             ],
@@ -133,17 +131,7 @@
                 "sProcessing": "Memproses...",
                 "sZeroRecords": "Tidak ada data untuk ditampilkan..."
             },
-            "rowCallback": function( row, data, index ) {
-                index++;
-                $('td:eq(0)', row).html(index);
-            },
         });
-
-        // t.on( 'order.dt search.dt', function () {
-        //     t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-        //         cell.innerHTML = i+1;
-        //     } );
-        // } ).draw();
 
         $("#materialTypeTable").on("click", ".deleteMaterialTypeBtn", function(){
             var id = this.id;
@@ -158,11 +146,10 @@
             id = id.substring(5);
 
             $("#editMaterialTypeId").val(id);
+            $("#editMaterialTypeName").html($('#materialTypeName_'+id).val());
+
+            $("#editMaterialTypeId").val(id);
             $("#editMaterialTypeName").val($('#materialTypeName_'+id).val());
-            $("#editMaterialTypeStore").val($('#materialTypeStore_'+id).val());
-            $("#editMaterialTypePhone").val($('#materialTypePhone_'+id).val());
-            $("#editMaterialTypeCity").val($('#materialTypeCity_'+id).val());
-            $("#editMaterialTypeDescription").val($('#materialTypeDescription_'+id).val());
         });
 	});
 </script>
