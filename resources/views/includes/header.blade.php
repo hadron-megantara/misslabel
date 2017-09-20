@@ -107,7 +107,7 @@
 
         		<ul style="margin-top: 10px">
                 	<li class="">
-                    	<a href="#">
+                    	<a href="/">
                           <i class="fa fa-home"></i>
                           <span class="title">Beranda</span>
                     	</a>
@@ -120,12 +120,18 @@
                     	</a>
                 	</li>
 
-                	<li class="">
-                    	<a href="#">
-                        	<i class="fa fa-file"></i>
-                        	<span class="title">Bahan</span>
-                    	</a>
-                	</li>
+                  <li class="">
+                      <a href="javascript:;">
+                          <i class="icon-custom-ui"></i>
+                          <span class="title">Bahan</span>
+                          <span class="arrow"></span>
+                      </a>
+                      <ul class="sub-menu">
+                          <li><a href="/material">Pembelian</a></li>
+                          <li><a href="/material-convection">Konveksi</a></li>
+                          <li><a href="/material-type">Tipe Bahan</a></li>
+                      </ul>
+                  </li>
 
                 	<li class="">
                     	<a href="#">

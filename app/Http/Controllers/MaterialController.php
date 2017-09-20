@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use Indonesia;
-use App\Customer;
+use App\Material;
+use App\MaterialType;
 
-class CustomerController extends Controller
+class MaterialController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +24,26 @@ class CustomerController extends Controller
 
         $cities = Indonesia::allCities();
 
-        return view("customer.list", array('user' => $user, 'cities' => $cities));
+        return view("material.list", array('user' => $user, 'cities' => $cities));
+    }
+
+    public function type(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        return view("material.type", array('user' => $user));
+    }
+
+    public function getMaterialType(){
+        $materialType = MaterialType::select(['id', 'name'])->orderBy('name', 'asc');
+     
+        return Datatables::of($materialType)->make();
+    }
+
+    public function convection(Request $request){
+
     }
 
     public function getCustomer(){

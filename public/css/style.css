@@ -63,3 +63,11 @@ table .btn{
   font-family: Verdana,Arial,sans-serif;
   font-size: 10px;
 }
+
+.modal-body .container{
+  width: 100%;
+}
+
+.table-responsive{
+  padding-bottom: 30px;
+}

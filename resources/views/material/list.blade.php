@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Data Pelanggan</h3>
+            <h3>Data Bahan</h3>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#userModalAdd" class="btn btn-success btnAddCustomer" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Pelanggan</a>
             </div>
