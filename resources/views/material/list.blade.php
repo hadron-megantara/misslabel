@@ -256,7 +256,7 @@
 
             var price = $('#materialPrice_'+id).val();
             price = price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#materialDeletePrice").html();
+            $("#materialDeletePrice").html('Rp '+price);
         });
 
         $("#materialTable").on("click", ".editMaterialBtn", function(){
@@ -283,6 +283,10 @@
         });
 
         $('#materialDatePurchase').datepicker({
+            dateFormat: 'yy-mm-dd',
+        });
+
+        $('#editMaterialDatePurchase').datepicker({
             dateFormat: 'yy-mm-dd',
         });
 
