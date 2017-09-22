@@ -24,13 +24,17 @@ Route::middleware(['userAuth'])->group(function () {
 	// Material
 		// Material-Purchase-List
 		Route::get('/material', 'MaterialController@index');
+		Route::get('/material/get-material', 'MaterialController@getMaterial')->name('material.getMaterial');
+		Route::post('/material/add-material', 'MaterialController@storeMaterial')->name('material.addMaterial');
+		Route::post('/material/edit-material', 'MaterialController@updateMaterial')->name('material.editMaterial');
+		Route::post('/material/delete-material', 'MaterialController@destroyMaterial')->name('material.deleteMaterial');
 
 		// Material-Type
 		Route::get('/material-type', 'MaterialController@type');
-		Route::get('/material/get-material-type', 'MaterialController@getMaterialType')->name('material.getMaterialType');
-		Route::post('/material/add-material-type', 'MaterialController@storeMaterialType')->name('material.addMaterialType');
-		Route::post('/material/edit-material-type', 'MaterialController@updateMaterialType')->name('material.editMaterialType');
-		Route::post('/material/delete-material-type', 'MaterialController@destroyMaterialType')->name('material.deleteMaterialType');
+		Route::get('/material-type/get-material', 'MaterialController@getMaterialType')->name('material.getMaterialType');
+		Route::post('/material-type/add-material', 'MaterialController@storeMaterialType')->name('material.addMaterialType');
+		Route::post('/material-type/edit-material', 'MaterialController@updateMaterialType')->name('material.editMaterialType');
+		Route::post('/material-type/delete-material', 'MaterialController@destroyMaterialType')->name('material.deleteMaterialType');
 
 		// Material-Convection
 		Route::get('/material-convection', 'MaterialController@convection');

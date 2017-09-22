@@ -43,6 +43,7 @@
     <script src="/js/app.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
     <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/jquery.priceformat.min.js"></script>
 
     <!-- Scripts -->
     <script>

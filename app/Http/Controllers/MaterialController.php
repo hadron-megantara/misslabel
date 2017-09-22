@@ -22,9 +22,53 @@ class MaterialController extends Controller
             $user = $request->user;
         }
 
-        $cities = Indonesia::allCities();
+        $materialType = MaterialType::all();
 
-        return view("material.list", array('user' => $user, 'cities' => $cities));
+        return view("material.list", array('user' => $user, 'materialType' => $materialType));
+    }
+
+    public function getMaterial(){
+        $material = Material::select(['id', 'material_type', 'length', 'width', 'description', 'price', 'date_purchase'])->orderBy('updated_at', 'desc');
+     
+        return Datatables::of($material)->make();
+    }
+
+    public function storeMaterial(Request $request){
+        $material = new Material;
+
+        $material->material_type = $request->materialName;
+        $material->length = $request->materialLength;
+        $material->width = $request->materialWidth;
+        $material->description = $request->materialDescription;
+        $material->price = $request->materialPrice;
+        $material->date_purchase = $request->materialDatePurchase;
+
+        $material->save();
+
+        return redirect('/material');
+    }
+
+    public function updateMaterial(Request $request){
+        $material = Material::find($request->materialId);
+        
+        $material->material_type = $request->materialName;
+        $material->length = $request->materialLength;
+        $material->width = $request->materialWidth;
+        $material->description = $request->materialDescription;
+        $material->price = $request->materialPrice;
+        $material->date_purchase = $request->materialDatePurchase;
+
+        $material->save();
+
+        return redirect('/material');
+    }
+
+    public function destroyMaterial(Request $request){
+        $material = Material::find($request->materialId);
+
+        $material->delete();
+
+        return redirect('/material');
     }
 
     public function type(Request $request){
@@ -72,91 +116,5 @@ class MaterialController extends Controller
 
     public function convection(Request $request){
 
-    }
-
-    public function getCustomer(){
-        $customers = Customer::select(['name', 'phone', 'store', 'city', 'description', 'id'])->orderBy('updated_at', 'desc');
-     
-        return Datatables::of($customers)->make();
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $customer = new Customer;
-
-        $customer->name = $request->customerName;
-        $customer->phone = $request->customerStore;
-        $customer->store = $request->customerPhone;
-        $customer->city = $request->customerCity;
-        $customer->description = $request->customerDescription;
-
-        $customer->save();
-
-        return redirect('/customer');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        $customer = Customer::find($request->customerId);
-        
-        $customer->name = $request->customerName;
-        $customer->store = $request->customerStore;
-        $customer->phone = $request->customerPhone;
-        $customer->city = $request->customerCity;
-        $customer->description = $request->customerDescription;
-
-        $customer->save();
-
-        return redirect('/customer');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(REQUEST $request)
-    {
-        $customer = Customer::find($request->customerId);
-
-        $customer->delete();
-
-        return redirect('/customer');
     }
 }

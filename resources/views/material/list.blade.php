@@ -5,21 +5,22 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Data Bahan</h3>
+            <h3>Pembelian Bahan</h3>
             <div class="pull-right" style="margin-top: 5px">
-                <a href="#userModalAdd" class="btn btn-success btnAddCustomer" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Pelanggan</a>
+                <a href="#materialModalAdd" class="btn btn-success btnAddMaterial" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Pembelian</a>
             </div>
         </div>
 
         <div class="table-responsive">
-        	<table id="customerTable" class="table-bordered">
+        	<table id="materialTable" class="table-bordered">
         		<thead>
         			<tr>
-        				<th>Nama Pelanggan</th>
-        				<th>No HP/Telp</th>
-                        <th>Toko</th>
-        				<th>Daerah</th>
-        				<th style="max-width: 300px">Keterangan</th>
+        				<th>Tipe Bahan</th>
+                        <th>Panjang</th>
+                        <th>Lebar</th>
+                        <th>Keterangan</th>
+                        <th>Harga</th>
+                        <th>Tanggal Pembelian</th>
         				<th class="actions-column">Aksi</th>
         			</tr>
         		</thead>
@@ -30,118 +31,71 @@
     </div>
 </div>
 
-<div id="userModalDetail" class="modal fade" role="dialog">
+<div id="materialModalAdd" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Detail Pelanggan</h4>
+                <h4 class="modal-title">Tambah Pembelian Bahan</h4>
             </div>
 
             <div class="modal-body">
-                <div class="container">
-                    <div class="form-group">
-                        <label for="detailCustomerName" class="col-md-4 control-label">Nama Pelanggan</label>
-
-                        <div class="col-md-6">
-                            <label class="form-control" id="detailCustomerName"></label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="detailCustomerStore" class="col-md-4 control-label">Toko</label>
-
-                        <div class="col-md-6">
-                            <label class="form-control" id="detailCustomerStore"></label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="detailCustomerPhone" class="col-md-4 control-label">No HP/Telp</label>
-
-                        <div class="col-md-6">
-                            <label class="form-control" id="detailCustomerPhone"></label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="detailCustomerCity" class="col-md-4 control-label">Daerah</label>
-
-                        <div class="col-md-6">
-                            <label class="form-control" id="detailCustomerCity"></label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="detailCustomerDescription" class="col-md-4 control-label">Keterangan</label>
-
-                        <div class="col-md-6">
-                            <label class="form-control" id="detailCustomerDescription"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="userModalAdd" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Tambah Pelanggan</h4>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('customer.addCustomer') }}" role="form" id="addForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.addMaterial') }}" role="form" id="addForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="customerName" class="col-md-4 control-label">Nama Pelanggan</label>
+                        <label for="materialName" class="col-md-4 control-label">Tipe Bahan</label>
 
                         <div class="col-md-6">
-                            <input id="customerName" type="text" class="form-control" name="customerName" required>
+                            <select id="materialName" class="form-control" name="materialName" required>
+                                @foreach($materialType as $materialType2)
+                                    <option value="{{$materialType2->name}}">{{$materialType2->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="customerStore" class="col-md-4 control-label">Toko</label>
+                        <label for="materialLength" class="col-md-4 control-label">Panjang</label>
 
                         <div class="col-md-6">
-                            <input id="customerStore" type="text" class="form-control" name="customerStore" required>
+                            <input id="materialLength" type="text" class="form-control" name="materialLengthShow" required placeholder="Dalam Meter">
+                            <input id="materialLengthHidden" type="hidden" name="materialLength" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="customerPhone" class="col-md-4 control-label">No HP/Telp</label>
+                        <label for="materialWidth" class="col-md-4 control-label">Lebar</label>
 
                         <div class="col-md-6">
-                            <input id="customerPhone" type="text" class="form-control" name="customerPhone" required>
+                            <input id="materialWidth" type="number" class="form-control" name="materialWidth" required placeholder="Dalam Centi Meter">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="customerCity" class="col-md-4 control-label">Daerah</label>
+                        <label for="materialDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
-                            <input id="customerCity" type="text" class="form-control customerCity" name="customerCity" required>
-                            <div class="containerAutocomplete"></div>
+                            <textarea id="materialDescription" class="form-control" name="materialDescription" required style="resize: none"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="customerDescription" class="col-md-4 control-label">Keterangan</label>
+                        <label for="materialPrice" class="col-md-4 control-label">Harga</label>
 
                         <div class="col-md-6">
-                            <textarea id="customerDescription" class="form-control" name="customerDescription" required></textarea>
+                            <input id="materialPrice" type="text" class="form-control number" name="materialPriceShow" required>
+                            <input id="materialPriceHidden" type="hidden" name="materialPrice" required>
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="materialDatePurchase" class="col-md-4 control-label">Tanggal Pembelian</label>
+
+                        <div class="col-md-6">
+                            <input id="materialDatePurchase" type="text" class="form-control" name="materialDatePurchase" required>
+                        </div>
+                    </div>
                 </form>
             </div>
             
@@ -153,60 +107,72 @@
     </div>
 </div>
 
-<div id="userModalEdit" class="modal fade" role="dialog">
+<div id="materialModalEdit" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Ubah Pelanggan</h4>
+                <h4 class="modal-title">Ubah Tipe Bahan</h4>
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('customer.editCustomer') }}" role="form" id="editForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.editMaterial') }}" role="form" id="editForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="editCustomerName" class="col-md-4 control-label">Nama Pelanggan</label>
+                        <label for="editMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
 
                         <div class="col-md-6">
-                            <input id="editCustomerName" type="text" class="form-control" name="customerName" required>
-                            <input type="hidden" id="editCustomerId" name="customerId" />
+                            <select id="editMaterialType" class="form-control" name="materialName" required>
+                                @foreach($materialType as $materialType3)
+                                    <option value="{{$materialType3->name}}">{{$materialType3->name}}</option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" id="editMaterialId" name="materialId" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="editCustomerStore" class="col-md-4 control-label">Toko</label>
+                        <label for="editMaterialLength" class="col-md-4 control-label">Panjang</label>
 
                         <div class="col-md-6">
-                            <input id="editCustomerStore" type="text" class="form-control" name="customerStore" required>
+                            <input id="editMaterialLength" type="text" class="form-control" name="materialLengthShow" required placeholder="Dalam Meter">
+                            <input id="editMaterialLengthHidden" type="hidden" name="materialLength" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="editCustomerPhone" class="col-md-4 control-label">No HP/Telp</label>
+                        <label for="editMaterialWidth" class="col-md-4 control-label">Lebar</label>
 
                         <div class="col-md-6">
-                            <input id="editCustomerPhone" type="text" class="form-control" name="customerPhone" required>
+                            <input id="editMaterialWidth" type="number" class="form-control" name="materialWidth" required placeholder="Dalam Centi Meter">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="editCustomerCity" class="col-md-4 control-label">Daerah</label>
+                        <label for="editMaterialDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
-                            <input id="editCustomerCity" type="text" class="form-control customerCity" name="customerCity" required>
-                            <div class="containerAutocomplete"></div>
+                            <textarea id="editMaterialDescription" class="form-control" name="materialDescription" required style="resize: none"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="editCustomerDescription" class="col-md-4 control-label">Keterangan</label>
+                        <label for="editMaterialPrice" class="col-md-4 control-label">Harga</label>
 
                         <div class="col-md-6">
-                            <textarea id="editCustomerDescription" class="form-control" name="customerDescription" required></textarea>
+                            <input id="editMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required>
+                            <input id="editMaterialPriceHidden" type="hidden" name="materialPrice" required>
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="editMaterialDatePurchase" class="col-md-4 control-label">Tanggal Pembelian</label>
+
+                        <div class="col-md-6">
+                            <input id="editMaterialDatePurchase" type="text" class="form-control" name="materialDatePurchase" required>
+                        </div>
+                    </div>
                 </form>
             </div>
             
@@ -218,20 +184,20 @@
     </div>
 </div>
 
-<div id="userModalDelete" class="modal fade" role="dialog">
+<div id="materialModalDelete" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Hapus Pelanggan</h4>
+                <h4 class="modal-title">Hapus Pembelian Bahan</h4>
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('customer.deleteCustomer') }}" role="form" id="deleteForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.deleteMaterial') }}" role="form" id="deleteForm">
                     {!! csrf_field() !!}
 
-                    <label>Anda yakin ingin menghapus pelanggan "<b id="customerDeleteName"></b>" ?</label>
-                    <input id="customerId" type="hidden" class="form-control" name="customerId">
+                    <label>Anda yakin ingin menghapus pembelian bahan "<b id="materialDeleteType"></b>" di tanggal "<b id="materialDeleteDatePurchase"></b>" dengan harga "<b id="materialDeletePrice"></b>" ?</label>
+                    <input id="materialId" type="hidden" class="form-control" name="materialId">
                 </form>
             </div>
             
@@ -245,19 +211,32 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-        $('#customerTable').DataTable({
+        var indexCounter = 1;
+
+        var t = $('#materialTable').DataTable({
             processing: true,
             serverSide: true,
-            aaSorting: [],
-            ajax: '{{ route('customer.getCustomer') }}',
+            ajax: '{{ route('material.getMaterial') }}',
             columns: [
-                { data: 'name', name: 'name' },
-                { data: 'phone', name: 'phone' },
-                { data: 'store', name: 'store' },
-                { data: 'city', name: 'city' },
+                { data: 'material_type', name: 'material_type' },
+                { data: 'length', name: 'length', render: function(data, type, full) {
+                        data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                        return data+' m';
+                    }
+                },
+                { data: 'width', name: 'width', render: function(data, type, full) {
+                        return data+' cm';
+                    }
+                },
                 { data: 'description', name: 'description' },
+                { data: 'price', name: 'price', render: function(data, type, full) {
+                        data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                        return 'Rp '+data;
+                    } 
+                },
+                { data: 'date_purchase', name: 'date_purchase' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"><a class="btn btn-primary detailCustomerBtn" id="detail_'+data+'" href="#userModalDetail" data-toggle="modal"id="detail_'+data+'" ><span class="fa  fa-search"></span></a> <a class="btn btn-success editCustomerBtn" id="edit_'+data+'" href="#userModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteCustomerBtn" id="delete_'+data+'" href="#userModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="customerName_'+data+'" value="'+full.name+'" /><input type="hidden" id="customerStore_'+data+'" value="'+full.store+'" /><input type="hidden" id="customerPhone_'+data+'" value="'+full.phone+'" /><input type="hidden" id="customerCity_'+data+'" value="'+full.city+'" /><input type="hidden" id="customerDescription_'+data+'" value="'+full.description+'" />';
+                        return '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteMaterialBtn" id="delete_'+data+'" href="#materialModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialWidth_'+data+'" value="'+full.width+'" /><input type="hidden" id="materialDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
                     }
                 }
             ],
@@ -267,51 +246,90 @@
             },
         });
 
-        var citiesArray = new Array();
-
-        <?php
-            foreach($cities as $cities){
-        ?>
-                citiesArray.push("{{$cities->name}}");
-        <?
-            }
-        ?>
-
-        $( ".customerCity" ).autocomplete({
-            source: citiesArray,
-            appendTo: ".containerAutocomplete",
-        });
-
-        $("#customerTable").on("click", ".deleteCustomerBtn", function(){
+        $("#materialTable").on("click", ".deleteMaterialBtn", function(){
             var id = this.id;
             id = id.substring(7);
 
-            $("#customerId").val(id);
-            $("#customerDeleteName").html($('#customerName_'+id).val());
+            $("#materialId").val(id);
+            $("#materialDeleteType").html($('#materialType_'+id).val());
+            $("#materialDeleteDatePurchase").html($('#materialDatePurchase_'+id).val());
+
+            var price = $('#materialPrice_'+id).val();
+            price = price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            $("#materialDeletePrice").html();
         });
 
-        $("#customerTable").on("click", ".editCustomerBtn", function(){
+        $("#materialTable").on("click", ".editMaterialBtn", function(){
             var id = this.id;
             id = id.substring(5);
 
-            $("#editCustomerId").val(id);
-            $("#editCustomerName").val($('#customerName_'+id).val());
-            $("#editCustomerStore").val($('#customerStore_'+id).val());
-            $("#editCustomerPhone").val($('#customerPhone_'+id).val());
-            $("#editCustomerCity").val($('#customerCity_'+id).val());
-            $("#editCustomerDescription").val($('#customerDescription_'+id).val());
+            $("#editMaterialId").val(id);
+            $("#editMaterialType option[value='"+$('#materialType_'+id).val()+"']").attr("selected", true);
+
+            var length = $('#materialLength_'+id).val();
+            length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            $("#editMaterialLength").val(length);
+            $("#editMaterialLengthHidden").val($('#materialLength_'+id).val());
+
+            $("#editMaterialWidth").val($('#materialWidth_'+id).val());
+            $("#editMaterialDescription").val($('#materialDescription_'+id).val());
+
+            var price = $('#materialPrice_'+id).val();
+            price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+
+            $("#editMaterialPrice").val(price);
+            $("#editMaterialPriceHidden").val($('#materialPrice_'+id).val());
+            $("#editMaterialDatePurchase").val($('#materialDatePurchase_'+id).val());
         });
 
-        $("#customerTable").on("click", ".detailCustomerBtn", function(){
-            var id = this.id;
-            id = id.substring(7);
-
-            $("#detailCustomerName").html($('#customerName_'+id).val());
-            $("#detailCustomerStore").html($('#customerStore_'+id).val());
-            $("#detailCustomerPhone").html($('#customerPhone_'+id).val());
-            $("#detailCustomerCity").html($('#customerCity_'+id).val());
-            $("#detailCustomerDescription").html($('#customerDescription_'+id).val());
+        $('#materialDatePurchase').datepicker({
+            dateFormat: 'yy-mm-dd',
         });
+
+        $('#materialDatePurchase').keypress(function(event){
+            event.preventDefault();
+        });
+
+        $('#materialLength').keyup(function(){
+            var number = $(this).val().split('.').join("");
+            $('#materialLengthHidden').val(number);
+
+            number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            $(this).val(number);
+        });
+
+        $('#materialPrice').keyup(function(){
+            var number = $(this).val().split('.').join("");
+            number = number.replace(/Rp /gi,'');
+            $('#materialPriceHidden').val(number);
+        });
+
+        $('#materialPrice').priceFormat({
+            prefix: 'Rp ',
+            centsLimit: 0,
+            thousandsSeparator: '.'
+        });
+
+        $('#editMaterialLength').keyup(function(){
+            var number = $(this).val().split('.').join("");
+            $('#editMaterialLengthHidden').val(number);
+
+            number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            $(this).val(number);
+        });
+
+        $('#editMaterialPrice').priceFormat({
+            prefix: 'Rp ',
+            centsLimit: 0,
+            thousandsSeparator: '.'
+        });
+
+        $('#editMaterialPrice').keyup(function(){
+            var number = $(this).val().split('.').join("");
+            number = number.replace(/Rp /gi,'');
+            $('#editMaterialPriceHidden').val(number);
+        });
+
 	});
 </script>
 

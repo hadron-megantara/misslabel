@@ -69,7 +69,7 @@
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="editMaterialTypeName" class="col-md-4 control-label">Nama Pelanggan</label>
+                        <label for="editMaterialTypeName" class="col-md-4 control-label">Tipe Bahan</label>
 
                         <div class="col-md-6">
                             <input id="editMaterialTypeName" type="text" class="form-control" name="materialTypeName" required>
@@ -144,9 +144,6 @@
         $("#materialTypeTable").on("click", ".editMaterialTypeBtn", function(){
             var id = this.id;
             id = id.substring(5);
-
-            $("#editMaterialTypeId").val(id);
-            $("#editMaterialTypeName").html($('#materialTypeName_'+id).val());
 
             $("#editMaterialTypeId").val(id);
             $("#editMaterialTypeName").val($('#materialTypeName_'+id).val());

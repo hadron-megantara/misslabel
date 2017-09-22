@@ -124,13 +124,13 @@
                       <a href="javascript:;">
                           <i class="icon-custom-ui"></i>
                           <span class="title">Bahan</span>
-                          @if(\Request::is('material/*') || \Request::is('material/*') || \Request::is('material-type') || \Request::is('material-type/*'))
+                          @if(\Request::is('material') || \Request::is('material/*') || \Request::is('material-type') || \Request::is('material-type/*'))
                             <span class="arrow open"></span>
                           @else
                             <span class="arrow"></span>
                           @endif
                       </a>
-                      <ul class="sub-menu" @if(\Request::is('material/*') || \Request::is('material/*') || \Request::is('material-type') || \Request::is('material-type/*')) style="display: block;" @endif>
+                      <ul class="sub-menu" @if(\Request::is('material') || \Request::is('material/*') || \Request::is('material-type') || \Request::is('material-type/*')) style="display: block;" @endif>
                           <li @if(\Request::is('material') || \Request::is('material/*')) class="active" @endif><a href="/material">Pembelian</a></li>
                           <li @if(\Request::is('material-convection') || \Request::is('material-convection/*')) class="active" @endif><a href="/material-convection">Konveksi</a></li>
                           <li @if(\Request::is('material-type') || \Request::is('material-type/*')) class="active" @endif><a href="/material-type">Tipe Bahan</a></li>
