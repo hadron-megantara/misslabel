@@ -71,6 +71,12 @@ class MaterialController extends Controller
         return redirect('/material');
     }
 
+    public function sendMaterial(Request $request){
+
+
+        return redirect('/material');
+    }
+
     public function type(Request $request){
         $user = array();
         if($request->has('user')){
@@ -93,7 +99,7 @@ class MaterialController extends Controller
 
         $materialType->save();
 
-        return redirect('/material-type');
+        return redirect('/material/type');
     }
 
     public function updateMaterialType(Request $request){
@@ -103,7 +109,7 @@ class MaterialController extends Controller
 
         $materialType->save();
 
-        return redirect('/material-type');
+        return redirect('/material/type');
     }
 
     public function destroyMaterialType(Request $request){
@@ -111,10 +117,6 @@ class MaterialController extends Controller
 
         $materialType->delete();
 
-        return redirect('/material-type');
-    }
-
-    public function convection(Request $request){
-
+        return redirect('/material/type');
     }
 }

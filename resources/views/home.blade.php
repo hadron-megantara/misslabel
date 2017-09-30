@@ -12,7 +12,7 @@
 	    	<div class="col-md-3 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
-	    				<span class="fa fa-dollar"></span>
+	    				<span class="fa fa-money"></span>
 	    			</span>
 
 	    			<div class="info-box-content">
@@ -25,7 +25,7 @@
 	    	<div class="col-md-3 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
-	    				<span class="fa fa-dollar"></span>
+	    				<span class="fa fa-calculator"></span>
 	    			</span>
 
 	    			<div class="info-box-content">

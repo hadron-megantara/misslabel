@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMaterialsTable extends Migration
+class CreateConvectionListsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateMaterialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('materials', function (Blueprint $table) {
+        Schema::create('convection_lists', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('material_type');
-            $table->integer('length');
-            $table->string('color');
+            $table->string('name');
             $table->string('description');
-            $table->integer('price');
-            $table->date('date_purchase');
-            $table->char('status')->default('0');
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ class CreateMaterialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('materials');
+        Schema::dropIfExists('convection_lists');
     }
 }

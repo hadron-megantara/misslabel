@@ -112,7 +112,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Ubah Pembelian Bahan</h4>
+                <h4 class="modal-title">Ubah Tipe Bahan</h4>
             </div>
 
             <div class="modal-body">
@@ -184,77 +184,6 @@
     </div>
 </div>
 
-<div id="materialModalSend" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Kirim Bahan ke Konveksi</h4>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.sendMaterial') }}" role="form" id="editForm">
-                    {!! csrf_field() !!}
-
-                    <div class="form-group">
-                        <label for="sendMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialType" type="text" class="form-control" disabled="">
-                            <input type="hidden" id="sendMaterialId" name="materialId" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialLength" class="col-md-4 control-label">Panjang</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialLength" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialWidth" class="col-md-4 control-label">Lebar</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialWidth" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialDescription" class="col-md-4 control-label">Keterangan</label>
-
-                        <div class="col-md-6">
-                            <textarea id="sendMaterialDescription" type="text" class="form-control" disabled="" style="resize: none"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialPrice" class="col-md-4 control-label">Harga</label>
-
-                        <div class="col-md-6">
-                            <input id="materialPrice" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialDatePurchase" class="col-md-4 control-label">Tanggal Pembelian</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialDatePurchase" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
-                <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Kirim</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="materialModalDelete" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -307,7 +236,7 @@
                 },
                 { data: 'date_purchase', name: 'date_purchase' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal" title="Ubah Data"><span class="fa fa-pencil"></span></a> <a class="btn btn-primary deleteMaterialBtn" id="delete_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Konveksi"><span class="fa fa-sign-out"></span></a> <a class="btn btn-danger deleteMaterialBtn" id="delete_'+data+'" href="#materialModalDelete" data-toggle="modal" title="Hapus Data"><span class="fa fa-trash"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialWidth_'+data+'" value="'+full.width+'" /><input type="hidden" id="materialDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
+                        return '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteMaterialBtn" id="delete_'+data+'" href="#materialModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialWidth_'+data+'" value="'+full.width+'" /><input type="hidden" id="materialDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
                     }
                 }
             ],
