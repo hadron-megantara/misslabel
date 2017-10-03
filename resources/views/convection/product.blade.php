@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Konveksi - Bahan Masuk</h3>
+            <h3>Konveksi - Produk</h3>
 
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionModalExport" class="btn btn-danger" data-toggle="modal">
@@ -21,11 +21,6 @@
                 @foreach($convectionList as $convectionList)
                     <option value="{{$convectionList->id}}" @if($convection == $convectionList->id) selected="" @endif>{{$convectionList->name}}</option>
                 @endforeach
-            </select>
-
-            <select id="searchMaterialUsed" name="searchMaterialUsed">
-                <option value="0">Stok</option>
-                <option value="1">Terpakai</option>
             </select>
         </div>
 
@@ -48,32 +43,66 @@
     </div>
 </div>
 
-<div id="materialModalConvert" class="modal fade" role="dialog">
+<div id="materialInModalEdit" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Konversi ke Produk</h4>
+                <h4 class="modal-title">Ubah Pembelian Bahan</h4>
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('convection.materialIn.convertToProduct') }}" role="form" id="editForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.editMaterial') }}" role="form" id="editForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="convertMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
+                        <label for="editMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
 
                         <div class="col-md-6">
-                            <input id="convertMaterialType" type="text" class="form-control" disabled="">
-                            <input type="hidden" id="convertMaterialId" name="materialId" />
+                            <select id="editMaterialType" class="form-control" name="materialName" required>
+                                
+                            </select>
+                            <input type="hidden" id="editMaterialId" name="materialId" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="convertMaterialColor" class="col-md-4 control-label">Warna Bahan</label>
+                        <label for="editMaterialLength" class="col-md-4 control-label">Panjang</label>
 
                         <div class="col-md-6">
-                            <input id="convertMaterialColor" type="text" class="form-control" disabled="">
+                            <input id="editMaterialLength" type="text" class="form-control" name="materialLengthShow" required placeholder="Dalam Meter">
+                            <input id="editMaterialLengthHidden" type="hidden" name="materialLength" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
+                <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="materialModalSend" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Kirim Bahan ke Konveksi</h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" method="POST" action="{{ route('material.sendMaterial') }}" role="form" id="editForm">
+                    {!! csrf_field() !!}
+
+                    <div class="form-group">
+                        <label for="sendMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
+
+                        <div class="col-md-6">
+                            <input id="sendMaterialType" type="text" class="form-control" disabled="">
+                            <input type="hidden" id="sendMaterialId" name="materialId" />
                         </div>
                     </div>
 
@@ -112,7 +141,7 @@
                     }
                 },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"> <a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" />';
+                        return '<div class="text-center"> <a class="btn btn-primary deleteMaterialBtn" id="delete_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Konveksi"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" />';
                     }
                 }
             ],

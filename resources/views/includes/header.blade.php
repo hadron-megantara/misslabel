@@ -148,7 +148,7 @@
                       </a>
                       <ul class="sub-menu" @if(\Request::is('convection') || \Request::is('convection/*')) style="display: block;" @endif>
                           <li @if(\Request::is('convection/material-in') || \Request::is('convection/material-in/*')) class="active" @endif><a href="/convection/material-in">Bahan Masuk</a></li>
-                          <li @if(\Request::is('convection/convection') || \Request::is('material/convection/*')) class="active" @endif><a href="/convection/convection">Produk</a></li>
+                          <li @if(\Request::is('convection/product') || \Request::is('material/product/*')) class="active" @endif><a href="/convection/product">Produk</a></li>
                           <li @if(\Request::is('convection/list') || \Request::is('convection/convection-list/*')) class="active" @endif><a href="/convection/list">Daftar Konveksi</a></li>
                       </ul>
                   </li>

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
+use App\Material;
 use App\ConvectionList;
 use App\ConvectionMaterialIn;
+use Carbon\Carbon;
 
 class ConvectionController extends Controller
 {
@@ -20,11 +22,22 @@ class ConvectionController extends Controller
             $user = $request->user;
         }
 
-        return view("convection.material-in", array('user' => $user));
+        $convectionList = ConvectionList::all();
+
+        $convection = '';
+        if($request->has('convection')){
+            $convection = $request->convection;
+        }
+
+        return view("convection.material-in", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection));
     }
 
-    public function getMaterialIn(){
-        $convectionMaterialIn = ConvectionMaterialIn::select(['id', 'material_type', 'length'])->orderBy('updated_at', 'desc');
+    public function getMaterialIn(Request $request){
+        if(!$request->has('convection') || $request->convection == ''){
+            $convectionMaterialIn = Material::selectRaw('material_type, color, SUM(length) AS length')->groupBy('material_type', 'color')->orderBy('material_type')->where('status', 1)->get();
+        } else{
+            $convectionMaterialIn = Material::selectRaw('material_type, color, SUM(length) AS length')->groupBy('material_type', 'color')->orderBy('material_type')->where('status', 1)->where('convection_id', $request->convection)->get();
+        }
      
         return Datatables::of($convectionMaterialIn)->make();
     }
@@ -79,4 +92,21 @@ class ConvectionController extends Controller
 
         return redirect('/convection/list');
     }
+
+    public function product(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $convectionList = ConvectionList::all();
+
+        $convection = '';
+        if($request->has('convection')){
+            $convection = $request->convection;
+        }
+
+        return view("convection.product", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection));
+    }
+
 }

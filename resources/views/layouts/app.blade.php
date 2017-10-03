@@ -38,8 +38,7 @@
 
     <link href="/css/style.css" rel="stylesheet">
 
-    {{-- <script src="/js/jquery-1.11.2.min.js"></script> --}}
-    <script src="/js/jquery-1.12.4.min.js"></script>    
+    <script src="/js/jquery-1.12.4.min.js"></script>   
     <script src="/js/app.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
     <script src="/js/jquery.dataTables.min.js"></script>

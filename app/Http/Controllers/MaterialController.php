@@ -7,6 +7,8 @@ use DataTables;
 use Indonesia;
 use App\Material;
 use App\MaterialType;
+use App\ConvectionList;
+use Carbon\Carbon;
 
 class MaterialController extends Controller
 {
@@ -22,13 +24,51 @@ class MaterialController extends Controller
             $user = $request->user;
         }
 
+        $status = 0;
+        if($request->has('status')){
+            $status = $request->status;
+        }
+
+        $dateFrom = '';
+        if($request->has('dateFrom')){
+            $dateFrom = $request->dateFrom;
+        }
+
+        $dateTo = '';
+        if($request->has('dateTo')){
+            $dateTo = $request->dateTo;
+        }
+
         $materialType = MaterialType::all();
 
-        return view("material.list", array('user' => $user, 'materialType' => $materialType));
+        $convectionList = ConvectionList::all();
+
+        return view("material.list", array('user' => $user, 'materialType' => $materialType, 'status' => $status, 'convectionList' => $convectionList, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo));
     }
 
-    public function getMaterial(){
-        $material = Material::select(['id', 'material_type', 'length', 'width', 'description', 'price', 'date_purchase'])->orderBy('updated_at', 'desc');
+    public function getMaterial(Request $request){
+        if(!$request->has('dateFrom') || $request->dateFrom == ''){
+            $dateFrom = '1990-01-01';
+        } else{
+            $dateFrom = $request->dateFrom;
+        }
+
+        if(!$request->has('dateTo') || $request->dateTo == ''){
+            $dateTo = date('Y-m-d');
+        } else{
+            $dateTo = $request->dateTo;
+        }
+
+        if($request->has('status')){
+            if($request->status != 2){
+                $status = $request->status;
+                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->where('status', $request->status)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
+            } else{
+                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereBetween('date_purchase', [$dateFrom, $dateTo]);
+            }
+        } else{
+            $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereDate('date_purchase', '>=', $request->dateFrom)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
+        }
      
         return Datatables::of($material)->make();
     }
@@ -38,7 +78,7 @@ class MaterialController extends Controller
 
         $material->material_type = $request->materialName;
         $material->length = $request->materialLength;
-        $material->width = $request->materialWidth;
+        $material->color = $request->materialColor;
         $material->description = $request->materialDescription;
         $material->price = $request->materialPrice;
         $material->date_purchase = $request->materialDatePurchase;
@@ -53,7 +93,7 @@ class MaterialController extends Controller
         
         $material->material_type = $request->materialName;
         $material->length = $request->materialLength;
-        $material->width = $request->materialWidth;
+        $material->color = $request->materialColor;
         $material->description = $request->materialDescription;
         $material->price = $request->materialPrice;
         $material->date_purchase = $request->materialDatePurchase;
@@ -72,9 +112,13 @@ class MaterialController extends Controller
     }
 
     public function sendMaterial(Request $request){
+        $material = Material::find($request->materialId);
+        $material->status = 1;
+        $material->convection_id = $request->convectionId;
+        $material->date_convection = date('Y-m-d');
+        $material->save();
 
-
-        return redirect('/material');
+        return redirect('/material')->with('success', 'Sukses mengirim bahan ke konveksi');;
     }
 
     public function type(Request $request){

@@ -173,5 +173,32 @@ class MaterialTableSeeder extends Seeder
 	    $material18->price = 25000000;
 	    $material18->date_purchase = '2017-04-24';
 	    $material18->save();
+
+	    $material19 = new Material();
+	    $material19->material_type = 'SUTRA';
+	    $material19->length = 2500;
+	    $material19->color = 'Putih';
+	    $material19->description = 'Keterangan Sutra lembut';
+	    $material19->price = 70000000;
+	    $material19->date_purchase = '2017-04-28';
+	    $material19->save();
+
+	    $material20 = new Material();
+	    $material20->material_type = 'SIFON/CHIFFON';
+	    $material20->length = 1500;
+	    $material20->color = 'merah';
+	    $material20->description = 'Keterangan Sifon polos';
+	    $material20->price = 30000000;
+	    $material20->date_purchase = '2017-04-30';
+	    $material20->save();
+
+	    $material21 = new Material();
+	    $material21->material_type = 'SUTRA';
+	    $material21->length = 1000;
+	    $material21->color = 'Hijau';
+	    $material21->description = 'Keterangan Sutra lembut Hijau';
+	    $material21->price = 25000000;
+	    $material21->date_purchase = '2017-05-02';
+	    $material21->save();
     }
 }

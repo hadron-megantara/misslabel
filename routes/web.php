@@ -23,7 +23,7 @@ Route::middleware(['userAuth'])->group(function () {
 
 	// Material
 		// Material-Purchase-List
-		Route::get('/material', 'MaterialController@index');
+		Route::get('/material', 'MaterialController@index')->name('material.index');
 		Route::get('/material/get-material', 'MaterialController@getMaterial')->name('material.getMaterial');
 		Route::post('/material/add-material', 'MaterialController@storeMaterial')->name('material.addMaterial');
 		Route::post('/material/edit-material', 'MaterialController@updateMaterial')->name('material.editMaterial');
@@ -36,14 +36,19 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/material/type/add-material', 'MaterialController@storeMaterialType')->name('material.addMaterialType');
 		Route::post('/material/type/edit-material', 'MaterialController@updateMaterialType')->name('material.editMaterialType');
 		Route::post('/material/type/delete-material', 'MaterialController@destroyMaterialType')->name('material.deleteMaterialType');
+	// End of Material
 
 	// Convection
 		// Convection
 		Route::get('/convection', 'ConvectionController@convection');
 
 		// Convection-Material-In
-		Route::get('/convection/material-in', 'ConvectionController@index');
+		Route::get('/convection/material-in', 'ConvectionController@index')->name('convection.index');
 		Route::get('/convection/material-in/get-material-in', 'ConvectionController@getMaterialIn')->name('convection.getMaterialIn');
+		Route::get('/convection/material-in/convert-to-product', 'ConvectionController@convertToProduct')->name('convection.materialIn.convertToProduct');
+
+		// Convection-Product
+		Route::get('/convection/product', 'ConvectionController@product')->name('convection.product');
 
 		// Convection-Type
 		Route::get('/convection/list', 'ConvectionController@convectionList');
@@ -52,6 +57,10 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/convection/list/edit-convection', 'ConvectionController@updateConvectionList')->name('convection.editConvectionList');
 		Route::post('/convection/list/delete-convection', 'ConvectionController@destroyConvectionList')->name('convection.deleteConvectionList');
 
-	// End of Material
+	// End of Convection
+
+	// Warehouse
+		Route::get('/warehouse', 'WarehouseController@index')->name('warehouse.index');
+	// End of Warehouse
 
 });

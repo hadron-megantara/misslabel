@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Daftar Konveksi</h3>
+            <h3>Konveksi - List Konveksi</h3>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionListModalAdd" class="btn btn-success btnAddConvectionList" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Konveksi</a>
             </div>

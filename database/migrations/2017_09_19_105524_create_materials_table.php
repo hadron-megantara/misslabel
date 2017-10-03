@@ -21,7 +21,11 @@ class CreateMaterialsTable extends Migration
             $table->string('description');
             $table->integer('price');
             $table->date('date_purchase');
+            $table->date('date_convection')->nullable();
+            $table->date('date_converted')->nullable();
+            $table->integer('convection_id')->nullable();
             $table->char('status')->default('0');
+            $table->char('status_converted')->default('0');
             $table->timestamps();
         });
     }
