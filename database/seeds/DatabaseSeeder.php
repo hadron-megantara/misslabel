@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MaterialTableSeeder::class);
         $this->call(MaterialTypeTableSeeder::class);
         $this->call(ConvectionListTableSeeder::class);
+        $this->call(ProductTableSeeder::class);
     }
 }

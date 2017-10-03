@@ -29,14 +29,25 @@ class ConvectionController extends Controller
             $convection = $request->convection;
         }
 
-        return view("convection.material-in", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection));
+        $converted = 0;
+        if($request->has('converted')){
+            $converted = $request->converted;
+        }
+
+        return view("convection.material-in", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection, 'converted' => $converted));
     }
 
     public function getMaterialIn(Request $request){
-        if(!$request->has('convection') || $request->convection == ''){
-            $convectionMaterialIn = Material::selectRaw('material_type, color, SUM(length) AS length')->groupBy('material_type', 'color')->orderBy('material_type')->where('status', 1)->get();
+        if(!$request->has('converted') || $request->converted == ''){
+            $converted = 0;
         } else{
-            $convectionMaterialIn = Material::selectRaw('material_type, color, SUM(length) AS length')->groupBy('material_type', 'color')->orderBy('material_type')->where('status', 1)->where('convection_id', $request->convection)->get();
+            $converted = $request->converted;
+        }
+
+        if(!$request->has('convection') || $request->convection == ''){
+            $convectionMaterialIn = Material::selectRaw('material_type, color, SUM(length) AS length')->groupBy('material_type', 'color')->orderBy('material_type')->where('status', 1)->where('status_converted', $converted)->get();
+        } else{
+            $convectionMaterialIn = Material::selectRaw('material_type, color, SUM(length) AS length')->groupBy('material_type', 'color')->orderBy('material_type')->where('status', 1)->where('convection_id', $request->convection)->where('status_converted', $converted)->get();
         }
      
         return Datatables::of($convectionMaterialIn)->make();

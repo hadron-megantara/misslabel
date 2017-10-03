@@ -24,8 +24,8 @@
             </select>
 
             <select id="searchMaterialUsed" name="searchMaterialUsed">
-                <option value="0">Stok</option>
-                <option value="1">Terpakai</option>
+                <option value="0" @if($converted == 0) selected="" @endif>Stok</option>
+                <option value="1" @if($converted == 1) selected="" @endif>Terpakai</option>
             </select>
         </div>
 
@@ -78,10 +78,44 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sendMaterialLength" class="col-md-4 control-label">Panjang</label>
+                        <label for="convertMaterialLength" class="col-md-4 control-label">Panjang (stok)</label>
 
                         <div class="col-md-6">
-                            <input id="sendMaterialLength" type="text" class="form-control" disabled="">
+                            <input id="convertMaterialLength" type="text" class="form-control" disabled="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="convertMaterialLengthUsed" class="col-md-4 control-label">Panjang (digunakan)</label>
+
+                        <div class="col-md-6">
+                            <input id="convertMaterialLengthUsed" type="text" class="form-control" placeholder="Dalam yard" />
+                            <input id="convertMaterialLengthUsedHidden" name="materialLength" type="hidden" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="convertMaterialPrice" class="col-md-4 control-label">Harga</label>
+
+                        <div class="col-md-6">
+                            <input id="convertMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required>
+                            <input id="convertMaterialPriceHidden" type="hidden" name="materialPrice">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="convertMaterialProductName" class="col-md-4 control-label">Nama Produk</label>
+
+                        <div class="col-md-6">
+                            <input id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="convertMaterialProductDescription" class="col-md-4 control-label">Keterangan</label>
+
+                        <div class="col-md-6">
+                            <textarea id="convertMaterialProductDescription" class="form-control" name="materialProductDescription" required style="resize: none;"></textarea>
                         </div>
                     </div>
                 </form>
@@ -102,7 +136,7 @@
         var t = $('#materialInTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('convection.getMaterialIn') }}'+'?convection={{$convection}}',
+            ajax: '{{ route('convection.getMaterialIn') }}'+'?convection={{$convection}}'+'&converted='+{{$converted}},
             columns: [
                 { data: 'material_type', name: 'material_type' },
                 { data: 'color', name: 'color' },
@@ -122,96 +156,45 @@
             },
         });
 
-        $("#materialTable").on("click", ".deleteMaterialBtn", function(){
+        $("#materialInTable").on("click", ".convertConvectionBtn", function(){
             var id = this.id;
-            id = id.substring(7);
+            id = id.substring(8);
 
-            $("#materialId").val(id);
-            $("#materialDeleteType").html($('#materialType_'+id).val());
-            $("#materialDeleteDatePurchase").html($('#materialDatePurchase_'+id).val());
-
-            var price = $('#materialPrice_'+id).val();
-            price = price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#materialDeletePrice").html('Rp '+price);
-        });
-
-        $("#materialTable").on("click", ".editMaterialBtn", function(){
-            var id = this.id;
-            id = id.substring(5);
-
-            $("#editMaterialId").val(id);
-            $("#editMaterialType option[value='"+$('#materialType_'+id).val()+"']").attr("selected", true);
+            $("#convertMaterialId").val(id);
+            $("#convertMaterialType").val($('#materialType_'+id).val());
+            $("#convertMaterialColor").val($('#materialColor_'+id).val());
 
             var length = $('#materialLength_'+id).val();
             length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#editMaterialLength").val(length);
-            $("#editMaterialLengthHidden").val($('#materialLength_'+id).val());
-
-            $("#editMaterialWidth").val($('#materialWidth_'+id).val());
-            $("#editMaterialDescription").val($('#materialDescription_'+id).val());
-
-            var price = $('#materialPrice_'+id).val();
-            price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-
-            $("#editMaterialPrice").val(price);
-            $("#editMaterialPriceHidden").val($('#materialPrice_'+id).val());
-            $("#editMaterialDatePurchase").val($('#materialDatePurchase_'+id).val());
+            $("#convertMaterialLength").val(length);
         });
 
-        $('#materialDatePurchase').datepicker({
-            dateFormat: 'yy-mm-dd',
-        });
-
-        $('#editMaterialDatePurchase').datepicker({
-            dateFormat: 'yy-mm-dd',
-        });
-
-        $('#materialDatePurchase').keypress(function(event){
-            event.preventDefault();
-        });
-
-        $('#materialLength').keyup(function(){
+        $('#convertMaterialLengthUsed').keyup(function(){
             var number = $(this).val().split('.').join("");
-            $('#materialLengthHidden').val(number);
+            $('#convertMaterialLengthUsedHidden').val(number);
 
             number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             $(this).val(number);
         });
 
-        $('#materialPrice').keyup(function(){
+        $('#convertMaterialPrice').keyup(function(){
             var number = $(this).val().split('.').join("");
             number = number.replace(/Rp /gi,'');
-            $('#materialPriceHidden').val(number);
+            $('#convertMaterialPriceHidden').val(number);
         });
 
-        $('#materialPrice').priceFormat({
+        $('#convertMaterialPrice').priceFormat({
             prefix: 'Rp ',
             centsLimit: 0,
             thousandsSeparator: '.'
-        });
-
-        $('#editMaterialLength').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            $('#editMaterialLengthHidden').val(number);
-
-            number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $(this).val(number);
-        });
-
-        $('#editMaterialPrice').priceFormat({
-            prefix: 'Rp ',
-            centsLimit: 0,
-            thousandsSeparator: '.'
-        });
-
-        $('#editMaterialPrice').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            number = number.replace(/Rp /gi,'');
-            $('#editMaterialPriceHidden').val(number);
         });
 
         $("#searchMaterialBy").change(function() {
-            window.location = "{{ route('convection.index')}}" + '?convection='+ $(this).val();
+            window.location = "{{ route('convection.index')}}" + '?convection='+ $(this).val()+'&converted='+$("#searchMaterialUsed").val();
+        });
+
+        $("#searchMaterialUsed").change(function() {
+            window.location = "{{ route('convection.index')}}" + '?convection='+ $('#searchMaterialBy').val()+'&converted='+$(this).val();
         });
 
 	});
