@@ -39,16 +39,17 @@ Route::middleware(['userAuth'])->group(function () {
 	// End of Material
 
 	// Convection
-		// Convection
 		Route::get('/convection', 'ConvectionController@convection');
 
 		// Convection-Material-In
 		Route::get('/convection/material-in', 'ConvectionController@index')->name('convection.index');
 		Route::get('/convection/material-in/get-material-in', 'ConvectionController@getMaterialIn')->name('convection.getMaterialIn');
-		Route::get('/convection/material-in/convert-to-product', 'ConvectionController@convertToProduct')->name('convection.materialIn.convertToProduct');
+		Route::post('/convection/material-in/convert-to-product', 'ConvectionController@convertToProduct')->name('convection.materialIn.convertToProduct');
 
 		// Convection-Product
 		Route::get('/convection/product', 'ConvectionController@product')->name('convection.product');
+		Route::get('/convection/product/get-product', 'ConvectionController@getProduct')->name('convection.product.getProduct');
+		Route::post('/convection/product/send-product', 'ConvectionController@sendProduct')->name('convection.product.sendProduct');
 
 		// Convection-Type
 		Route::get('/convection/list', 'ConvectionController@convectionList');
@@ -56,11 +57,28 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/convection/list/add-convection', 'ConvectionController@storeConvectionList')->name('convection.addConvectionList');
 		Route::post('/convection/list/edit-convection', 'ConvectionController@updateConvectionList')->name('convection.editConvectionList');
 		Route::post('/convection/list/delete-convection', 'ConvectionController@destroyConvectionList')->name('convection.deleteConvectionList');
-
 	// End of Convection
 
 	// Warehouse
 		Route::get('/warehouse', 'WarehouseController@index')->name('warehouse.index');
+
+		// Warehouse-Incoming-Stock
+		Route::get('/warehouse/incoming-stock', 'WarehouseController@incomingStock')->name('warehouse.incomingStock');
+
+		// Warehouse-Incoming-Stock
+		Route::get('/warehouse/incoming-stock', 'WarehouseController@incomingStock')->name('warehouse.incomingStock');
+
+		// Warehouse-Stock
+		Route::get('/warehouse/stock', 'WarehouseController@stock')->name('warehouse.stock');
+
+		// Warehouse-Sold-Out
+		Route::get('/warehouse/sold-out', 'WarehouseController@soldOut')->name('warehouse.soldOut');
+
+		// Warehouse-Transfer-Stock
+		Route::get('/warehouse/transfer-stock', 'WarehouseController@transferStock')->name('warehouse.transferStock');
+
+		// Warehouse-Warehouse-List
+		Route::get('/warehouse/warehouse-list', 'WarehouseController@warehouseList')->name('warehouse.warehouseList');
 	// End of Warehouse
 
 });

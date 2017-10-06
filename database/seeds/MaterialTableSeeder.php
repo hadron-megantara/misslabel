@@ -200,5 +200,14 @@ class MaterialTableSeeder extends Seeder
 	    $material21->price = 25000000;
 	    $material21->date_purchase = '2017-05-02';
 	    $material21->save();
+
+	    $material22 = new Material();
+	    $material22->material_type = 'RAYON';
+	    $material22->length = 1500;
+	    $material22->color = 'Hijau';
+	    $material22->description = 'Keterangan bahan rayon';
+	    $material22->price = 40000000;
+	    $material22->date_purchase = '2017-05-05';
+	    $material22->save();
     }
 }

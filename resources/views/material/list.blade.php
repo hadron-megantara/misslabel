@@ -286,6 +286,7 @@
                         <div class="col-md-6">
                             <input id="sendMaterialType" type="text" class="form-control" disabled="">
                             <input type="hidden" id="sendMaterialId" name="materialId" />
+                            <input type="hidden" id="sendMaterialTypeHidden" name="materialType" />
                         </div>
                     </div>
 
@@ -294,6 +295,7 @@
 
                         <div class="col-md-6">
                             <input id="sendMaterialLength" type="text" class="form-control" disabled="">
+                            <input id="sendMaterialLengthHidden" type="hidden" name="materialLength" >
                         </div>
                     </div>
 
@@ -302,6 +304,7 @@
 
                         <div class="col-md-6">
                             <input id="sendMaterialColor" type="text" class="form-control" disabled="">
+                            <input id="sendMaterialColorHidden" type="hidden" name="materialColor" >
                         </div>
                     </div>
 
@@ -388,7 +391,7 @@
                 { data: 'material_type', name: 'material_type' },
                 { data: 'length', name: 'length', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        return data+' m';
+                        return data+' yard';
                     }
                 },
                 { data: 'color', name: 'color'},
@@ -470,12 +473,15 @@
 
             $("#sendMaterialId").val(id);
             $("#sendMaterialType").val($('#materialType_'+id).val());
+            $("#sendMaterialTypeHidden").val($('#materialType_'+id).val());
 
             var length = $('#materialLength_'+id).val();
+            $("#sendMaterialLengthHidden").val(length);
             length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#sendMaterialLength").val(length);
+            $("#sendMaterialLength").val(length+' yard');
 
             $("#sendMaterialColor").val($('#materialColor_'+id).val());
+            $("#sendMaterialColorHidden").val($('#materialColor_'+id).val());
             $("#sendMaterialDescription").val($('#materialDescription_'+id).val());
 
             var price = $('#materialPrice_'+id).val();

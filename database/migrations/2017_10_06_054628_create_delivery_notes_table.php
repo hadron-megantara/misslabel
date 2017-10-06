@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConvectionMaterialInsTable extends Migration
+class CreateDeliveryNotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateConvectionMaterialInsTable extends Migration
      */
     public function up()
     {
-        Schema::create('convection_material_ins', function (Blueprint $table) {
+        Schema::create('delivery_notes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('material_type');
-            $table->integer('length');
+            $table->string('product_id');
+            $table->string('name');
+            $table->binary('file');
+            $table->unsignedInteger('size');
+            $table->string('mime');
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ class CreateConvectionMaterialInsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('convection_material_ins');
+        Schema::dropIfExists('delivery_notes');
     }
 }

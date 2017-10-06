@@ -21,11 +21,12 @@
                 @foreach($convectionList as $convectionList)
                     <option value="{{$convectionList->id}}" @if($convection == $convectionList->id) selected="" @endif>{{$convectionList->name}}</option>
                 @endforeach
+                <option value="" @if($convection == 0) selected="" @endif >Semua Konveksi</option>
             </select>
 
             <select id="searchMaterialUsed" name="searchMaterialUsed">
-                <option value="0" @if($converted == 0) selected="" @endif>Stok</option>
-                <option value="1" @if($converted == 1) selected="" @endif>Terpakai</option>
+                <option value="0" @if($status == 0) selected="" @endif>Stok</option>
+                <option value="1" @if($status == 1) selected="" @endif>Terpakai</option>
             </select>
         </div>
 
@@ -48,7 +49,7 @@
     </div>
 </div>
 
-<div id="materialModalConvert" class="modal fade" role="dialog">
+<div id="materialModalConvert" class="modal fade" role="dialog" style="margin-top:1%;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -66,6 +67,8 @@
                         <div class="col-md-6">
                             <input id="convertMaterialType" type="text" class="form-control" disabled="">
                             <input type="hidden" id="convertMaterialId" name="materialId" />
+                            <input type="hidden" id="convertMaterialConvectionIdHidden" name="materialConvectionId" />
+                            <input id="convertMaterialTypeHidden" type="hidden" name="materialType">
                         </div>
                     </div>
 
@@ -74,6 +77,7 @@
 
                         <div class="col-md-6">
                             <input id="convertMaterialColor" type="text" class="form-control" disabled="">
+                            <input id="convertMaterialColorHidden" type="hidden" name="materialColor" />
                         </div>
                     </div>
 
@@ -82,6 +86,7 @@
 
                         <div class="col-md-6">
                             <input id="convertMaterialLength" type="text" class="form-control" disabled="">
+                            <input id="convertMaterialLengthHidden" type="hidden" name="materialLength" />
                         </div>
                     </div>
 
@@ -98,8 +103,23 @@
                         <label for="convertMaterialPrice" class="col-md-4 control-label">Harga</label>
 
                         <div class="col-md-6">
-                            <input id="convertMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required>
+                            <input id="convertMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required placeholder="Masukkan Harga">
                             <input id="convertMaterialPriceHidden" type="hidden" name="materialPrice">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="convertMaterialTotal" class="col-md-4 control-label">Total Produk</label>
+
+                        <div class="col-md-3">
+                            <input id="convertMaterialTotal" type="text" class="form-control number" name="materialTotalShow" required placeholder="Masukkan Total">
+                            <input id="convertMaterialTotalHidden" type="hidden" name="materialTotal">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" name="materialUnit">
+                                <option value="pcs">Satuan/Pcs</option>
+                                <option value="kodi">Kodi</option>
+                            </select>
                         </div>
                     </div>
 
@@ -107,7 +127,7 @@
                         <label for="convertMaterialProductName" class="col-md-4 control-label">Nama Produk</label>
 
                         <div class="col-md-6">
-                            <input id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required>
+                            <input id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required placeholder="Masukkan Nama Produk">
                         </div>
                     </div>
 
@@ -115,7 +135,7 @@
                         <label for="convertMaterialProductDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
-                            <textarea id="convertMaterialProductDescription" class="form-control" name="materialProductDescription" required style="resize: none;"></textarea>
+                            <textarea id="convertMaterialProductDescription" class="form-control" name="materialProductDescription" required style="resize: none;" placeholder="Masukkan Keterangan"></textarea>
                         </div>
                     </div>
                 </form>
@@ -123,7 +143,7 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
-                <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Kirim</button>
+                <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Simpan</button>
             </div>
         </div>
     </div>
@@ -136,17 +156,17 @@
         var t = $('#materialInTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('convection.getMaterialIn') }}'+'?convection={{$convection}}'+'&converted='+{{$converted}},
+            ajax: '{{ route('convection.getMaterialIn') }}'+'?convection={{$convection}}'+'&status='+{{$status}},
             columns: [
                 { data: 'material_type', name: 'material_type' },
                 { data: 'color', name: 'color' },
                 { data: 'length', name: 'length', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        return data+' m';
+                        return data+' yard';
                     }
                 },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"> <a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" />';
+                        return '<div class="text-center"> <a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+data+'" value="'+full.convection_id+'" />';
                     }
                 }
             ],
@@ -163,6 +183,10 @@
             $("#convertMaterialId").val(id);
             $("#convertMaterialType").val($('#materialType_'+id).val());
             $("#convertMaterialColor").val($('#materialColor_'+id).val());
+            $("#convertMaterialTypeHidden").val($('#materialType_'+id).val());
+            $("#convertMaterialColorHidden").val($('#materialColor_'+id).val());
+            $("#convertMaterialLengthHidden").val($('#materialLength_'+id).val());
+            $("#convertMaterialConvectionIdHidden").val($('#materialConvectionId_'+id).val());
 
             var length = $('#materialLength_'+id).val();
             length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -172,6 +196,19 @@
         $('#convertMaterialLengthUsed').keyup(function(){
             var number = $(this).val().split('.').join("");
             $('#convertMaterialLengthUsedHidden').val(number);
+
+            var rest = $('#convertMaterialLengthHidden').val() - number;
+            rest = rest.toString();
+            var numberUsed = rest.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            $('#convertMaterialLength').val(numberUsed);
+
+            number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            $(this).val(number);
+        });
+
+        $('#convertMaterialTotal').keyup(function(){
+            var number = $(this).val().split('.').join("");
+            $('#convertMaterialTotalHidden').val(number);
 
             number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             $(this).val(number);
@@ -190,11 +227,11 @@
         });
 
         $("#searchMaterialBy").change(function() {
-            window.location = "{{ route('convection.index')}}" + '?convection='+ $(this).val()+'&converted='+$("#searchMaterialUsed").val();
+            window.location = "{{ route('convection.index')}}" + '?convection='+ $(this).val()+'&status='+$("#searchMaterialUsed").val();
         });
 
         $("#searchMaterialUsed").change(function() {
-            window.location = "{{ route('convection.index')}}" + '?convection='+ $('#searchMaterialBy').val()+'&converted='+$(this).val();
+            window.location = "{{ route('convection.index')}}" + '?convection='+ $('#searchMaterialBy').val()+'&status='+$(this).val();
         });
 
 	});

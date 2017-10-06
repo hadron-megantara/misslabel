@@ -21,18 +21,28 @@
                 @foreach($convectionList as $convectionList)
                     <option value="{{$convectionList->id}}" @if($convection == $convectionList->id) selected="" @endif>{{$convectionList->name}}</option>
                 @endforeach
+                <option value="" @if($convection == 0) selected="" @endif >Semua Konveksi</option>
+            </select>
+
+            <select id="searchMaterialUsed" name="searchMaterialUsed">
+                <option value="0" @if($status == 0) selected="" @endif>Stok</option>
+                <option value="1" @if($status == 1) selected="" @endif>Terkirim ke Gudang</option>
             </select>
         </div>
 
         <div class="row"></div>
 
         <div class="table-responsive">
-        	<table id="materialInTable" class="table-bordered">
+        	<table id="productTable" class="table-bordered">
         		<thead>
         			<tr>
-        				<th>Tipe Bahan</th>
-                        <th>Warna Bahan</th>
+        				<th>Nama Produk</th>
+                        <th>Bahan</th>
+                        <th>Warna</th>
                         <th>Panjang Bahan</th>
+                        <th>Harga</th>
+                        <th>Total</th>
+                        <th>Deskripsi</th>
         				<th class="actions-column">Aksi</th>
         			</tr>
         		</thead>
@@ -43,74 +53,87 @@
     </div>
 </div>
 
-<div id="materialInModalEdit" class="modal fade" role="dialog">
+<div id="materialModalSend" class="modal fade" role="dialog" style="margin-top:1%;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Ubah Pembelian Bahan</h4>
+                <h4 class="modal-title">Kirim Barang ke Gudang</h4>
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.editMaterial') }}" role="form" id="editForm">
+                <form class="form-horizontal" method="POST" action="{{ route('convection.product.sendProduct') }}" role="form" id="editForm" enctype="multipart/form-data">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="editMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
+                        <label for="sendMaterialType" class="col-md-4 control-label">Nama Produk</label>
 
                         <div class="col-md-6">
-                            <select id="editMaterialType" class="form-control" name="materialName" required>
-                                
-                            </select>
-                            <input type="hidden" id="editMaterialId" name="materialId" />
+                            <input id="sendProductName" type="text" class="form-control" disabled="">
+                            <input type="hidden" id="sendProductId" name="productId" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="editMaterialLength" class="col-md-4 control-label">Panjang</label>
+                        <label for="sendProductMaterialType" class="col-md-4 control-label">Bahan</label>
 
                         <div class="col-md-6">
-                            <input id="editMaterialLength" type="text" class="form-control" name="materialLengthShow" required placeholder="Dalam Meter">
-                            <input id="editMaterialLengthHidden" type="hidden" name="materialLength" required>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
-                <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="materialModalSend" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Kirim Bahan ke Konveksi</h4>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.sendMaterial') }}" role="form" id="editForm">
-                    {!! csrf_field() !!}
-
-                    <div class="form-group">
-                        <label for="sendMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialType" type="text" class="form-control" disabled="">
-                            <input type="hidden" id="sendMaterialId" name="materialId" />
+                            <input id="sendProductMaterialType" type="text" class="form-control" disabled="">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="sendMaterialLength" class="col-md-4 control-label">Panjang</label>
+                        <label for="sendProductColor" class="col-md-4 control-label">Warna</label>
 
                         <div class="col-md-6">
-                            <input id="sendMaterialLength" type="text" class="form-control" disabled="">
+                            <input id="sendProductColor" type="text" class="form-control" disabled="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendProductLength" class="col-md-4 control-label">Panjang Bahan</label>
+
+                        <div class="col-md-6">
+                            <input id="sendProductLength" type="text" class="form-control" disabled="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendProductPrice" class="col-md-4 control-label">Harga</label>
+
+                        <div class="col-md-6">
+                            <input id="sendProductPrice" type="text" class="form-control" disabled="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendProductTotal" class="col-md-4 control-label">Total</label>
+
+                        <div class="col-md-6">
+                            <input id="sendProductTotal" type="text" class="form-control" disabled="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendProductDescription" class="col-md-4 control-label">Deskripsi</label>
+
+                        <div class="col-md-6">
+                            <input id="sendProductDescription" type="text" class="form-control" disabled="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendProductDeliveryNote" class="col-md-4 control-label">Nota Surat Jalan</label>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label class="input-group-btn">
+                                    <span class="btn btn-primary">
+                                        <span class="fa fa-file"></span><input id="sendProductDeliveryNote" type="file" style="display: none;" name="deliveryNote">
+                                    </span>
+                                </label>
+                                <input type="text" id="sendProductDeliveryNoteHidden" class="form-control" readonly>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -128,20 +151,32 @@
 	$(document).ready(function(){
         var indexCounter = 1;
 
-        var t = $('#materialInTable').DataTable({
+        var t = $('#productTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('convection.getMaterialIn') }}'+'?convection={{$convection}}',
+            ajax: '{{ route('convection.product.getProduct') }}',
             columns: [
+                { data: 'name', name: 'name' },
                 { data: 'material_type', name: 'material_type' },
                 { data: 'color', name: 'color' },
                 { data: 'length', name: 'length', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        return data+' m';
+                        return data+' yard';
                     }
                 },
+                { data: 'price', name: 'price', render: function(data, type, full) {
+                        data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                        return 'Rp '+data;
+                    }
+                },
+                { data: 'total', name: 'total', render: function(data, type, full) {
+                        data = data+' '+full.unit;
+                        return data;
+                    }
+                },
+                { data: 'description', name: 'description' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"> <a class="btn btn-primary deleteMaterialBtn" id="delete_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Konveksi"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" />';
+                        return '<div class="text-center"> <a class="btn btn-primary sendMaterialBtn" id="send_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Gudang"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="productMaterialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="productColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="productLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="productPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="productTotal_'+data+'" value="'+full.total+'" /><input type="hidden" id="productUnit_'+data+'" value="'+full.unit+'" /><input type="hidden" id="productDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="productName_'+data+'" value="'+full.name+'" />';
                     }
                 }
             ],
@@ -151,96 +186,37 @@
             },
         });
 
-        $("#materialTable").on("click", ".deleteMaterialBtn", function(){
-            var id = this.id;
-            id = id.substring(7);
-
-            $("#materialId").val(id);
-            $("#materialDeleteType").html($('#materialType_'+id).val());
-            $("#materialDeleteDatePurchase").html($('#materialDatePurchase_'+id).val());
-
-            var price = $('#materialPrice_'+id).val();
-            price = price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#materialDeletePrice").html('Rp '+price);
-        });
-
-        $("#materialTable").on("click", ".editMaterialBtn", function(){
+        $("#productTable").on("click", ".sendMaterialBtn", function(){
             var id = this.id;
             id = id.substring(5);
 
-            $("#editMaterialId").val(id);
-            $("#editMaterialType option[value='"+$('#materialType_'+id).val()+"']").attr("selected", true);
+            $("#sendProductId").val(id);
+            $("#sendProductName").val($('#productName_'+id).val());
 
-            var length = $('#materialLength_'+id).val();
+            var length = $('#productLength_'+id).val();
             length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#editMaterialLength").val(length);
-            $("#editMaterialLengthHidden").val($('#materialLength_'+id).val());
+            $("#sendProductLength").val(length+' yard');
 
-            $("#editMaterialWidth").val($('#materialWidth_'+id).val());
-            $("#editMaterialDescription").val($('#materialDescription_'+id).val());
+            $("#sendProductMaterialType").val($('#productMaterialType_'+id).val());
+            $("#sendProductDescription").val($('#productDescription_'+id).val());
+            $("#sendProductColor").val($('#productColor_'+id).val());
+            $("#sendProductTotal").val($('#productTotal_'+id).val()+' '+$('#productUnit_'+id).val());
 
-            var price = $('#materialPrice_'+id).val();
+            var price = $('#productPrice_'+id).val();
             price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-
-            $("#editMaterialPrice").val(price);
-            $("#editMaterialPriceHidden").val($('#materialPrice_'+id).val());
-            $("#editMaterialDatePurchase").val($('#materialDatePurchase_'+id).val());
-        });
-
-        $('#materialDatePurchase').datepicker({
-            dateFormat: 'yy-mm-dd',
-        });
-
-        $('#editMaterialDatePurchase').datepicker({
-            dateFormat: 'yy-mm-dd',
-        });
-
-        $('#materialDatePurchase').keypress(function(event){
-            event.preventDefault();
-        });
-
-        $('#materialLength').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            $('#materialLengthHidden').val(number);
-
-            number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $(this).val(number);
-        });
-
-        $('#materialPrice').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            number = number.replace(/Rp /gi,'');
-            $('#materialPriceHidden').val(number);
-        });
-
-        $('#materialPrice').priceFormat({
-            prefix: 'Rp ',
-            centsLimit: 0,
-            thousandsSeparator: '.'
-        });
-
-        $('#editMaterialLength').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            $('#editMaterialLengthHidden').val(number);
-
-            number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $(this).val(number);
-        });
-
-        $('#editMaterialPrice').priceFormat({
-            prefix: 'Rp ',
-            centsLimit: 0,
-            thousandsSeparator: '.'
-        });
-
-        $('#editMaterialPrice').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            number = number.replace(/Rp /gi,'');
-            $('#editMaterialPriceHidden').val(number);
+            $("#sendProductPrice").val(price);
         });
 
         $("#searchMaterialBy").change(function() {
-            window.location = "{{ route('convection.index')}}" + '?convection='+ $(this).val();
+            window.location = "{{ route('convection.index')}}" + '?convection='+ $(this).val()+'&status='+$("#searchMaterialUsed").val();
+        });
+
+        $("#searchMaterialUsed").change(function() {
+            window.location = "{{ route('convection.index')}}" + '?convection='+ $('#searchMaterialBy').val()+'&status='+$(this).val();
+        });
+
+        $('#sendProductDeliveryNote').change(function(){
+            $('#sendProductDeliveryNoteHidden').val($(this).val());
         });
 
 	});

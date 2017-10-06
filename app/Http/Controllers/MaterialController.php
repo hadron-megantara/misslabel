@@ -7,6 +7,7 @@ use DataTables;
 use Indonesia;
 use App\Material;
 use App\MaterialType;
+use App\MaterialIn;
 use App\ConvectionList;
 use Carbon\Carbon;
 
@@ -118,7 +119,21 @@ class MaterialController extends Controller
         $material->date_convection = date('Y-m-d');
         $material->save();
 
-        return redirect('/material')->with('success', 'Sukses mengirim bahan ke konveksi');;
+        $materialIn = MaterialIn::where('material_type', $request->materialType)->where('color', $request->materialColor)->where('convection_id', $request->convectionId)->first();
+
+        if($materialIn == null){
+            $materialIn = new MaterialIn;
+            $materialIn->material_type = $request->materialType;
+            $materialIn->color = $request->materialColor;
+            $materialIn->length = $request->materialLength;
+            $materialIn->convection_id = $request->convectionId;
+        } else{
+            $materialIn->length = $materialIn->length + $request->materialLength;
+        }
+
+        $materialIn->save();
+
+        return redirect('/material')->with('success', 'Sukses mengirim bahan ke konveksi');
     }
 
     public function type(Request $request){
