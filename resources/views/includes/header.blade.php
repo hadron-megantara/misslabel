@@ -132,8 +132,9 @@
                       </a>
                       <ul class="sub-menu" @if(\Request::is('material') || \Request::is('material/*')) style="display: block;" @endif>
                           <li @if(\Request::is('material/transaction') || \Request::is('material/transaction/*')) class="active" @endif><a href="/material/transaction">Nota Pembelian</a></li>
-                          <li @if(\Request::is('material') || \Request::is('material/*')) class="active" @endif><a href="/material">List Bahan</a></li>
+                          <li @if(\Request::is('material/list') || \Request::is('material/list/*')) class="active" @endif><a href="/material/list">List Bahan</a></li>
                           <li @if(\Request::is('material/type') || \Request::is('material/type/*')) class="active" @endif><a href="/material/type">Tipe Bahan</a></li>
+                          <li @if(\Request::is('material/seller') || \Request::is('material/seller/*')) class="active" @endif><a href="/material/seller">Penjual</a></li>
                       </ul>
                   </li>
 

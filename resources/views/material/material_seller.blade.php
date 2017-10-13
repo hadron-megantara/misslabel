@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Tipe Bahan</h3>
+            <h3>Penjual Bahan</h3>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#materialSellerModalAdd" class="btn btn-success btnAddMaterialSeller" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Penjual Bahan</a>
             </div>
@@ -16,7 +16,7 @@
         		<thead>
         			<tr>
         				<th>Nama Penjual</th>
-                        <th>Keterang`an</th>
+                        <th>Keterangan</th>
         				<th class="actions-column">Aksi</th>
         			</tr>
         		</thead>
@@ -32,18 +32,26 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Tambah Tipe Bahan</h4>
+                <h4 class="modal-title">Tambah Penjual Bahan</h4>
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.addMaterialSeller') }}" role="form" id="addForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.seller.addSeller') }}" role="form" id="addForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="customerName" class="col-md-4 control-label">Tipe Bahan</label>
+                        <label for="sellerNameAdd" class="col-md-4 control-label">Penjual</label>
 
                         <div class="col-md-6">
-                            <input id="materialSellerName" type="text" class="form-control" name="materialSellerName" required>
+                            <input id="sellerNameAdd" type="text" class="form-control" name="sellerName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sellerDescriptionAdd" class="col-md-4 control-label">Keterangan</label>
+
+                        <div class="col-md-6">
+                            <textarea id="sellerDescriptionAdd" class="form-control" name="sellerDescription" required style="resize: none;" rows="4"></textarea>
                         </div>
                     </div>
                 </form>
@@ -62,19 +70,27 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Ubah Tipe Bahan</h4>
+                <h4 class="modal-title">Ubah Penjual Bahan</h4>
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.editMaterialSeller') }}" role="form" id="editForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.seller.editSeller') }}" role="form" id="editForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="editMaterialSellerName" class="col-md-4 control-label">Tipe Bahan</label>
+                        <label for="editSellerName" class="col-md-4 control-label">Penjual</label>
 
                         <div class="col-md-6">
-                            <input id="editMaterialSellerName" type="text" class="form-control" name="materialSellerName" required>
-                            <input type="hidden" id="editMaterialSellerId" name="materialSellerId" />
+                            <input id="editSellerName" type="text" class="form-control" name="sellerName" required>
+                            <input type="hidden" id="editSellerId" name="sellerId" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editSellerDescription" class="col-md-4 control-label">Keterangan</label>
+
+                        <div class="col-md-6">
+                            <textarea id="editSellerDescription" class="form-control" name="sellerDescription" required style="resize: none;" rows="4"></textarea>
                         </div>
                     </div>
                 </form>
@@ -93,15 +109,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Hapus Tipe Bahan</h4>
+                <h4 class="modal-title">Hapus Penjual Bahan</h4>
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.deleteMaterialSeller') }}" role="form" id="deleteForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.seller.deleteSeller') }}" role="form" id="deleteForm">
                     {!! csrf_field() !!}
 
-                    <label>Anda yakin ingin menghapus tipe bahan "<b id="materialSellerDeleteName"></b>" ?</label>
-                    <input id="materialSellerId" type="hidden" class="form-control" name="materialSellerId">
+                    <label class="text-center">Anda yakin ingin menghapus penjual "<b id="sellerDeleteName"></b>" ?</label>
+                    <input id="sellerIdDelete" type="hidden" class="form-control" name="sellerId">
                 </form>
             </div>
             
@@ -120,11 +136,12 @@
         var t = $('#materialSellerTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('material.getMaterialSeller') }}',
+            ajax: '{{ route('material.seller.getSeller') }}',
             columns: [
                 { data: 'name', name: 'name' },
+                { data: 'description', name: 'description' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"><a class="btn btn-success editMaterialSellerBtn" id="edit_'+data+'" href="#materialSellerModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteMaterialSellerBtn" id="delete_'+data+'" href="#materialSellerModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="materialSellerName_'+data+'" value="'+full.name+'" />';
+                        return '<div class="text-center"><a class="btn btn-success editMaterialSellerBtn" id="edit_'+data+'" href="#materialSellerModalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteMaterialSellerBtn" id="delete_'+data+'" href="#materialSellerModalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="sellerName_'+data+'" value="'+full.name+'" /><input type="hidden" id="sellerDescription_'+data+'" value="'+full.description+'" />';
                     }
                 }
             ],
@@ -138,16 +155,17 @@
             var id = this.id;
             id = id.substring(7);
 
-            $("#materialSellerId").val(id);
-            $("#materialSellerDeleteName").html($('#materialSellerName_'+id).val());
+            $("#sellerIdDelete").val(id);
+            $("#sellerDeleteName").html($('#sellerName_'+id).val());
         });
 
         $("#materialSellerTable").on("click", ".editMaterialSellerBtn", function(){
             var id = this.id;
             id = id.substring(5);
 
-            $("#editMaterialSellerId").val(id);
-            $("#editMaterialSellerName").val($('#materialSellerName_'+id).val());
+            $("#editSellerId").val(id);
+            $("#editSellerName").val($('#sellerName_'+id).val());
+            $("#editSellerDescription").val($('#sellerDescription_'+id).val());
         });
 	});
 </script>

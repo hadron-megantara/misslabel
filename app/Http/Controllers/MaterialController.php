@@ -227,72 +227,38 @@ class MaterialController extends Controller
     }
 
     public function getMaterialSeller(Request $request){
-        if(!$request->has('dateFrom') || $request->dateFrom == ''){
-            $dateFrom = '1990-01-01';
-        } else{
-            $dateFrom = $request->dateFrom;
-        }
-
-        if(!$request->has('dateTo') || $request->dateTo == ''){
-            $dateTo = date('Y-m-d');
-        } else{
-            $dateTo = $request->dateTo;
-        }
-
-        if($request->has('status')){
-            if($request->status != 2){
-                $status = $request->status;
-                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->where('status', $request->status)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
-            } else{
-                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereBetween('date_purchase', [$dateFrom, $dateTo]);
-            }
-        } else{
-            $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereDate('date_purchase', '>=', $request->dateFrom)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
-        }
+        $materialSeller = MaterialSeller::select(['id', 'name', 'description'])->orderBy('updated_at', 'desc')->get();
      
-        return Datatables::of($material)->make();
+        return Datatables::of($materialSeller)->make();
     }
 
     public function storeMaterialSeller(Request $request){
-        $material = new Material;
+        $materialSeller = new MaterialSeller;
 
-        $material->material_type = $request->materialName;
-        $material->length = $request->materialLength;
-        $material->color = $request->materialColor;
-        $material->description = $request->materialDescription;
-        $material->price = $request->materialPrice;
-        $material->date_purchase = $request->materialDatePurchase;
+        $materialSeller->name = $request->sellerName;
+        $materialSeller->description = $request->sellerDescription;
 
-        $material->save();
+        $materialSeller->save();
 
-        $expense = new Expense;
-        $expense->value = $request->materialPrice;
-        $expense->date = $request->materialDatePurchase;
-        $expense->save();
-
-        return redirect('/material');
+        return redirect('/material/seller');
     }
 
     public function updateMaterialSeller(Request $request){
-        $material = Material::find($request->materialId);
+        $materialSeller = MaterialSeller::find($request->sellerId);
         
-        $material->material_type = $request->materialName;
-        $material->length = $request->materialLength;
-        $material->color = $request->materialColor;
-        $material->description = $request->materialDescription;
-        $material->price = $request->materialPrice;
-        $material->date_purchase = $request->materialDatePurchase;
+        $materialSeller->name = $request->sellerName;
+        $materialSeller->description = $request->sellerDescription;
 
-        $material->save();
+        $materialSeller->save();
 
-        return redirect('/material');
+        return redirect('/material/seller');
     }
 
     public function destroyMaterialSeller(Request $request){
-        $material = Material::find($request->materialId);
+        $materialSeller = MaterialSeller::find($request->sellerId);
 
-        $material->delete();
+        $materialSeller->delete();
 
-        return redirect('/material');
+        return redirect('/material/seller');
     }
 }

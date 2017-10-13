@@ -23,9 +23,9 @@ Route::middleware(['userAuth'])->group(function () {
 
 	// Material
 		// Material-List
-		Route::get('/material', 'MaterialController@index')->name('material.index');
-		Route::get('/material/get-material', 'MaterialController@getMaterial')->name('material.getMaterial');
-		Route::post('/material/send-material', 'MaterialController@sendMaterial')->name('material.sendMaterial');
+		Route::get('/material/list', 'MaterialController@index')->name('material.index');
+		Route::get('/material/list/get-material', 'MaterialController@getMaterial')->name('material.getMaterial');
+		Route::post('/material/list/send-material', 'MaterialController@sendMaterial')->name('material.sendMaterial');
 
 		// Material-Transaction
 		Route::get('/material/transaction', 'MaterialController@transaction')->name('material.transaction');
@@ -40,6 +40,13 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/material/type/add-material', 'MaterialController@storeMaterialType')->name('material.addMaterialType');
 		Route::post('/material/type/edit-material', 'MaterialController@updateMaterialType')->name('material.editMaterialType');
 		Route::post('/material/type/delete-material', 'MaterialController@destroyMaterialType')->name('material.deleteMaterialType');
+
+		// Material-Color
+		Route::get('/material/color', 'MaterialController@color');
+		Route::get('/material/color/get-color', 'MaterialController@getMaterialColor')->name('material.getMaterialColor');
+		Route::post('/material/color/add-colo', 'MaterialController@storeMaterialColor')->name('material.addMaterialColor');
+		Route::post('/material/color/edit-color', 'MaterialController@updateMaterialColor')->name('material.editMaterialColor');
+		Route::post('/material/color/delete-color', 'MaterialController@destroyMaterialColor')->name('material.deleteMaterialColor');
 
 		// Material-Seller
 		Route::get('/material/seller', 'MaterialController@seller');
