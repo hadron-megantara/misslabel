@@ -19,6 +19,7 @@
     <link href="/css/footer.css" rel="stylesheet">
     <link href="/css/jquery-ui.min.css" rel="stylesheet">
     <link href="/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="/css/highcharts.css" rel="stylesheet">
 
     <!-- BEGIN PLUGIN CSS -->
     <link href="/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" />
@@ -43,6 +44,8 @@
     <script src="/js/jquery-ui.min.js"></script>
     <script src="/js/jquery.dataTables.min.js"></script>
     <script src="/js/jquery.priceformat.min.js"></script>
+    {{-- <script src="/js/highcharts.js"></script> --}}
+    <script src="/js/highstock.js"></script>
 
     <!-- Scripts -->
     <script>

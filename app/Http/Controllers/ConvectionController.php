@@ -10,6 +10,7 @@ use App\ConvectionList;
 use App\ConvectionMaterialIn;
 use App\Product;
 use App\DeliveryNote;
+use App\Warehouse;
 use Carbon\Carbon;
 
 class ConvectionController extends Controller
@@ -51,9 +52,9 @@ class ConvectionController extends Controller
         }
 
         if(!$request->has('convection') || $request->convection == '' || $request->convection == 0){
-            $convectionMaterialIn = MaterialIn::selectRaw('id, material_type, color, SUM(length) AS length')->groupBy('id', 'convection_id', 'material_type', 'color')->orderBy('material_type')->where('status', $status)->get();
+            $convectionMaterialIn = MaterialIn::selectRaw('id, material_type, color, SUM(length) AS length')->groupBy('id', 'convection_id', 'material_type', 'color')->orderBy('material_type')->where('status', $status)->where('length', '<>', 0)->get();
         } else{
-            $convectionMaterialIn = MaterialIn::selectRaw('id, material_type, color, SUM(length) AS length, convection_id')->groupBy('id', 'convection_id', 'material_type', 'color')->orderBy('material_type')->where('status', $status)->where('convection_id', $request->convection)->get();
+            $convectionMaterialIn = MaterialIn::selectRaw('id, material_type, color, SUM(length) AS length, convection_id')->groupBy('id', 'convection_id', 'material_type', 'color')->orderBy('material_type')->where('status', $status)->where('length', '<>', 0)->where('convection_id', $request->convection)->get();
         }
         
         return Datatables::of($convectionMaterialIn)->make();
@@ -162,6 +163,7 @@ class ConvectionController extends Controller
         }
 
         $convectionList = ConvectionList::all();
+        $warehouseList = Warehouse::all();
 
         $product = Product::all();
 
@@ -178,27 +180,47 @@ class ConvectionController extends Controller
             $status = $request->status;
         }
 
-        return view("convection.product", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection, 'status' => $status));
+        return view("convection.product", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection, 'status' => $status, 'warehouseList' => $warehouseList));
     }
 
     public function getProduct(Request $request){
-        $product = Product::select('id','name','material_type','color','length','price','description','total','unit')->orderBy('updated_at','desc')->get();
+        if($request->has('productId')){
+            $items = json_decode($request->productId);
+        }
+
+        $product = Product::select('id','name','material_type','color','length','price','description','total','unit')->whereNotIn('id', $items)->where('status', 0)->orderBy('updated_at','desc')->get();
 
         return Datatables::of($product)->make();
     }
 
     public function sendProduct(Request $request){
-        $product = Product::find($request->productId);
-
         if($request->has('deliveryNote')){
+            $productItem = explode(',', $request->productId);
+            $productId = '';
+            foreach($productItem as $productItem){
+                $productData = Product::find($productItem);
+                $productData->status = 1;
+                $productData->warehouse = $request->warehouseId;
+                $productData->save();
+
+                if($productId == ''){
+                    $productId = $productItem;
+                } else{
+                    $productId = $productId.','.$productItem;
+                }
+            }
+
             $file = $request->file('deliveryNote');
             $deliveryNote = new DeliveryNote;
-            $deliveryNote->product_id = $request->product_id;
+            $deliveryNote->product_id = $productId;
             $deliveryNote->name = $file->getClientOriginalName();
             $deliveryNote->file = base64_encode(file_get_contents($file->getRealPath()));
             $deliveryNote->mime = $file->getMimeType();
             $deliveryNote->size = $file->getSize();
+            $deliveryNote->description = $request->description;
             $deliveryNote->save();
+
+            return redirect('/convection/product')->with('success', 'Sukses menyimpan barang ke gudang');
         } else{
             return redirect('/convection/product')->with('error', 'Proses gagal, harap lampirkan surat jalan');
         }

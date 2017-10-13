@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDeliveryNotesTable extends Migration
+class CreateStocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreateDeliveryNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('delivery_notes', function (Blueprint $table) {
+        Schema::create('stocks', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('product_id');
             $table->string('name');
-            $table->unsignedInteger('size');
-            $table->string('mime');
-            $table->string('description')->nullable();
+            $table->string('warehouse');
+            $table->integer('total');
             $table->timestamps();
         });
-
-        DB::statement('ALTER TABLE delivery_notes ADD file LONGBLOB');
     }
 
     /**
@@ -33,6 +29,6 @@ class CreateDeliveryNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('delivery_notes');
+        Schema::dropIfExists('stocks');
     }
 }

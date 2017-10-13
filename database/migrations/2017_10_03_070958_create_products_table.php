@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->integer('total');
             $table->string('unit');
             $table->char('status')->default('0');
+            $table->string('warehouse')->nullable();
             $table->timestamps();
         });
     }

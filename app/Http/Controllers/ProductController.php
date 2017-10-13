@@ -10,10 +10,9 @@ use App\ConvectionList;
 use App\ConvectionMaterialIn;
 use App\Product;
 use App\DeliveryNote;
-use App\Warehouse;
 use Carbon\Carbon;
 
-class WareHouseController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,42 +22,6 @@ class WareHouseController extends Controller
     public function index()
     {
         //
-    }
-
-    public function stock(Request $request){
-        $user = array();
-        if($request->has('user')){
-            $user = $request->user;
-        }
-
-        $warehouseList = Warehouse::all();
-
-        $product = Product::all();
-
-        $warehouse = 0;
-        if($request->has('warehouse')){
-            $warehouse = $request->warehouse;
-        } else{
-            $firstWarehouse = Warehouse::first();
-            $warehouse = $firstWarehouse->id;
-        }
-
-        $status = 0;
-        if($request->has('status')){
-            $status = $request->status;
-        }
-
-        return view("product.list", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse, 'status' => $status));
-    }
-
-    public function getStock(Request $request){
-        if($request->has('warehouse') && $request->warehouse != ''){
-            $product = Product::select('id','name','material_type','color','price','description','total','unit')->where('warehouse', $request->warehouse)->where('status', 1)->orderBy('updated_at','desc')->get();
-        } else{
-            $product = Product::select('id','name','material_type','color','price','description','total','unit')->where('status', 1)->orderBy('updated_at','desc')->get();
-        }
-
-        return Datatables::of($product)->make();
     }
 
     /**

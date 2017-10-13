@@ -11,12 +11,12 @@
         <div class="page-title">
             <h3>Pembelian Bahan</h3>
             <div class="pull-right" style="margin-top: 5px">
-                <a href="#materialModalExport" class="btn btn-danger" data-toggle="modal">
-                    <span class="fa fa-cloud-download"> </span>Download
+                <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
+                    <span class="fa fa-print"> </span>Print
                 </a>
 
-                <a href="#materialModalAdd" class="btn btn-success btnAddMaterial" data-toggle="modal">
-                    <span class="fa fa-plus"></span> Tambah Pembelian
+                <a href="#materialModalExport" class="btn btn-danger" data-toggle="modal">
+                    <span class="fa fa-cloud-download"> </span>Download
                 </a>
             </div>
         </div>
@@ -74,7 +74,6 @@
         				<th style="padding: 10px 18px">Tipe Bahan</th>
                         <th>Panjang</th>
                         <th>Warna</th>
-                        <th>Keterangan</th>
                         <th>Harga</th>
                         <th>Tanggal Pembelian</th>
         				<th class="actions-column">Aksi</th>
@@ -87,188 +86,7 @@
     </div>
 </div>
 
-<div id="materialModalAdd" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Tambah Pembelian Bahan</h4>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.addMaterial') }}" role="form" id="addForm">
-                    {!! csrf_field() !!}
-
-                    <div class="form-group">
-                        <label for="materialName" class="col-md-4 control-label">Tipe Bahan</label>
-
-                        <div class="col-md-6">
-                            <select id="materialName" class="form-control" name="materialName" required>
-                                @foreach($materialType as $materialType2)
-                                    <option value="{{$materialType2->name}}">{{$materialType2->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialLength" class="col-md-4 control-label">Panjang</label>
-
-                        <div class="col-md-6">
-                            <input id="materialLength" type="text" class="form-control" name="materialLengthShow" required placeholder="Dalam Yard">
-                            <input id="materialLengthHidden" type="hidden" name="materialLength" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialColor" class="col-md-4 control-label">Warna</label>
-
-                        <div class="col-md-6">
-                            <select id="materialColor" class="form-control" name="materialColor" required>
-                                <option value="Putih">Putih</option>
-                                <option value="Hitam">Hitam</option>
-                                <option value="Biru">Biru</option>
-                                <option value="Biru Muda">Biru Muda</option>
-                                <option value="Hijau">Hijau</option>
-                                <option value="Hijau Muda">Hijau Muda</option>
-                                <option value="Kuning">Kuning</option>
-                                <option value="Kuning Muda">Kuning Muda</option>
-                                <option value="Merah">Merah</option>
-                                <option value="Merah Muda">Merah Muda</option>
-                                <option value="Ungu">Ungu</option>
-                                <option value="Perak">Perak</option>
-                                <option value="Emas">Emas</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialDescription" class="col-md-4 control-label">Keterangan</label>
-
-                        <div class="col-md-6">
-                            <textarea id="materialDescription" class="form-control" name="materialDescription" required style="resize: none"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialPrice" class="col-md-4 control-label">Harga</label>
-
-                        <div class="col-md-6">
-                            <input id="materialPrice" type="text" class="form-control number" name="materialPriceShow" required>
-                            <input id="materialPriceHidden" type="hidden" name="materialPrice" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialDatePurchase" class="col-md-4 control-label">Tanggal Pembelian</label>
-
-                        <div class="col-md-6">
-                            <input id="materialDatePurchase" type="text" class="form-control" name="materialDatePurchase" required>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
-                <button type="submit" class="btn btn-success" form="addForm"><span class="fa fa-save"></span> Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="materialModalEdit" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Ubah Pembelian Bahan</h4>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.editMaterial') }}" role="form" id="editForm">
-                    {!! csrf_field() !!}
-
-                    <div class="form-group">
-                        <label for="editMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
-
-                        <div class="col-md-6">
-                            <select id="editMaterialType" class="form-control" name="materialName" required>
-                                @foreach($materialType as $materialType3)
-                                    <option value="{{$materialType3->name}}">{{$materialType3->name}}</option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" id="editMaterialId" name="materialId" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editMaterialLength" class="col-md-4 control-label">Panjang</label>
-
-                        <div class="col-md-6">
-                            <input id="editMaterialLength" type="text" class="form-control" name="materialLengthShow" required placeholder="Dalam Yard">
-                            <input id="editMaterialLengthHidden" type="hidden" name="materialLength" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editMaterialColor" class="col-md-4 control-label">Lebar</label>
-
-                        <div class="col-md-6">
-                            <select id="editMaterialColor" class="form-control" name="materialColor" required>
-                                <option value="Putih">Putih</option>
-                                <option value="Hitam">Hitam</option>
-                                <option value="Biru">Biru</option>
-                                <option value="Biru Muda">Biru Muda</option>
-                                <option value="Hijau">Hijau</option>
-                                <option value="Hijau Muda">Hijau Muda</option>
-                                <option value="Kuning">Kuning</option>
-                                <option value="Kuning Muda">Kuning Muda</option>
-                                <option value="Merah">Merah</option>
-                                <option value="Merah Muda">Merah Muda</option>
-                                <option value="Ungu">Ungu</option>
-                                <option value="Perak">Perak</option>
-                                <option value="Emas">Emas</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editMaterialDescription" class="col-md-4 control-label">Keterangan</label>
-
-                        <div class="col-md-6">
-                            <textarea id="editMaterialDescription" class="form-control" name="materialDescription" required style="resize: none"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editMaterialPrice" class="col-md-4 control-label">Harga</label>
-
-                        <div class="col-md-6">
-                            <input id="editMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required>
-                            <input id="editMaterialPriceHidden" type="hidden" name="materialPrice" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editMaterialDatePurchase" class="col-md-4 control-label">Tanggal Pembelian</label>
-
-                        <div class="col-md-6">
-                            <input id="editMaterialDatePurchase" type="text" class="form-control" name="materialDatePurchase" required>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
-                <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="materialModalSend" class="modal fade" role="dialog">
+<div id="materialModalSend" class="modal fade" role="dialog" style="margin-top:1%;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -354,31 +172,6 @@
     </div>
 </div>
 
-<div id="materialModalDelete" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Hapus Pembelian Bahan</h4>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.deleteMaterial') }}" role="form" id="deleteForm">
-                    {!! csrf_field() !!}
-
-                    <label>Anda yakin ingin menghapus pembelian bahan "<b id="materialDeleteType"></b>" di tanggal "<b id="materialDeleteDatePurchase"></b>" dengan harga "<b id="materialDeletePrice"></b>" ?</label>
-                    <input id="materialId" type="hidden" class="form-control" name="materialId">
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
-                <button type="submit" class="btn btn-success" form="deleteForm"><span class="fa fa-trash"></span> Hapus</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
 	$(document).ready(function(){
         var indexCounter = 1;
@@ -395,7 +188,6 @@
                     }
                 },
                 { data: 'color', name: 'color'},
-                { data: 'description', name: 'description' },
                 { data: 'price', name: 'price', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         return 'Rp '+data;
@@ -429,42 +221,6 @@
                 "sProcessing": "Memproses...",
                 "sZeroRecords": "Tidak ada data untuk ditampilkan..."
             },
-        });
-
-        $("#materialTable").on("click", ".deleteMaterialBtn", function(){
-            var id = this.id;
-            id = id.substring(7);
-
-            $("#materialId").val(id);
-            $("#materialDeleteType").html($('#materialType_'+id).val());
-            $("#materialDeleteDatePurchase").html($('#materialDatePurchase_'+id).val());
-
-            var price = $('#materialPrice_'+id).val();
-            price = price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#materialDeletePrice").html('Rp '+price);
-        });
-
-        $("#materialTable").on("click", ".editMaterialBtn", function(){
-            var id = this.id;
-            id = id.substring(5);
-
-            $("#editMaterialId").val(id);
-            $("#editMaterialType option[value='"+$('#materialType_'+id).val()+"']").attr("selected", true);
-
-            var length = $('#materialLength_'+id).val();
-            length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#editMaterialLength").val(length);
-            $("#editMaterialLengthHidden").val($('#materialLength_'+id).val());
-
-            $("#editMaterialColor option[value='"+$('#materialColor_'+id).val()+"']").attr("selected", true);
-            $("#editMaterialDescription").val($('#materialDescription_'+id).val());
-
-            var price = $('#materialPrice_'+id).val();
-            price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-
-            $("#editMaterialPrice").val(price);
-            $("#editMaterialPriceHidden").val($('#materialPrice_'+id).val());
-            $("#editMaterialDatePurchase").val($('#materialDatePurchase_'+id).val());
         });
 
         $("#materialTable").on("click", ".sendMaterialBtn", function(){
@@ -525,28 +281,12 @@
             thousandsSeparator: '.'
         });
 
-        $('#editMaterialLength').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            $('#editMaterialLengthHidden').val(number);
-
-            number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $(this).val(number);
-        });
-
-        $('#editMaterialPrice').priceFormat({
-            prefix: 'Rp ',
-            centsLimit: 0,
-            thousandsSeparator: '.'
-        });
-
-        $('#editMaterialPrice').keyup(function(){
-            var number = $(this).val().split('.').join("");
-            number = number.replace(/Rp /gi,'');
-            $('#editMaterialPriceHidden').val(number);
-        });
-
         $("#searchMaterialBy").change(function() {
             window.location = "{{ route('material.index')}}" + '?status='+ $(this).val();
+        });
+
+        $('#materialTotalPrice').keypress(function(){
+            event.preventDefault();
         });
 
         $('#filterDateFrom').keypress(function(event){
@@ -559,6 +299,11 @@
 
         $('#filterProcess').click(function(){
             window.location = "{{ route('material.index')}}" + '?status='+$("#searchMaterialBy").val()+'&dateFrom='+$("#filterDateFrom").val()+'&dateTo='+$("#filterDateTo").val();
+        });
+
+        $("#materialLength").keypress(function (e) {
+            if (e.which < 48 || 57 < e.which)
+                e.preventDefault();
         });
 
 	});

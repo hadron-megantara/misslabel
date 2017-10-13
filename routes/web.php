@@ -22,13 +22,17 @@ Route::middleware(['userAuth'])->group(function () {
 	Route::post('/customer/delete-customer', 'CustomerController@destroy')->name('customer.deleteCustomer');
 
 	// Material
-		// Material-Purchase-List
+		// Material-List
 		Route::get('/material', 'MaterialController@index')->name('material.index');
 		Route::get('/material/get-material', 'MaterialController@getMaterial')->name('material.getMaterial');
-		Route::post('/material/add-material', 'MaterialController@storeMaterial')->name('material.addMaterial');
-		Route::post('/material/edit-material', 'MaterialController@updateMaterial')->name('material.editMaterial');
-		Route::post('/material/delete-material', 'MaterialController@destroyMaterial')->name('material.deleteMaterial');
 		Route::post('/material/send-material', 'MaterialController@sendMaterial')->name('material.sendMaterial');
+
+		// Material-Transaction
+		Route::get('/material/transaction', 'MaterialController@transaction')->name('material.transaction');
+		Route::get('/material/transaction/get-transaction', 'MaterialController@getTransaction')->name('material.transaction.getTransaction');
+		Route::post('/material/add-transaction', 'MaterialController@storeTransaction')->name('material.transaction.addTransaction');
+		Route::post('/material/edit-transaction', 'MaterialController@updateTransaction')->name('material.transaction.editTransaction');
+		Route::post('/material/delete-transaction', 'MaterialController@destroyTransaction')->name('material.transaction.deleteTransaction');
 
 		// Material-Type
 		Route::get('/material/type', 'MaterialController@type');
@@ -36,6 +40,13 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/material/type/add-material', 'MaterialController@storeMaterialType')->name('material.addMaterialType');
 		Route::post('/material/type/edit-material', 'MaterialController@updateMaterialType')->name('material.editMaterialType');
 		Route::post('/material/type/delete-material', 'MaterialController@destroyMaterialType')->name('material.deleteMaterialType');
+
+		// Material-Seller
+		Route::get('/material/seller', 'MaterialController@seller');
+		Route::get('/material/type/get-seller', 'MaterialController@getMaterialSeller')->name('material.seller.getSeller');
+		Route::post('/material/type/add-seller', 'MaterialController@storeMaterialSeller')->name('material.seller.addSeller');
+		Route::post('/material/type/edit-seller', 'MaterialController@updateMaterialSeller')->name('material.seller.editSeller');
+		Route::post('/material/type/delete-seller', 'MaterialController@destroyMaterialSeller')->name('material.seller.deleteSeller');
 	// End of Material
 
 	// Convection
@@ -70,6 +81,7 @@ Route::middleware(['userAuth'])->group(function () {
 
 		// Warehouse-Stock
 		Route::get('/warehouse/stock', 'WarehouseController@stock')->name('warehouse.stock');
+		Route::get('/warehouse/get-stock', 'WarehouseController@getStock')->name('warehouse.getStock');
 
 		// Warehouse-Sold-Out
 		Route::get('/warehouse/sold-out', 'WarehouseController@soldOut')->name('warehouse.soldOut');

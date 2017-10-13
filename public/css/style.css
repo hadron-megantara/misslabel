@@ -78,7 +78,7 @@ table .btn{
 }
 
 .page-title h3 {
-    width: 70%;
+    width: 50%;
 }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
@@ -175,4 +175,56 @@ input[type="text"]:focus, input[type="number"]:focus, textarea:focus, textarea.f
 
 .page-title h3{
   width: 50%;
+}
+
+table.selectedItems tr{
+  background-color: #ffffff;
+  border: 3px solid #D3D7DB;
+}
+
+table.selectedItems tr th{
+  padding: 10px 18px;
+}
+
+table.selectedItems tr td{
+  padding: 8px 10px;
+  border: 1px solid #e8edf1 !important;
+}
+
+.bottomTable{
+  margin-bottom: 50px;
+}
+
+.dataTable{
+  border: 3px solid #D3D7DB;
+}
+
+.alert.materialAdded{
+  margin-bottom: 0;
+}
+
+.modal{
+  margin-top: 1%;
+}
+
+.modal-dialog.full-width{
+  width: 95%;
+}
+
+.modal-dialog .modal-body, .modal-dialog .modal-footer{
+  background-color: #ffffff;
+}
+
+.modal-dialog.full-width .form-horizontal .control-label{
+  text-align: left;
+}
+
+.inputArea{
+  padding-top: 25px;
+  padding-right: 10px;
+  margin-bottom: 10px;
+}
+
+.fa.addBtn, .fa.deleteBtn{
+  margin-right: 0;
 }

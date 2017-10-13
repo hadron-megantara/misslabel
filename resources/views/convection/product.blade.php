@@ -50,6 +50,41 @@
         		</tbody>
         	</table>
         </div>
+
+        <hr style="border-top: 2px solid #000000;">
+
+        <div class="page-title">
+            <h3>Produk terpilih</h3>
+            <div class="pull-right" style="margin-top: 5px">
+                <a href="#materialModalSend" class="btn btn-success productModalSend" data-toggle="modal">
+                    <span class="fa fa-save"></span> Simpan di Gudang
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive bottomTable">
+            <table id="productTableChecked" class="table-bordered selectedItems" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Nama Produk</th>
+                        <th>Bahan</th>
+                        <th>Warna</th>
+                        <th>Panjang Bahan</th>
+                        <th>Harga</th>
+                        <th>Total</th>
+                        <th>Deskripsi</th>
+                        <th class="actions-column">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="checkedItems">
+                    <tr class="emptyItems">
+                        <td colspan="8" class="text-center">
+                            Tidak ada data untuk ditampilkan...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -58,7 +93,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Kirim Barang ke Gudang</h4>
+                <h4 class="modal-title">Simpan Barang ke Gudang</h4>
             </div>
 
             <div class="modal-body">
@@ -66,59 +101,15 @@
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="sendMaterialType" class="col-md-4 control-label">Nama Produk</label>
+                        <label for="sendProductWarehouse" class="col-md-4 control-label">Gudang</label>
 
                         <div class="col-md-6">
-                            <input id="sendProductName" type="text" class="form-control" disabled="">
-                            <input type="hidden" id="sendProductId" name="productId" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendProductMaterialType" class="col-md-4 control-label">Bahan</label>
-
-                        <div class="col-md-6">
-                            <input id="sendProductMaterialType" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendProductColor" class="col-md-4 control-label">Warna</label>
-
-                        <div class="col-md-6">
-                            <input id="sendProductColor" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendProductLength" class="col-md-4 control-label">Panjang Bahan</label>
-
-                        <div class="col-md-6">
-                            <input id="sendProductLength" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendProductPrice" class="col-md-4 control-label">Harga</label>
-
-                        <div class="col-md-6">
-                            <input id="sendProductPrice" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendProductTotal" class="col-md-4 control-label">Total</label>
-
-                        <div class="col-md-6">
-                            <input id="sendProductTotal" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendProductDescription" class="col-md-4 control-label">Deskripsi</label>
-
-                        <div class="col-md-6">
-                            <input id="sendProductDescription" type="text" class="form-control" disabled="">
+                            <select class="form-control" name="warehouseId" >
+                                <option value="">Pilih gudang</option>
+                                @foreach($warehouseList as $warehouseList)
+                                    <option value="{{$warehouseList->id}}">{{$warehouseList->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -136,6 +127,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="sendProductDescription" class="col-md-4 control-label">Keterangan</label>
+
+                        <div class="col-md-6">
+                            <textarea id="sendProductDescription" name="description" class="form-control"></textarea>
+                            <input type="hidden" id="sendProductId" name="productId" style="resize: none;" />
+                        </div>
+                    </div>
                 </form>
             </div>
             
@@ -150,11 +150,19 @@
 <script type="text/javascript">
 	$(document).ready(function(){
         var indexCounter = 1;
+        var productId = [];
 
         var t = $('#productTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('convection.product.getProduct') }}',
+            ajax:
+            {
+                "url": '{{ route('convection.product.getProduct') }}',
+                "type": "GET",
+                "data": function(d){
+                     d.productId = getProductId();
+                  }
+            },
             columns: [
                 { data: 'name', name: 'name' },
                 { data: 'material_type', name: 'material_type' },
@@ -176,7 +184,7 @@
                 },
                 { data: 'description', name: 'description' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"> <a class="btn btn-primary sendMaterialBtn" id="send_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Gudang"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="productMaterialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="productColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="productLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="productPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="productTotal_'+data+'" value="'+full.total+'" /><input type="hidden" id="productUnit_'+data+'" value="'+full.unit+'" /><input type="hidden" id="productDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="productName_'+data+'" value="'+full.name+'" />';
+                        return '<div class="text-center"> <input type="checkbox" id="check_'+data+'" class="checkProduct" /></div><input type="hidden" id="productMaterialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="productColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="productLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="productPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="productTotal_'+data+'" value="'+full.total+'" /><input type="hidden" id="productUnit_'+data+'" value="'+full.unit+'" /><input type="hidden" id="productDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="productName_'+data+'" value="'+full.name+'" />';
                     }
                 }
             ],
@@ -184,6 +192,47 @@
                 "sProcessing": "Memproses...",
                 "sZeroRecords": "Tidak ada data untuk ditampilkan..."
             },
+        });
+
+        function getProductId(){
+            return JSON.stringify(productId);
+        }
+
+        $('#productTable').on("click", ".checkProduct", function(){
+            var id = this.id;
+            id = id.substring(6);
+
+            var length = $('#productLength_'+id).val();
+            length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+
+            var price = $('#productPrice_'+id).val();
+            price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+
+            $("#checkedItems").append('<tr><td>'+$('#productName_'+id).val()+'</td><td>'+$('#productMaterialType_'+id).val()+'</td><td>'+$('#productColor_'+id).val()+'</td><td>'+length+' yard</td><td>'+price+'</td><td>'+$('#productTotal_'+id).val()+' '+$('#productUnit_'+id).val()+'</td><td>'+$('#productDescription_'+id).val()+'</td><td class="productItemsHidden"><div class="text-center"><input type="checkbox" id="check_'+id+'" checked="" class="checkProduct" /></div><input type="hidden" id="productMaterialType_'+id+'" value="'+$('#productMaterialType_'+id).val()+'" /><input type="hidden" id="productColor_'+id+'" value="'+$('#productColor_'+id).val()+'" /><input type="hidden" id="productLength_'+id+'" value="'+$('#productLength_'+id).val()+'" /><input type="hidden" id="productPrice_'+id+'" value="'+$('#productPrice_'+id).val()+'" /><input type="hidden" id="productTotal_'+id+'" value="'+$('#productTotal_'+id).val()+'" /><input type="hidden" id="productUnit_'+id+'" value="'+$('#productUnit_'+id).val()+'" /><input type="hidden" id="productDescription_'+id+'" value="'+$('#productDescription_'+id).val()+'" /><input type="hidden" id="productName_'+id+'" value="'+$('#productName_'+id).val()+'" /></td></tr>');
+
+            productId.push(id);
+            $('.emptyItems').hide();
+
+            $('#productTable').DataTable().ajax.reload();
+            
+        });
+
+        $('#productTableChecked').on("click", ".checkProduct", function(){
+            var id = this.id;
+            id = id.substring(6);
+            var rowCount = $('#productTableChecked tr').length;
+
+            if(rowCount == 0){
+                $('.emptyItems').show();
+            }
+
+            var removeItem = id;
+            productId = jQuery.grep(productId, function(value) {
+              return value != removeItem;
+            });
+            
+            $(this).closest('tr').remove();
+            $('#productTable').DataTable().ajax.reload();
         });
 
         $("#productTable").on("click", ".sendMaterialBtn", function(){
@@ -215,9 +264,16 @@
             window.location = "{{ route('convection.index')}}" + '?convection='+ $('#searchMaterialBy').val()+'&status='+$(this).val();
         });
 
+        $('.productModalSend').click(function(){
+            $('#sendProductId').val(productId);
+            
+        });
+
         $('#sendProductDeliveryNote').change(function(){
             $('#sendProductDeliveryNoteHidden').val($(this).val());
         });
+
+
 
 	});
 </script>

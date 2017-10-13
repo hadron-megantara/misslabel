@@ -131,7 +131,8 @@
                           @endif
                       </a>
                       <ul class="sub-menu" @if(\Request::is('material') || \Request::is('material/*')) style="display: block;" @endif>
-                          <li @if(\Request::is('material') || \Request::is('material/*')) class="active" @endif><a href="/material">Pembelian</a></li>
+                          <li @if(\Request::is('material/transaction') || \Request::is('material/transaction/*')) class="active" @endif><a href="/material/transaction">Nota Pembelian</a></li>
+                          <li @if(\Request::is('material') || \Request::is('material/*')) class="active" @endif><a href="/material">List Bahan</a></li>
                           <li @if(\Request::is('material/type') || \Request::is('material/type/*')) class="active" @endif><a href="/material/type">Tipe Bahan</a></li>
                       </ul>
                   </li>
