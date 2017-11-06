@@ -214,6 +214,76 @@ class MaterialController extends Controller
         return view("material.transaction", array('user' => $user, 'materialType' => $materialType, 'status' => $status, 'convectionList' => $convectionList, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo));
     }
 
+    public function getMaterial(Request $request){
+        if(!$request->has('dateFrom') || $request->dateFrom == ''){
+            $dateFrom = '1990-01-01';
+        } else{
+            $dateFrom = $request->dateFrom;
+        }
+
+        if(!$request->has('dateTo') || $request->dateTo == ''){
+            $dateTo = date('Y-m-d');
+        } else{
+            $dateTo = $request->dateTo;
+        }
+
+        if($request->has('status')){
+            if($request->status != 2){
+                $status = $request->status;
+                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->where('status', $request->status)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
+            } else{
+                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereBetween('date_purchase', [$dateFrom, $dateTo]);
+            }
+        } else{
+            $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereDate('date_purchase', '>=', $request->dateFrom)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
+        }
+     
+        return Datatables::of($material)->make();
+    }
+
+    public function storeTransaction(Request $request){
+        $material = new Material;
+
+        $material->material_type = $request->materialName;
+        $material->length = $request->materialLength;
+        $material->color = $request->materialColor;
+        $material->description = $request->materialDescription;
+        $material->price = $request->materialPrice;
+        $material->date_purchase = $request->materialDatePurchase;
+
+        $material->save();
+
+        $expense = new Expense;
+        $expense->value = $request->materialPrice;
+        $expense->date = $request->materialDatePurchase;
+        $expense->save();
+
+        return redirect('/material');
+    }
+
+    public function updateTransaction(Request $request){
+        $material = Material::find($request->materialId);
+        
+        $material->material_type = $request->materialName;
+        $material->length = $request->materialLength;
+        $material->color = $request->materialColor;
+        $material->description = $request->materialDescription;
+        $material->price = $request->materialPrice;
+        $material->date_purchase = $request->materialDatePurchase;
+
+        $material->save();
+
+        return redirect('/material');
+    }
+
+    public function destroyTransaction(Request $request){
+        $material = Material::find($request->materialId);
+
+        $material->delete();
+
+        return redirect('/material');
+    }
+
     public function seller(Request $request)
     {
         $user = array();

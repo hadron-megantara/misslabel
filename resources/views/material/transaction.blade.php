@@ -99,7 +99,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.addMaterial') }}" role="form" id="addForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.transaction.addTransaction') }}" role="form" id="addForm">
                     {!! csrf_field() !!}
 
                     <div class="row">
@@ -271,7 +271,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.editMaterial') }}" role="form" id="editForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.transaction.editTransaction') }}" role="form" id="editForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
@@ -368,92 +368,6 @@
     </div>
 </div>
 
-<div id="materialModalSend" class="modal fade" role="dialog" style="margin-top:1%;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Kirim Bahan ke Konveksi</h4>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.sendMaterial') }}" role="form" id="sendForm">
-                    {!! csrf_field() !!}
-
-                    <div class="form-group">
-                        <label for="sendMaterialType" class="col-md-4 control-label">Tipe Bahan</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialType" type="text" class="form-control" disabled="">
-                            <input type="hidden" id="sendMaterialId" name="materialId" />
-                            <input type="hidden" id="sendMaterialTypeHidden" name="materialType" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialLength" class="col-md-4 control-label">Panjang</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialLength" type="text" class="form-control" disabled="">
-                            <input id="sendMaterialLengthHidden" type="hidden" name="materialLength" >
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialColor" class="col-md-4 control-label">Warna</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialColor" type="text" class="form-control" disabled="">
-                            <input id="sendMaterialColorHidden" type="hidden" name="materialColor" >
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialDescription" class="col-md-4 control-label">Keterangan</label>
-
-                        <div class="col-md-6">
-                            <textarea id="sendMaterialDescription" type="text" class="form-control" disabled="" style="resize: none"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialPrice" class="col-md-4 control-label">Harga</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialPrice" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialDatePurchase" class="col-md-4 control-label">Tanggal Pembelian</label>
-
-                        <div class="col-md-6">
-                            <input id="sendMaterialDatePurchase" type="text" class="form-control" disabled="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendMaterialConvection" class="col-md-4 control-label">Pilih Konveksi</label>
-
-                        <div class="col-md-6">
-                            <select id="sendMaterialConvection" name="convectionId" class="form-control">
-                                @foreach($convectionList as $convectionList)
-                                    <option value="{{$convectionList->id}}">{{$convectionList->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
-                <button type="submit" class="btn btn-success" form="sendForm"><span class="fa fa-sign-out"></span> Kirim</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="materialModalDelete" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -463,7 +377,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.deleteMaterial') }}" role="form" id="deleteForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.transaction.deleteTransaction') }}" role="form" id="deleteForm">
                     {!! csrf_field() !!}
 
                     <label>Anda yakin ingin menghapus pembelian bahan "<b id="materialDeleteType"></b>" di tanggal "<b id="materialDeleteDatePurchase"></b>" dengan harga "<b id="materialDeletePrice"></b>" ?</label>
@@ -486,7 +400,7 @@
         var t = $('#materialTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('material.getMaterial') }}'+"?status={{$status}}&dateFrom={{$dateFrom}}&dateTo={{$dateTo}}",
+            ajax: '{{ route('material.transaction.getTransaction') }}'+"?status={{$status}}&dateFrom={{$dateFrom}}&dateTo={{$dateTo}}",
             columns: [
                 { data: 'material_type', name: 'material_type' },
                 { data: 'length', name: 'length', render: function(data, type, full) {
@@ -645,7 +559,7 @@
         });
 
         $("#searchMaterialBy").change(function() {
-            window.location = "{{ route('material.index')}}" + '?status='+ $(this).val();
+            window.location = "{{ route('material.transaction')}}" + '?status='+ $(this).val();
         });
 
         $('#materialTotalPrice').keypress(function(){
@@ -661,7 +575,7 @@
         });
 
         $('#filterProcess').click(function(){
-            window.location = "{{ route('material.index')}}" + '?status='+$("#searchMaterialBy").val()+'&dateFrom='+$("#filterDateFrom").val()+'&dateTo='+$("#filterDateTo").val();
+            window.location = "{{ route('material.transaction')}}" + '?status='+$("#searchMaterialBy").val()+'&dateFrom='+$("#filterDateFrom").val()+'&dateTo='+$("#filterDateTo").val();
         });
 
         $("#materialLength").keypress(function (e) {
