@@ -90,7 +90,7 @@
     </div>
 </div>
 
-<div id="materialModalAdd" class="modal fade" role="dialog">
+<div id="materialModalAdd" class="modal fade" role="dialog" style="margin-bottom: 20px">
     <div class="modal-dialog full-width">
         <div class="modal-content">
             <div class="modal-header">
@@ -110,6 +110,12 @@
 
                                     <div class="col-md-12">
                                         <input id="materialDatePurchase" type="text" class="form-control" name="materialDatePurchase" required placeholder="Tanggal Pembelian">
+                                    </div>
+
+                                    <label for="materialDescription" class="col-md-12 control-label">Penjual</label>
+
+                                    <div class="col-md-12">
+                                        <input type="text" id="materialSeller" class="form-control" name="materialSeller" required style="resize: none" rows="4" placeholder="Masukkan Penjual" />
                                     </div>
 
                                     <label for="materialDescription" class="col-md-12 control-label">Keterangan</label>
@@ -142,9 +148,9 @@
 
                             <div class="col-md-9">
                                 <div id="materialInputArea" class="inputArea">
-                                    <div class="form-group">
+                                    <div class="form-group inputAddedArea">
                                         <div class="col-md-3">
-                                            <select class="form-control materialName" name="materialName" required>
+                                            <select class="form-control materialName" name="materialName[]" required>
                                                 <option value="">Pilih Bahan</option>
                                                 @foreach($materialType as $materialType2)
                                                     <option value="{{$materialType2->name}}">{{$materialType2->name}}</option>
@@ -154,18 +160,18 @@
 
                                         <div class="col-md-2" style="padding-right: 5px">
                                             <input type="text" class="form-control materialLength" name="materialLengthShow" required placeholder="Panjang bahan">
-                                            <input type="hidden" class="materialLengthHidden" name="materialLength" required>
+                                            <input type="hidden" class="materialLengthHidden" name="materialLength[]" required>
                                         </div>
 
                                         <div class="col-md-1" style="padding-left: 0">
-                                            <select name="materialLengthUnit" class="form-control materialLengthUnit">
+                                            <select name="materialLengthUnit[]" class="form-control materialLengthUnit">
                                                 <option value="yard">yard</option>
                                                 <option value="meter">meter</option>
                                             </select>
                                         </div>
 
                                         <div class="col-md-2" style="padding-right: 0">
-                                            <select class="form-control materialColor" name="materialColor" required>
+                                            <select class="form-control materialColor" name="materialColor[]" required>
                                                 <option value="">Pilih Warna</option>
                                                 <option value="Putih">Putih</option>
                                                 <option value="Hitam">Hitam</option>
@@ -185,12 +191,14 @@
 
                                         <div class="col-md-3" style="padding-right: 0">
                                             <input type="text" class="form-control number materialPrice" name="materialPriceShow" required placeholder="Masukkan Harga">
-                                            <input type="hidden" name="materialPrice materialPriceHidden" required>
+                                            <input type="hidden" name="materialPrice[]" class="materialPriceHidden" required>
                                         </div>
 
-                                        <div class="col-md-1" style="padding-right: 0">
+                                        <div class="col-md-1 addMoreRegion" style="padding-right: 0">
                                             <button type="button" class="btn btn-success pull-right" id="addMore"><span class="fa fa-plus addBtn" title="Tambah Bahan"></span></button>
                                         </div>
+
+                                        <input type="hidden" name="totalMaterial" id="totalMaterial"/>
                                     </div>
                                 </div>
                             </div>
@@ -211,6 +219,10 @@
 
 <div id="materialInputAreaHidden" class="inputArea" style="display: none">
     <div class="form-group inputAddedArea">
+        <div class="col-md-12 border-space" style="margin-top:-20px">
+            <hr>
+        </div>
+
         <div class="col-md-3">
             <select class="form-control materialName" name="materialName" required>
                 <option value="">Pilih Bahan</option>
@@ -256,9 +268,10 @@
             <input type="hidden" name="materialPrice materialPriceHidden" required>
         </div>
 
-        <div class="col-md-1" style="padding-right: 0">
-            <button type="button" class="btn btn-danger pull-right deleteBtnAction" title="Hapus Bahan"><span class="fa fa-close deleteBtn"></span></button>
+        <div class="col-md-1 addMoreRegion" style="padding-right: 0">
+            <button type="button" class="btn btn-success pull-right" id="addMore"><span class="fa fa-plus addBtn" title="Tambah Bahan"></span></button>
         </div>
+
     </div>
 </div>
 
@@ -396,6 +409,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
         var indexCounter = 1;
+        var totalMaterial = 1;
 
         var t = $('#materialTable').DataTable({
             processing: true,
@@ -526,13 +540,13 @@
             $(this).val(number);
         });
 
-        $('#materialPrice').keyup(function(){
+        $('.materialPrice').keyup(function(){
             var number = $(this).val().split('.').join("");
             number = number.replace(/Rp /gi,'');
             $('#materialPriceHidden').val(number);
         });
 
-        $('#materialPrice').priceFormat({
+        $('.materialPrice').priceFormat({
             prefix: 'Rp ',
             centsLimit: 0,
             thousandsSeparator: '.'
@@ -590,12 +604,24 @@
             $('#addMoreArea').show();
         });
 
-        $("#addMore").click(function(){
-            $('#materialInputArea').prepend($('#materialInputAreaHidden').html());
+        $("#materialInputArea").on("click", "#addMore", function(){
+            $(this).closest('.addMoreRegion').html('<button type="button" class="btn btn-danger pull-right deleteBtnAction" title="Hapus Bahan"><span class="fa fa-close deleteBtn"></span></button>');
+
+            $('#materialInputArea').append($('#materialInputAreaHidden').html());
+
+            totalMaterial = totalMaterial + 1;
+            $('#totalMaterial').val(totalMaterial);
         });
 
         $("#materialInputArea").on("click", ".deleteBtnAction", function(){
             $(this).closest('.inputAddedArea').remove();
+
+            if($('.inputAddedArea').length <= 2){
+                $('.border-space').remove();
+            }
+
+            totalMaterial = totalMaterial - 1;
+            $('#totalMaterial').val(totalMaterial);
         });
 
 	});

@@ -46,6 +46,7 @@
     <script src="/js/jquery.priceformat.min.js"></script>
     {{-- <script src="/js/highcharts.js"></script> --}}
     <script src="/js/highstock.js"></script>
+    <script src="/js/spin.min.js"></script>
 
     <!-- Scripts -->
     <script>

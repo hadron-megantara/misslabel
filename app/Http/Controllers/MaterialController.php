@@ -214,7 +214,7 @@ class MaterialController extends Controller
         return view("material.transaction", array('user' => $user, 'materialType' => $materialType, 'status' => $status, 'convectionList' => $convectionList, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo));
     }
 
-    public function getMaterial(Request $request){
+    public function getTransaction(Request $request){
         if(!$request->has('dateFrom') || $request->dateFrom == ''){
             $dateFrom = '1990-01-01';
         } else{
@@ -242,6 +242,9 @@ class MaterialController extends Controller
     }
 
     public function storeTransaction(Request $request){
+        materialName
+        
+        
         $material = new Material;
 
         $material->material_type = $request->materialName;
