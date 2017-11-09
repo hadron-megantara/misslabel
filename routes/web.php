@@ -33,6 +33,7 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/material/add-transaction', 'MaterialController@storeTransaction')->name('material.transaction.addTransaction');
 		Route::post('/material/edit-transaction', 'MaterialController@updateTransaction')->name('material.transaction.editTransaction');
 		Route::post('/material/delete-transaction', 'MaterialController@destroyTransaction')->name('material.transaction.deleteTransaction');
+		Route::get('/material/transaction/download-note', 'MaterialController@downloadNote')->name('material.transaction.downloadNote');
 
 		// Material-Type
 		Route::get('/material/type', 'MaterialController@type');

@@ -9,7 +9,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Pembelian Bahan</h3>
+            <h3>Nota Pembelian Bahan</h3>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
                     <span class="fa fa-print"> </span>Print
@@ -75,12 +75,12 @@
         	<table id="materialTable" class="table-bordered" style="padding:">
         		<thead>
         			<tr>
-        				<th style="padding: 10px 18px">Tipe Bahan</th>
-                        <th>Panjang</th>
-                        <th>Warna</th>
-                        <th>Harga</th>
-                        <th>Tanggal Pembelian</th>
-        				<th class="actions-column">Aksi</th>
+        				<th class="text-center">Penjual</th>
+                        <th class="text-center">Keterangan</th>
+                        <th class="text-center">Total Harga</th>
+                        <th class="text-center">Tanggal Pembelian</th>
+                        <th class="text-center">Nota</th>
+        				<th class="actions-column text-center">Aksi</th>
         			</tr>
         		</thead>
         		<tbody>
@@ -99,7 +99,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('material.transaction.addTransaction') }}" role="form" id="addForm">
+                <form class="form-horizontal" method="POST" action="{{ route('material.transaction.addTransaction') }}" role="form" id="addForm" enctype="multipart/form-data">
                     {!! csrf_field() !!}
 
                     <div class="row">
@@ -124,16 +124,16 @@
                                         <textarea id="materialDescription" class="form-control" name="materialDescription" required style="resize: none" rows="4" placeholder="Keterangan"></textarea>
                                     </div>
 
-                                    <label for="sendProductDeliveryNote" class="col-md-12 control-label">Nota Pembelian</label>
+                                    <label for="materialNote" class="col-md-12 control-label">Nota Pembelian</label>
                                     <div class="row"></div>
                                     <div class="col-md-12">
                                         <div class="input-group">
                                             <label class="input-group-btn">
                                                 <span class="btn btn-primary">
-                                                    <span class="fa fa-file"></span><input id="sendProductDeliveryNote" type="file" style="display: none;" name="deliveryNote">
+                                                    <span class="fa fa-file"></span><input id="materialNote" type="file" style="display: none;" name="materialNote">
                                                 </span>
                                             </label>
-                                            <input type="text" id="sendProductDeliveryNoteHidden" class="form-control" readonly placeholder="Lampirkan nota">
+                                            <input type="text" id="materialNoteShow" class="form-control" readonly placeholder="Lampirkan nota">
                                         </div>
                                     </div>
 
@@ -145,6 +145,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <input type="hidden" name="totalMaterial" id="totalMaterial" value="1" />
 
                             <div class="col-md-9">
                                 <div id="materialInputArea" class="inputArea">
@@ -159,7 +161,7 @@
                                         </div>
 
                                         <div class="col-md-2" style="padding-right: 5px">
-                                            <input type="text" class="form-control materialLength" name="materialLengthShow" required placeholder="Panjang bahan">
+                                            <input type="text" class="form-control materialLength" required placeholder="Panjang bahan">
                                             <input type="hidden" class="materialLengthHidden" name="materialLength[]" required>
                                         </div>
 
@@ -190,15 +192,13 @@
                                         </div>
 
                                         <div class="col-md-3" style="padding-right: 0">
-                                            <input type="text" class="form-control number materialPrice" name="materialPriceShow" required placeholder="Masukkan Harga">
+                                            <input type="text" class="form-control number materialPrice" required placeholder="Masukkan Harga">
                                             <input type="hidden" name="materialPrice[]" class="materialPriceHidden" required>
                                         </div>
 
                                         <div class="col-md-1 addMoreRegion" style="padding-right: 0">
                                             <button type="button" class="btn btn-success pull-right" id="addMore"><span class="fa fa-plus addBtn" title="Tambah Bahan"></span></button>
                                         </div>
-
-                                        <input type="hidden" name="totalMaterial" id="totalMaterial"/>
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +224,7 @@
         </div>
 
         <div class="col-md-3">
-            <select class="form-control materialName" name="materialName" required>
+            <select class="form-control materialName" name="materialName[]" required>
                 <option value="">Pilih Bahan</option>
                 @foreach($materialType as $materialType2)
                     <option value="{{$materialType2->name}}">{{$materialType2->name}}</option>
@@ -233,19 +233,19 @@
         </div>
 
         <div class="col-md-2" style="padding-right: 5px">
-            <input type="text" class="form-control materialLength" name="materialLengthShow" required placeholder="Panjang bahan">
-            <input type="hidden" class="materialLengthHidden" name="materialLength" required>
+            <input type="text" class="form-control materialLength" required placeholder="Panjang bahan">
+            <input type="hidden" class="materialLengthHidden" name="materialLength[]" required>
         </div>
 
         <div class="col-md-1" style="padding-left: 0">
-            <select name="materialLengthUnit" class="form-control materialLengthUnit">
+            <select name="materialLengthUnit[]" class="form-control materialLengthUnit">
                 <option value="yard">yard</option>
                 <option value="meter">meter</option>
             </select>
         </div>
 
         <div class="col-md-2" style="padding-right: 0">
-            <select class="form-control materialColor" name="materialColor" required>
+            <select class="form-control materialColor" name="materialColor[]" required>
                 <option value="">Pilih Warna</option>
                 <option value="Putih">Putih</option>
                 <option value="Hitam">Hitam</option>
@@ -264,8 +264,8 @@
         </div>
 
         <div class="col-md-3" style="padding-right: 0">
-            <input type="text" class="form-control number materialPrice" name="materialPriceShow" required placeholder="Masukkan Harga">
-            <input type="hidden" name="materialPrice materialPriceHidden" required>
+            <input type="text" class="form-control number materialPrice" required placeholder="Masukkan Harga">
+            <input type="hidden" name="materialPrice[]" class="materialPriceHidden" required>
         </div>
 
         <div class="col-md-1 addMoreRegion" style="padding-right: 0">
@@ -304,7 +304,7 @@
                         <label for="editMaterialLength" class="col-md-4 control-label">Panjang</label>
 
                         <div class="col-md-6">
-                            <input id="editMaterialLength" type="text" class="form-control" name="materialLengthShow" required placeholder="Dalam Yard">
+                            <input id="editMaterialLength" type="text" class="form-control" required placeholder="Dalam Yard">
                             <input id="editMaterialLengthHidden" type="hidden" name="materialLength" required>
                         </div>
                     </div>
@@ -343,7 +343,7 @@
                         <label for="editMaterialPrice" class="col-md-4 control-label">Harga</label>
 
                         <div class="col-md-6">
-                            <input id="editMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required>
+                            <input id="editMaterialPrice" type="text" class="form-control number" required>
                             <input id="editMaterialPriceHidden" type="hidden" name="materialPrice" required>
                         </div>
                     </div>
@@ -409,20 +409,15 @@
 <script type="text/javascript">
 	$(document).ready(function(){
         var indexCounter = 1;
-        var totalMaterial = 1;
+        var totalPrice = 0;
 
         var t = $('#materialTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: '{{ route('material.transaction.getTransaction') }}'+"?status={{$status}}&dateFrom={{$dateFrom}}&dateTo={{$dateTo}}",
             columns: [
-                { data: 'material_type', name: 'material_type' },
-                { data: 'length', name: 'length', render: function(data, type, full) {
-                        data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        return data+' yard';
-                    }
-                },
-                { data: 'color', name: 'color'},
+                { data: 'seller', name: 'seller' },
+                { data: 'description', name: 'description' },
                 { data: 'price', name: 'price', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         return 'Rp '+data;
@@ -438,15 +433,12 @@
                         return data;
                     }
                 },
+                { data: 'id', name: 'id', render: function(data, type, full) {
+                        return '<div class="text-center"><a href="/material/transaction/download-note?id='+data+'" style="text-decoration: underline" target="_blank">download</a></div>';
+                    } 
+                },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        var dataReturn = '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal" title="Ubah Data"><span class="fa fa-pencil"></span></a><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
-
-                        if(full.status == 0){
-                            dataReturn = dataReturn + ' <a class="btn btn-primary sendMaterialBtn" id="send_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Konveksi"><span class="fa fa-sign-out"></span></a>';
-                        }
-
-                        dataReturn = dataReturn + ' <a class="btn btn-danger deleteMaterialBtn" id="delete_'+data+'" href="#materialModalDelete" data-toggle="modal" title="Hapus Data"><span class="fa fa-trash"></span></a></div>';
-
+                        var dataReturn = '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal" title="Lihat Data"><span class="fa fa-search"></span></a></div>';
 
                         return dataReturn;
                     }
@@ -456,6 +448,11 @@
                 "sProcessing": "Memproses...",
                 "sZeroRecords": "Tidak ada data untuk ditampilkan..."
             },
+        });
+
+        $("#materialModalAdd").click(function(){
+            totalMaterial = 1;
+            totalPrice = 0;
         });
 
         $("#materialTable").on("click", ".deleteMaterialBtn", function(){
@@ -532,24 +529,46 @@
             event.preventDefault();
         });
 
-        $('#materialLength').keyup(function(){
+        $("#materialInputArea").on("keyup", ".materialLength", function(){
             var number = $(this).val().split('.').join("");
-            $('#materialLengthHidden').val(number);
+            $(this).closest('.inputAddedArea').find('.materialLengthHidden').val(number);
 
             number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             $(this).val(number);
         });
 
-        $('.materialPrice').keyup(function(){
+        $("#materialInputArea").on("keyup", ".materialPrice", function(){
+            $('.materialPrice').priceFormat({
+                prefix: 'Rp ',
+                centsLimit: 0,
+                thousandsSeparator: '.'
+            });
+
             var number = $(this).val().split('.').join("");
             number = number.replace(/Rp /gi,'');
-            $('#materialPriceHidden').val(number);
-        });
+            $(this).closest('.inputAddedArea').find('.materialPriceHidden').val(number);
 
-        $('.materialPrice').priceFormat({
-            prefix: 'Rp ',
-            centsLimit: 0,
-            thousandsSeparator: '.'
+            totalPrice = 0;
+            $(this).closest('#materialInputArea').find('.materialPriceHidden').each(function(){
+                var number2 = $(this).val().split('.').join("");
+                number2 = number2.replace(/Rp /gi,'');
+
+                if(number2 == ""){
+                    number2 = 0;
+                }
+
+                totalPrice = parseInt(totalPrice) + parseInt(number2);
+            });
+            
+            $("#materialTotalPriceHidden").val(totalPrice);
+            $("#materialTotalPrice").val(totalPrice);
+
+            $('#materialTotalPrice').priceFormat({
+                prefix: 'Rp ',
+                centsLimit: 0,
+                thousandsSeparator: '.'
+            });
+
         });
 
         $('#editMaterialLength').keyup(function(){
@@ -609,8 +628,7 @@
 
             $('#materialInputArea').append($('#materialInputAreaHidden').html());
 
-            totalMaterial = totalMaterial + 1;
-            $('#totalMaterial').val(totalMaterial);
+            $('#totalMaterial').val(parseInt($('#totalMaterial').val()) + 1);
         });
 
         $("#materialInputArea").on("click", ".deleteBtnAction", function(){
@@ -620,8 +638,11 @@
                 $('.border-space').remove();
             }
 
-            totalMaterial = totalMaterial - 1;
-            $('#totalMaterial').val(totalMaterial);
+            $('#totalMaterial').val(parseInt($('#totalMaterial').val()) - 1);
+        });
+
+        $('#materialNote').change(function(){
+            $('#materialNoteShow').val($(this).val());
         });
 
 	});

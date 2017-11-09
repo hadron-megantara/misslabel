@@ -18,9 +18,7 @@ class CreateMaterialsTable extends Migration
             $table->string('material_type');
             $table->integer('length');
             $table->string('color');
-            $table->string('description');
             $table->integer('price');
-            $table->date('date_purchase');
             $table->date('date_convection')->nullable();
             $table->date('date_converted')->nullable();
             $table->integer('convection_id')->nullable();

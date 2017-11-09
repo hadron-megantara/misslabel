@@ -15,7 +15,7 @@ class CreateMaterialTransactionsTable extends Migration
     {
         Schema::create('material_transactions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_material');
+            $table->string('seller');
             $table->string('description');
             $table->integer('price');
             $table->date('date_purchase');

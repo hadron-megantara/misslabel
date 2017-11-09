@@ -15,8 +15,8 @@ class CreateMaterialTransactionRelationsTable extends Migration
     {
         Schema::create('material_transaction_relations', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_transaction');
             $table->integer('id_material');
-            $table->integer('id_trasaction');
             $table->timestamps();
         });
     }

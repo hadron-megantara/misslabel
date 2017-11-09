@@ -71,12 +71,12 @@
         	<table id="materialTable" class="table-bordered" style="padding:">
         		<thead>
         			<tr>
-        				<th style="padding: 10px 18px">Tipe Bahan</th>
-                        <th>Panjang</th>
-                        <th>Warna</th>
-                        <th>Harga</th>
-                        <th>Tanggal Pembelian</th>
-        				<th class="actions-column">Aksi</th>
+        				<th class="text-center" style="padding: 10px 18px">Tipe Bahan</th>
+                        <th class="text-center">Panjang</th>
+                        <th class="text-center">Warna</th>
+                        <th class="text-center">Harga</th>
+                        <th class="text-center">Tanggal Pembelian</th>
+        				<th class="actions-column text-center">Aksi</th>
         			</tr>
         		</thead>
         		<tbody>
