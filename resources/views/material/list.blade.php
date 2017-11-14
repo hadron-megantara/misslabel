@@ -127,14 +127,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sendMaterialDescription" class="col-md-4 control-label">Keterangan</label>
-
-                        <div class="col-md-6">
-                            <textarea id="sendMaterialDescription" type="text" class="form-control" disabled="" style="resize: none"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label for="sendMaterialPrice" class="col-md-4 control-label">Harga</label>
 
                         <div class="col-md-6">
@@ -193,18 +185,8 @@
                         return 'Rp '+data;
                     } 
                 },
-                { data: 'date_purchase', name: 'date_purchase', render: function(data, type, full){
-                        var year = data.substring(0,4);
-                        var month = data.substring(5,7);
-                        var date = data.substring(8,10);
-                        var dateTime = new Date(Date.UTC(year, month - 1, date));
-                        var options = {weekday: "long", year: "numeric", month: "long", day: "numeric"};
-                        data = dateTime.toLocaleString("in-ID", options);
-                        return data;
-                    }
-                },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        var dataReturn = '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal" title="Ubah Data"><span class="fa fa-pencil"></span></a><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
+                        var dataReturn = '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal" title="Ubah Data"><span class="fa fa-pencil"></span></a><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" />';
 
                         if(full.status == 0){
                             dataReturn = dataReturn + ' <a class="btn btn-primary sendMaterialBtn" id="send_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Konveksi"><span class="fa fa-sign-out"></span></a>';
@@ -238,7 +220,6 @@
 
             $("#sendMaterialColor").val($('#materialColor_'+id).val());
             $("#sendMaterialColorHidden").val($('#materialColor_'+id).val());
-            $("#sendMaterialDescription").val($('#materialDescription_'+id).val());
 
             var price = $('#materialPrice_'+id).val();
             price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");

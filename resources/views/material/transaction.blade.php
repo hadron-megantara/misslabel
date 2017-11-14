@@ -121,7 +121,7 @@
                                     <label for="materialDescription" class="col-md-12 control-label">Keterangan</label>
 
                                     <div class="col-md-12">
-                                        <textarea id="materialDescription" class="form-control" name="materialDescription" required style="resize: none" rows="4" placeholder="Keterangan"></textarea>
+                                        <textarea id="materialDescription" class="form-control" name="materialDescription" style="resize: none" rows="4" placeholder="Keterangan"></textarea>
                                     </div>
 
                                     <label for="materialNote" class="col-md-12 control-label">Nota Pembelian</label>
@@ -335,7 +335,7 @@
                         <label for="editMaterialDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
-                            <textarea id="editMaterialDescription" class="form-control" name="materialDescription" required style="resize: none"></textarea>
+                            <textarea id="editMaterialDescription" class="form-control" name="materialDescription" style="resize: none"></textarea>
                         </div>
                     </div>
 
@@ -518,7 +518,8 @@
         $('#materialDatePurchase, #editMaterialDatePurchase, #filterDateFrom, #filterDateTo').datepicker({
             dateFormat: 'yy-mm-dd',
             regional: 'id',
-            orientation: "auto"
+            orientation: "auto",
+            maxDate : 'now'
         });
 
         $('#materialDatePurchase').keypress(function(event){

@@ -67,12 +67,12 @@ class MaterialController extends Controller
         if($request->has('status')){
             if($request->status != 2){
                 $status = $request->status;
-                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->where('status', $request->status)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
+                $material = Material::select(['id', 'material_type', 'length', 'color', 'price', 'status'])->orderBy('updated_at', 'desc')->where('status', $request->status)->get();
             } else{
-                $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereBetween('date_purchase', [$dateFrom, $dateTo]);
+                $material = Material::select(['id', 'material_type', 'length', 'color', 'price', 'status'])->orderBy('updated_at', 'desc')->get();
             }
         } else{
-            $material = Material::select(['id', 'material_type', 'length', 'color', 'description', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereDate('date_purchase', '>=', $request->dateFrom)->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
+            $material = Material::select(['id', 'material_type', 'length', 'color', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereDate('date_purchase', '>=', $request->dateFrom)->get();
         }
      
         return Datatables::of($material)->make();
@@ -84,9 +84,7 @@ class MaterialController extends Controller
         $material->material_type = $request->materialName;
         $material->length = $request->materialLength;
         $material->color = $request->materialColor;
-        $material->description = $request->materialDescription;
         $material->price = $request->materialPrice;
-        $material->date_purchase = $request->materialDatePurchase;
 
         $material->save();
 
@@ -104,9 +102,7 @@ class MaterialController extends Controller
         $material->material_type = $request->materialName;
         $material->length = $request->materialLength;
         $material->color = $request->materialColor;
-        $material->description = $request->materialDescription;
         $material->price = $request->materialPrice;
-        $material->date_purchase = $request->materialDatePurchase;
 
         $material->save();
 
@@ -237,54 +233,43 @@ class MaterialController extends Controller
     public function downloadNote(Request $request){
         if($request->has('id')){
             $file = MaterialTransaction::find($request->id);
-            header("Content-length: ".$file->size);
-            header("Content-type: ".$file->mime);
-            header("Content-Disposition: attachment; filename=".$file->name);
-            echo $file->file;
+            return response()->download(storage_path("app/".$file->file_path));
         }
     }
 
     public function storeTransaction(Request $request){
+        $materialTransaction = new MaterialTransaction;
+        $materialTransaction->seller = $request->materialSeller;
+        $materialTransaction->description = $request->materialDescription;
+        $materialTransaction->price = $request->materialTotalPrice;
+        $materialTransaction->date_purchase = $request->materialDatePurchase;
+
         if($request->hasFile('materialNote'))
         {
-            // $f = $request->file('materialNote');
-            // $materialTransaction->name = $f->getClientOriginalName();
-            // $materialTransaction->file = base64_encode(file_get_contents($f->getRealPath()));
-            // $materialTransaction->mime = $f->getMimeType();
-            // $materialTransaction->size = $f->getSize();
-            
             $f = $request->file('materialNote');
-            $path = $request->file('materialNote')->store('note');
             $path = $request->file('materialNote')->storeAs(
-                'note', $request->user()->id
+                'note', pathinfo($request->file('materialNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
             );
-            dd($path);
+
+            $materialTransaction->file_path = $path;
         }
 
-        // $materialTransaction = new MaterialTransaction;
-        // $materialTransaction->seller = $request->materialSeller;
-        // $materialTransaction->description = $request->materialDescription;
-        // $materialTransaction->price = $request->materialTotalPrice;
-        // $materialTransaction->date_purchase = $request->materialDatePurchase;
+        $materialTransaction->save();
 
+        for($i=0;$i < $request->totalMaterial; $i++){
+            $material = new Material;
+            $material->material_type = $request->materialName[$i];
+            $material->length = $request->materialLength[$i];
+            $material->color = $request->materialColor[$i];
+            $material->price = $request->materialPrice[$i];
+            $material->save();
 
+            $materialRelation = new MaterialTransactionRelation;
+            $materialRelation->id_transaction = $materialTransaction->id;
+            $materialRelation->id_material = $material->id;
+            $materialRelation->save();
 
-        // $materialTransaction->save();
-
-        // for($i=0;$i < $request->totalMaterial; $i++){
-        //     $material = new Material;
-        //     $material->material_type = $request->materialName[$i];
-        //     $material->length = $request->materialLength[$i];
-        //     $material->color = $request->materialColor[$i];
-        //     $material->price = $request->materialPrice[$i];
-        //     $material->save();
-
-        //     $materialRelation = new MaterialTransactionRelation;
-        //     $materialRelation->id_transaction = $materialTransaction->id;
-        //     $materialRelation->id_material = $material->id;
-        //     $materialRelation->save();
-
-        // }
+        }
 
         return redirect('/material/transaction');
     }

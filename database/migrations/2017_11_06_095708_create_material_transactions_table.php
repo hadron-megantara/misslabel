@@ -19,13 +19,9 @@ class CreateMaterialTransactionsTable extends Migration
             $table->string('description');
             $table->integer('price');
             $table->date('date_purchase');
-            $table->string('name');
-            $table->unsignedInteger('size');
-            $table->string('mime');
+            $table->string('file_path');
             $table->timestamps();
         });
-
-        DB::statement('ALTER TABLE material_transactions ADD file LONGBLOB');
     }
 
     /**
