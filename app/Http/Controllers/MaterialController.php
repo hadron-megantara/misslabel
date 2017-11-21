@@ -225,7 +225,7 @@ class MaterialController extends Controller
             $dateTo = $request->dateTo;
         }
 
-        $materialTransaction = MaterialTransaction::select(['id', 'seller', 'description', 'price', 'date_purchase'])->orderBy('updated_at', 'desc')->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)]);
+        $materialTransaction = MaterialTransaction::select(['id', 'seller', 'description', 'price', 'date_purchase'])->orderBy('updated_at', 'desc')->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
 
         return Datatables::of($materialTransaction)->make();
     }
@@ -258,20 +258,15 @@ class MaterialController extends Controller
 
         for($i=0;$i < $request->totalMaterial; $i++){
             $material = new Material;
+            $material->transaction_id = $materialTransaction->id;
             $material->material_type = $request->materialName[$i];
             $material->length = $request->materialLength[$i];
             $material->color = $request->materialColor[$i];
             $material->price = $request->materialPrice[$i];
             $material->save();
-
-            $materialRelation = new MaterialTransactionRelation;
-            $materialRelation->id_transaction = $materialTransaction->id;
-            $materialRelation->id_material = $material->id;
-            $materialRelation->save();
-
         }
 
-        return redirect('/material/transaction');
+        return redirect('/material/transaction')->with('success', 'Sukses menambah nota baru');
     }
 
     public function updateTransaction(Request $request){

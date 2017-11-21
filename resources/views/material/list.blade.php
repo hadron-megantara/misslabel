@@ -63,7 +63,9 @@
 
         @if(session('success'))
             <div class="panel panel-success">
-              <div class="panel-heading notification text-center">{{session('success')}}</div>
+                <div class="panel-heading notification text-center">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close"></a> {{session('success')}}
+                </div>
             </div>
         @endif
 
