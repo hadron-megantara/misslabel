@@ -13,6 +13,8 @@ use App\MaterialIn;
 use App\MaterialSeller;
 use App\ConvectionList;
 use App\Expense;
+use App\Seller;
+use App\Color;
 use Carbon\Carbon;
 
 class MaterialController extends Controller
@@ -141,6 +143,14 @@ class MaterialController extends Controller
         return redirect('/material')->with('success', 'Sukses mengirim bahan ke konveksi');
     }
 
+    public function getMaterialByTransactionId(Request $request){
+        if($request->has('id')){
+            $material = Material::where('transaction_id', $request->id)->get();
+
+            return $material;
+        }
+    }
+
     public function type(Request $request){
         $user = array();
         if($request->has('user')){
@@ -205,11 +215,15 @@ class MaterialController extends Controller
             $dateTo = $request->dateTo;
         }
 
+        $seller = Seller::all();
+
+        $color = Color::orderBy('name', 'asc')->get();
+
         $materialType = MaterialType::all();
 
         $convectionList = ConvectionList::all();
 
-        return view("material.transaction", array('user' => $user, 'materialType' => $materialType, 'status' => $status, 'convectionList' => $convectionList, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+        return view("material.transaction", array('user' => $user, 'materialType' => $materialType, 'color' => $color, 'status' => $status, 'convectionList' => $convectionList, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo, 'seller' => $seller));
     }
 
     public function getTransaction(Request $request){
@@ -225,7 +239,7 @@ class MaterialController extends Controller
             $dateTo = $request->dateTo;
         }
 
-        $materialTransaction = MaterialTransaction::select(['id', 'seller', 'description', 'price', 'date_purchase'])->orderBy('updated_at', 'desc')->whereBetween('date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+        $materialTransaction = MaterialTransaction::join('sellers', 'material_transactions.seller_id', '=', 'sellers.id')->select(['material_transactions.id', 'material_transactions.seller_id', 'sellers.name', 'material_transactions.description', 'material_transactions.price', 'material_transactions.date_purchase'])->orderBy('material_transactions.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
 
         return Datatables::of($materialTransaction)->make();
     }
@@ -239,7 +253,7 @@ class MaterialController extends Controller
 
     public function storeTransaction(Request $request){
         $materialTransaction = new MaterialTransaction;
-        $materialTransaction->seller = $request->materialSeller;
+        $materialTransaction->seller_id = $request->materialSeller;
         $materialTransaction->description = $request->materialDescription;
         $materialTransaction->price = $request->materialTotalPrice;
         $materialTransaction->date_purchase = $request->materialDatePurchase;
@@ -270,18 +284,35 @@ class MaterialController extends Controller
     }
 
     public function updateTransaction(Request $request){
-        $material = Material::find($request->materialId);
-        
-        $material->material_type = $request->materialName;
-        $material->length = $request->materialLength;
-        $material->color = $request->materialColor;
-        $material->description = $request->materialDescription;
-        $material->price = $request->materialPrice;
-        $material->date_purchase = $request->materialDatePurchase;
+        $materialTransaction = new MaterialTransaction;
+        $materialTransaction->seller_id = $request->materialSeller;
+        $materialTransaction->description = $request->materialDescription;
+        $materialTransaction->price = $request->materialTotalPrice;
+        $materialTransaction->date_purchase = $request->materialDatePurchase;
 
-        $material->save();
+        if($request->hasFile('materialNote'))
+        {
+            $f = $request->file('materialNote');
+            $path = $request->file('materialNote')->storeAs(
+                'note', pathinfo($request->file('materialNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+            );
 
-        return redirect('/material');
+            $materialTransaction->file_path = $path;
+        }
+
+        $materialTransaction->save();
+
+        for($i=0;$i < $request->totalMaterial; $i++){
+            $material = new Material;
+            $material->transaction_id = $materialTransaction->id;
+            $material->material_type = $request->materialName[$i];
+            $material->length = $request->materialLength[$i];
+            $material->color = $request->materialColor[$i];
+            $material->price = $request->materialPrice[$i];
+            $material->save();
+        }
+
+        return redirect('/material/transaction')->with('success', 'Sukses mengubah nota');
     }
 
     public function destroyTransaction(Request $request){

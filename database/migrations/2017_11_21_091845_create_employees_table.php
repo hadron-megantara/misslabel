@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMaterialTransactionsTable extends Migration
+class CreateEmployeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateMaterialTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('material_transactions', function (Blueprint $table) {
+        Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('seller_id');
-            $table->string('description');
-            $table->integer('price');
-            $table->date('date_purchase');
-            $table->string('file_path');
+            $table->string('name');
+            $table->string('phone')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateMaterialTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('material_transactions');
+        Schema::dropIfExists('employees');
     }
 }

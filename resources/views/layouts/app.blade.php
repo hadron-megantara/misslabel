@@ -55,7 +55,7 @@
         ]); ?>
     </script>
 </head>
-<body>
+<body id="body">
     @include('includes.header')
     @yield('content')
     @include('includes.footer')

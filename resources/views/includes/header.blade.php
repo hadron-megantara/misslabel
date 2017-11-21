@@ -194,51 +194,57 @@
                           <span class="title">Pengeluaran</span>
                       </a>
                   </li>
-        		</ul>
-
-        		<p class="menu-title" style="margin-top: -10px">Report<span class="pull-right"><i class="fa fa-flag"></i></span></p>
-
-              <ul>
-              	<li class="">
-                    	<a href="#">
-                        	<i class="fa fa-line-chart"></i>
-                        	<span class="title">Penjualan</span>
-                    	</a>
-                	</li>
-
-                	<li class="">
-                    	<a href="#">
-                        	<i class="fa fa-line-chart"></i>
-                        	<span class="title">Omset</span>
-                    	</a>
-                	</li>
-
-                	<li class="">
-                    	<a href="#">
-                        	<i class="fa fa-line-chart"></i>
-                        	<span class="title">Langganan</span>
-                    	</a>
-                	</li>
-
-                	<li class="">
-                    	<a href="#">
-                        	<i class="fa fa-line-chart"></i>
-                        	<span class="title">Nota Penjualan</span>
-                    	</a>
-                	</li>
-
-                	<li class="">
-                    	<a href="#">
-                        	<i class="fa fa-line-chart"></i>
-                        	<span class="title">Surat Jalan</span>
-                    	</a>
-                	</li>
 
                   <li class="">
-                      <a href="#">
+                      <a href="javascript:;">
                           <i class="fa fa-users"></i>
-                          <span class="title">Absensi</span>
+                          <span class="title">Karyawan</span>
+                          @if(\Request::is('employee') || \Request::is('employee/*'))
+                            <span class="arrow open"></span>
+                          @else
+                            <span class="arrow"></span>
+                          @endif
                       </a>
+                      <ul class="sub-menu" @if(\Request::is('employee') || \Request::is('employee/*')) style="display: block;" @endif>
+                          <li @if(\Request::is('employee/list') || \Request::is('employee/list/*')) class="active" @endif><a href="/employee/list">List Karyawan</a></li>
+                          <li @if(\Request::is('employee/attendance') || \Request::is('employee/attendance/*')) class="active" @endif><a href="/employee/attendance">Absensi Karyawan</a></li>
+                      </ul>
+                  </li>
+
+                  <li class="">
+                      <a href="javascript:;">
+                          <i class="fa fa-cogs"></i>
+                          <span class="title">Pengaturan</span>
+                          @if(\Request::is('config') || \Request::is('config/*'))
+                            <span class="arrow open"></span>
+                          @else
+                            <span class="arrow"></span>
+                          @endif
+                      </a>
+                      <ul class="sub-menu" @if(\Request::is('config') || \Request::is('config/*')) style="display: block;" @endif>
+                          <li @if(\Request::is('config/color') || \Request::is('config/color/*')) class="active" @endif><a href="/config/color">Warna</a></li>
+                          <li @if(\Request::is('config/seller') || \Request::is('config/seller/*')) class="active" @endif><a href="/config/seller">Penjual</a></li>
+                      </ul>
+                  </li>
+
+                  <li class="">
+                      <a href="javascript:;">
+                          <i class="fa fa-line-chart"></i>
+                          <span class="title">Report</span>
+                          @if(\Request::is('report') || \Request::is('report/*'))
+                            <span class="arrow open"></span>
+                          @else
+                            <span class="arrow"></span>
+                          @endif
+                      </a>
+                      <ul class="sub-menu" @if(\Request::is('report') || \Request::is('report/*')) style="display: block;" @endif>
+                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Penjualan</a></li>
+                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Omset</a></li>
+                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Langganan</a></li>
+                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Nota Penjualan</a></li>
+                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Surat Jalan</a></li>
+                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Absensi</a></li>
+                      </ul>
                   </li>
         		</ul>
     		</div>

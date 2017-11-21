@@ -26,6 +26,7 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/material/list', 'MaterialController@index')->name('material.index');
 		Route::get('/material/list/get-material', 'MaterialController@getMaterial')->name('material.getMaterial');
 		Route::post('/material/list/send-material', 'MaterialController@sendMaterial')->name('material.sendMaterial');
+		Route::get('/material/list/get-by-transaction', 'MaterialController@getMaterialByTransactionId')->name('material.getMaterialByTransactionId');
 
 		// Material-Transaction
 		Route::get('/material/transaction', 'MaterialController@transaction')->name('material.transaction');
@@ -100,5 +101,31 @@ Route::middleware(['userAuth'])->group(function () {
 		// Warehouse-Warehouse-List
 		Route::get('/warehouse/warehouse-list', 'WarehouseController@warehouseList')->name('warehouse.warehouseList');
 	// End of Warehouse
+
+	// Configuration
+		Route::get('/config/color', 'ConfigController@color')->name('config.color');
+		Route::get('/config/get-color', 'ConfigController@getColor')->name('config.color.get');
+		Route::post('/config/store-color', 'ConfigController@storeColor')->name('config.color.store');
+		Route::post('/config/update-color', 'ConfigController@updateColor')->name('config.color.update');
+		Route::post('/config/destroy-color', 'ConfigController@destroyColor')->name('config.color.destroy');
+
+		Route::get('/config/seller', 'ConfigController@seller')->name('config.seller');
+		Route::get('/config/get-seller', 'ConfigController@getSeller')->name('config.seller.get');
+		Route::post('/config/store-seller', 'ConfigController@storeSeller')->name('config.seller.store');
+		Route::post('/config/update-seller', 'ConfigController@updateSeller')->name('config.seller.update');
+		Route::post('/config/destroy-seller', 'ConfigController@destroySeller')->name('config.seller.destroy');
+	// End of Configuration
+
+	// Employee
+		Route::get('/employee/list', 'EmployeeController@list')->name('employee.list');
+		Route::get('/employee/get-employee', 'EmployeeController@getEmployee')->name('employee.get');
+		Route::post('/employee/store-employee', 'EmployeeController@storeEmployee')->name('employee.store');
+		Route::post('/employee/update-employee', 'EmployeeController@updateEmployee')->name('employee.update');
+		Route::post('/employee/destroy-employee', 'EmployeeController@destroyEmployee')->name('employee.destroy');
+	// End of Employee
+
+	// Report
+		Route::get('/report/list', 'EmployeeController@list')->name('employee.list');
+	// End of Report
 
 });
