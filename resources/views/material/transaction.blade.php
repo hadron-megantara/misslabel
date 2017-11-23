@@ -332,10 +332,13 @@
         });
 
         $("body").on("click", ".btnAddMaterial", function(e){
+            
+            
             $('#addForm').attr('action', "{{ route('material.transaction.addTransaction') }}");
             $('#materialId').val("");
 
             $('.newAdded').remove();
+            $('.addMoreRegion').remove();
 
             $('#materialInputArea').append("<div class='form-group inputAddedArea newAdded'><div class='col-md-3'><select class='form-control materialName' name='materialName[]' required><option value=''>Pilih Bahan</option>@foreach($materialType as $materialType2)<option value='{{$materialType2->name}}'>{{$materialType2->name}}</option>@endforeach</select></div><div class='col-md-2' style='padding-right: 5px'><input type='text' class='form-control materialLength' required placeholder='Panjang bahan'><input type='hidden' class='materialLengthHidden' name='materialLength[]' required></div><div class='col-md-1' style='padding-left: 0'><select name='materialLengthUnit[]' class='form-control materialLengthUnit'><option value='yard'>yard</option><option value='meter'>meter</option></select></div><div class='col-md-2' style='padding-right: 0'><select class='form-control materialColor' name='materialColor[]' required><option value=''>Pilih Warna</option>@foreach($color as $color2)<option value='{{$color2->name}}'>{{$color2->name}}</option>@endforeach</select></div><div class='col-md-3' style='padding-right: 0'><input type='text' class='form-control number materialPrice' required placeholder='Masukkan Harga'><input type='hidden' name='materialPrice[]' class='materialPriceHidden' required></div><div class='col-md-1 addMoreRegion' style='padding-right: 0'><button type='button' class='btn btn-danger pull-right deleteBtnAction'><span class='fa fa-close deleteBtn'></span></button></div></div><div class='col-md-12 pull-right'><div class='addMoreRegion' style='padding-right: 0;margin-top:10px;margin-right: -30px;'><button type='button' class='btn btn-success pull-right addMore addBtn'><span class='fa fa-plus addBtn' title='Tambah Bahan'></span> Tambah Bahan</button></div></div>");
         });
@@ -452,12 +455,23 @@
             event.preventDefault();
         });
 
+        $("#materialInputArea").on("keypress", ".materialLength", function(e){
+            if (e.which < 48 || 57 < e.which)
+                e.preventDefault();
+        });
+
         $("#materialInputArea").on("keyup", ".materialLength", function(){
+
             var number = $(this).val().split('.').join("");
             $(this).closest('.inputAddedArea').find('.materialLengthHidden').val(number);
 
             number = number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             $(this).val(number);
+        });
+
+        $("#materialInputArea").on("keypress", ".materialPrice", function(e){
+            if (e.which < 48 || 57 < e.which)
+                e.preventDefault();
         });
 
         $("#materialInputArea").on("keyup", ".materialPrice", function(){
@@ -534,20 +548,17 @@
             window.location = "{{ route('material.transaction')}}" + '?status='+$("#searchMaterialBy").val()+'&dateFrom='+$("#filterDateFrom").val()+'&dateTo='+$("#filterDateTo").val();
         });
 
-        $("#materialLength").keypress(function (e) {
-            if (e.which < 48 || 57 < e.which)
-                e.preventDefault();
-        });
-
         $('#saveCurrentData').click(function(){
-            $('#hiddenMaterialData').prepend('<div class="col-md-12"><div class="alert alert-info materialAdded"><label style="font-weight:bold;color:#1791d6">'+$('#materialName').val()+' - '+$('#materialColor').val()+' - '+$('#materialLength').val()+' '+$('#materialLengthUnit').val()+' - '+$('#materialPrice').val()+'<a href="#" class="pull-right" data-dismiss="alert" title="hapus"><span class="fa fa-close"></span></a></label></div></div><div class="row"></div>');
+            $('#hiddenMaterialData').prepend('<div class="col-md-12"><div class="alert alert-info materialAdded"><label style="font-weight:bold;color:#1791d6">'+$('#materialName').val()+' - '+$('#materialColor').val()+' - '+$('.materialLength').val()+' '+$('#materialLengthUnit').val()+' - '+$('#materialPrice').val()+'<a href="#" class="pull-right" data-dismiss="alert" title="hapus"><span class="fa fa-close"></span></a></label></div></div><div class="row"></div>');
             $('#materialInputArea').hide();
             $('#addMoreArea').height($('#hiddenMaterialData').height());
             $('#addMoreArea').show();
         });
 
         $("#materialInputArea").on("click", ".addMore", function(){
-            $('#materialInputArea').append("<div class='form-group inputAddedArea newAdded'><div class='col-md-3'><select class='form-control materialName' name='materialName[]' required><option value=''>Pilih Bahan</option>@foreach($materialType as $materialType2)<option value='{{$materialType2->name}}'>{{$materialType2->name}}</option>@endforeach</select></div><div class='col-md-2' style='padding-right: 5px'><input type='text' class='form-control materialLength' required placeholder='Panjang bahan'><input type='hidden' class='materialLengthHidden' name='materialLength[]' required></div><div class='col-md-1' style='padding-left: 0'><select name='materialLengthUnit[]' class='form-control materialLengthUnit'><option value='yard'>yard</option><option value='meter'>meter</option></select></div><div class='col-md-2' style='padding-right: 0'><select class='form-control materialColor' name='materialColor[]' required><option value=''>Pilih Warna</option>@foreach($color as $color2)<option value='{{$color2->name}}'>{{$color2->name}}</option>@endforeach</select></div><div class='col-md-3' style='padding-right: 0'><input type='text' class='form-control number materialPrice' required placeholder='Masukkan Harga'><input type='hidden' name='materialPrice[]' class='materialPriceHidden' required></div><div class='col-md-1 addMoreRegion' style='padding-right: 0'><button type='button' class='btn btn-danger pull-right deleteBtnAction'><span class='fa fa-close deleteBtn'></span></button></div></div><div class='col-md-12 pull-right'></div>");
+            $(this).closest('.addMoreRegion').remove();
+
+            $('#materialInputArea').append("<div class='form-group inputAddedArea newAdded'><div class='col-md-12 border-space' style='margin-top:-20px'><hr></div><div class='col-md-3'><select class='form-control materialName' name='materialName[]' required><option value=''>Pilih Bahan</option>@foreach($materialType as $materialType2)<option value='{{$materialType2->name}}'>{{$materialType2->name}}</option>@endforeach</select></div><div class='col-md-2' style='padding-right: 5px'><input type='text' class='form-control materialLength' required placeholder='Panjang bahan'><input type='hidden' class='materialLengthHidden' name='materialLength[]' required></div><div class='col-md-1' style='padding-left: 0'><select name='materialLengthUnit[]' class='form-control materialLengthUnit'><option value='yard'>yard</option><option value='meter'>meter</option></select></div><div class='col-md-2' style='padding-right: 0'><select class='form-control materialColor' name='materialColor[]' required><option value=''>Pilih Warna</option>@foreach($color as $color2)<option value='{{$color2->name}}'>{{$color2->name}}</option>@endforeach</select></div><div class='col-md-3' style='padding-right: 0'><input type='text' class='form-control number materialPrice' required placeholder='Masukkan Harga'><input type='hidden' name='materialPrice[]' class='materialPriceHidden' required></div><div class='col-md-1 addMoreRegion' style='padding-right: 0'><button type='button' class='btn btn-danger pull-right deleteBtnAction'><span class='fa fa-close deleteBtn'></span></button></div></div><div class='col-md-12 pull-right'></div><div class='col-md-12 pull-right'><div class='addMoreRegion' style='padding-right: 0;margin-top:10px;margin-right: -30px;'><button type='button' class='btn btn-success pull-right addMore addBtn'><span class='fa fa-plus addBtn' title='Tambah Bahan'></span> Tambah Bahan</button></div></div>");
         });
 
         $("#materialInputArea").on("click", ".deleteBtnAction", function(){

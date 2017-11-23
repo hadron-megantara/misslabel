@@ -66,15 +66,17 @@ class MaterialController extends Controller
             $dateTo = $request->dateTo;
         }
 
+        $materialTransaction = MaterialTransaction::join('sellers', 'material_transactions.seller_id', '=', 'sellers.id')->select(['material_transactions.id', 'material_transactions.seller_id', 'sellers.name', 'material_transactions.description', 'material_transactions.price', 'material_transactions.date_purchase'])->orderBy('material_transactions.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+
         if($request->has('status')){
             if($request->status != 2){
                 $status = $request->status;
-                $material = Material::select(['id', 'material_type', 'length', 'color', 'price', 'status'])->orderBy('updated_at', 'desc')->where('status', $request->status)->get();
+                $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->select(['materials.id', 'materials.material_type', 'materials.length', 'materials.color', 'materials.price', 'materials.status', 'material_transactions.date_purchase'])->orderBy('materials.updated_at', 'desc')->where('materials.status', $request->status)->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
             } else{
-                $material = Material::select(['id', 'material_type', 'length', 'color', 'price', 'status'])->orderBy('updated_at', 'desc')->get();
+                $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->select(['materials.id', 'materials.material_type', 'materials.length', 'materials.color', 'materials.price', 'materials.status', 'material_transactions.date_purchase'])->orderBy('materials.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
             }
         } else{
-            $material = Material::select(['id', 'material_type', 'length', 'color', 'price', 'date_purchase', 'status'])->orderBy('updated_at', 'desc')->whereDate('date_purchase', '>=', $request->dateFrom)->get();
+            $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->select(['materials.id', 'materials.material_type', 'materials.length', 'materials.color', 'materials.price', 'materials.status', 'material_transactions.date_purchase'])->orderBy('materials.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
         }
      
         return Datatables::of($material)->make();
@@ -140,7 +142,7 @@ class MaterialController extends Controller
 
         $materialIn->save();
 
-        return redirect('/material')->with('success', 'Sukses mengirim bahan ke konveksi');
+        return redirect('/material/list')->with('success', 'Sukses mengirim bahan ke konveksi');
     }
 
     public function getMaterialByTransactionId(Request $request){

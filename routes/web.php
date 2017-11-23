@@ -125,7 +125,14 @@ Route::middleware(['userAuth'])->group(function () {
 	// End of Employee
 
 	// Report
-		Route::get('/report/list', 'EmployeeController@list')->name('employee.list');
+		Route::get('/report/sales', 'ReportController@sales')->name('report.sales');
+		Route::get('/report/turn-over', 'ReportController@turnOver')->name('report.turn-over');
+		Route::get('/report/profit', 'ReportController@profit')->name('report.profit');
+		Route::get('/report/cash', 'ReportController@cash')->name('report.cash');
+		Route::get('/report/free-cash', 'ReportController@freeCash')->name('report.free-cash');
+		Route::get('/report/payable-receivable', 'ReportController@payableReceivable')->name('report.payable-receivable');
+		Route::get('/report/stock', 'ReportController@stock')->name('report.stock');
+		Route::get('/report/expense', 'ReportController@expense')->name('report.expense');
 	// End of Report
 
 });

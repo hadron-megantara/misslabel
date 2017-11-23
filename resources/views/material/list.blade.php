@@ -9,7 +9,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Pembelian Bahan</h3>
+            <h3>List Bahan</h3>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
                     <span class="fa fa-print"> </span>Print
@@ -187,14 +187,26 @@
                         return 'Rp '+data;
                     } 
                 },
+                { data: 'date_purchase', name: 'date_purchase', render: function(data, type, full){
+                        var year = data.substring(0,4);
+                        var month = data.substring(5,7);
+                        var date = data.substring(8,10);
+                        var dateTime = new Date(Date.UTC(year, month - 1, date));
+                        var options = {weekday: "long", year: "numeric", month: "long", day: "numeric"};
+                        data = dateTime.toLocaleString("in-ID", options);
+                        return data;
+                    }
+                },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        var dataReturn = '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="#materialModalEdit" data-toggle="modal" title="Ubah Data"><span class="fa fa-pencil"></span></a><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" />';
+                        var dataReturn = '<div class="text-center"><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
 
                         if(full.status == 0){
                             dataReturn = dataReturn + ' <a class="btn btn-primary sendMaterialBtn" id="send_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Konveksi"><span class="fa fa-sign-out"></span></a>';
+                        } else{
+                            dataReturn = dataReturn +'<a class="btn btn-success" href="#" title="Terkirim ke Konveksi"><span class="fa fa-check"></span></a>';
                         }
 
-                        dataReturn = dataReturn + ' <a class="btn btn-danger deleteMaterialBtn" id="delete_'+data+'" href="#materialModalDelete" data-toggle="modal" title="Hapus Data"><span class="fa fa-trash"></span></a></div>';
+                        dataReturn = dataReturn + ' </div>';
 
 
                         return dataReturn;

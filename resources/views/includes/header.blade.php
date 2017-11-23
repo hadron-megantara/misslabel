@@ -224,6 +224,7 @@
                       <ul class="sub-menu" @if(\Request::is('config') || \Request::is('config/*')) style="display: block;" @endif>
                           <li @if(\Request::is('config/color') || \Request::is('config/color/*')) class="active" @endif><a href="/config/color">Warna</a></li>
                           <li @if(\Request::is('config/seller') || \Request::is('config/seller/*')) class="active" @endif><a href="/config/seller">Penjual</a></li>
+                          <li @if(\Request::is('config/user') || \Request::is('config/user/*')) class="active" @endif><a href="/config/user">Pengguna</a></li>
                       </ul>
                   </li>
 
@@ -239,11 +240,11 @@
                       </a>
                       <ul class="sub-menu" @if(\Request::is('report') || \Request::is('report/*')) style="display: block;" @endif>
                           <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Penjualan</a></li>
-                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Omset</a></li>
-                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Langganan</a></li>
-                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Nota Penjualan</a></li>
-                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Surat Jalan</a></li>
-                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Absensi</a></li>
+                          <li @if(\Request::is('report/turn-over') || \Request::is('report/turn-over/*')) class="active" @endif><a href="/report/turn-over">Omset</a></li>
+                          <li @if(\Request::is('report/customer') || \Request::is('report/customer/*')) class="active" @endif><a href="/report/customer">Langganan</a></li>
+                          <li @if(\Request::is('report/transaction') || \Request::is('report/transaction/*')) class="active" @endif><a href="/report/transaction">Nota Penjualan</a></li>
+                          <li @if(\Request::is('report/delivery-order') || \Request::is('report/delivery-order/*')) class="active" @endif><a href="/report/delivery-order">Surat Jalan</a></li>
+                          <li @if(\Request::is('report/attendance') || \Request::is('report/attendance/*')) class="active" @endif><a href="/report/attendance">Absensi</a></li>
                       </ul>
                   </li>
         		</ul>

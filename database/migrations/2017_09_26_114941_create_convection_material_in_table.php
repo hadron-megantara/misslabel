@@ -15,11 +15,12 @@ class CreateConvectionMaterialInTable extends Migration
     {
         Schema::create('convection_material_in', function (Blueprint $table) {
             $table->increments('id');
+            $table->char('status')->default('0');
+            $table->string('description')->nullable();
             $table->string('material_type');
             $table->string('color');
             $table->integer('length');
             $table->integer('convection_id');
-            $table->char('status')->default('0');
             $table->timestamps();
         });
     }
