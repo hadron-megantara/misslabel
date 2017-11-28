@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Konveksi - Produk</h3>
+            <h3>Konveksi - Produk Selesai</h3>
 
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionModalExport" class="btn btn-danger" data-toggle="modal">
@@ -18,8 +18,8 @@
             <span style="font-weight: bold; margin-right: 10px">Filter Berdasar Konveksi</span>
 
             <select id="searchMaterialBy" name="searchMaterialBy">
-                @foreach($convectionList as $convectionList)
-                    <option value="{{$convectionList->id}}" @if($convection == $convectionList->id) selected="" @endif>{{$convectionList->name}}</option>
+                @foreach($convectionList as $convectionDetail)
+                    <option value="{{$convectionDetail->id}}" @if($convection == $convectionDetail->id) selected="" @endif>{{$convectionDetail->name}}</option>
                 @endforeach
                 <option value="" @if($convection == 0) selected="" @endif >Semua Konveksi</option>
             </select>
@@ -29,6 +29,14 @@
                 <option value="1" @if($status == 1) selected="" @endif>Terkirim ke Gudang</option>
             </select>
         </div>
+
+        @if(session('success'))
+            <div class="panel panel-success">
+                <div class="panel-heading notification text-center">
+                    {{session('success')}}
+                </div>
+            </div>
+        @endif
 
         <div class="row"></div>
 
@@ -55,9 +63,14 @@
 
         <div class="page-title">
             <h3>Produk terpilih</h3>
+            <div class="pull-right" style="margin-top: 5px;margin-left: 20px">
+                <a href="#materialModalSendConvection" class="btn btn-success productModalSendConvection" data-toggle="modal">
+                    <span class="fa fa-send"></span> Kirim ke Konveksi
+                </a>
+            </div>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#materialModalSend" class="btn btn-success productModalSend" data-toggle="modal">
-                    <span class="fa fa-save"></span> Simpan di Gudang
+                    <span class="fa fa-send"></span> Kirim ke Gudang
                 </a>
             </div>
         </div>
@@ -93,7 +106,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Simpan Barang ke Gudang</h4>
+                <h4 class="modal-title">Kirim Produk ke Gudang</h4>
             </div>
 
             <div class="modal-body">
@@ -105,9 +118,9 @@
 
                         <div class="col-md-6">
                             <select class="form-control" name="warehouseId" >
-                                <option value="">Pilih gudang</option>
-                                @foreach($warehouseList as $warehouseList)
-                                    <option value="{{$warehouseList->id}}">{{$warehouseList->name}}</option>
+                                <option value="">Pilih Gudang</option>
+                                @foreach($warehouseList as $warehouseList2)
+                                    <option value="{{$warehouseList2->id}}">{{$warehouseList2->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -142,6 +155,43 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Kirim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="materialModalSendConvection" class="modal fade" role="dialog" style="margin-top:1%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Kirim Produk ke Konveksi</h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" method="POST" action="{{ route('convection.product.sendProductConvection') }}" role="form" id="sendConvectionForm" enctype="multipart/form-data">
+                    {!! csrf_field() !!}
+
+                    <div class="form-group">
+                        <label for="sendProductWarehouse" class="col-md-4 control-label">Konveksi</label>
+
+                        <div class="col-md-6">
+                            <select class="form-control" name="convectionId" >
+                                <option value="">Pilih Konveksi</option>
+                                @foreach($convectionList as $convectionDetail2)
+                                    <option value="{{$convectionDetail2->id}}">{{$convectionDetail2->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="productIdAppend"></div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
+                <button type="submit" class="btn btn-success" form="sendConvectionForm"><span class="fa fa-save"></span> Kirim</button>
             </div>
         </div>
     </div>
@@ -208,7 +258,9 @@
             var price = $('#productPrice_'+id).val();
             price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
 
-            $("#checkedItems").append('<tr><td>'+$('#productName_'+id).val()+'</td><td>'+$('#productMaterialType_'+id).val()+'</td><td>'+$('#productColor_'+id).val()+'</td><td>'+length+' yard</td><td>'+price+'</td><td>'+$('#productTotal_'+id).val()+' '+$('#productUnit_'+id).val()+'</td><td>'+$('#productDescription_'+id).val()+'</td><td class="productItemsHidden"><div class="text-center"><input type="checkbox" id="check_'+id+'" checked="" class="checkProduct" /></div><input type="hidden" id="productMaterialType_'+id+'" value="'+$('#productMaterialType_'+id).val()+'" /><input type="hidden" id="productColor_'+id+'" value="'+$('#productColor_'+id).val()+'" /><input type="hidden" id="productLength_'+id+'" value="'+$('#productLength_'+id).val()+'" /><input type="hidden" id="productPrice_'+id+'" value="'+$('#productPrice_'+id).val()+'" /><input type="hidden" id="productTotal_'+id+'" value="'+$('#productTotal_'+id).val()+'" /><input type="hidden" id="productUnit_'+id+'" value="'+$('#productUnit_'+id).val()+'" /><input type="hidden" id="productDescription_'+id+'" value="'+$('#productDescription_'+id).val()+'" /><input type="hidden" id="productName_'+id+'" value="'+$('#productName_'+id).val()+'" /></td></tr>');
+            $("#checkedItems").append('<tr><td>'+$('#productName_'+id).val()+'</td><td>'+$('#productMaterialType_'+id).val()+'</td><td>'+$('#productColor_'+id).val()+'</td><td>'+length+' yard</td><td>'+price+'</td><td>'+$('#productTotal_'+id).val()+' '+$('#productUnit_'+id).val()+'</td><td>'+$('#productDescription_'+id).val()+'</td><td class="productItemsHidden"><div class="text-center"><input type="checkbox" id="check_'+id+'" checked="" class="checkProduct" /></div><input type="hidden" id="productSendId_'+id+'" name="" value="'+id+'" /><input type="hidden" id="productMaterialType_'+id+'" value="'+$('#productMaterialType_'+id).val()+'" /><input type="hidden" id="productColor_'+id+'" value="'+$('#productColor_'+id).val()+'" /><input type="hidden" id="productLength_'+id+'" value="'+$('#productLength_'+id).val()+'" /><input type="hidden" id="productPrice_'+id+'" value="'+$('#productPrice_'+id).val()+'" /><input type="hidden" id="productTotal_'+id+'" value="'+$('#productTotal_'+id).val()+'" /><input type="hidden" id="productUnit_'+id+'" value="'+$('#productUnit_'+id).val()+'" /><input type="hidden" id="productDescription_'+id+'" value="'+$('#productDescription_'+id).val()+'" /><input type="hidden" id="productName_'+id+'" value="'+$('#productName_'+id).val()+'" /></td></tr>');
+
+            $("#productIdAppend").append('<input type="hidden" id="idAppended_'+id+'" name="productId[]" value="'+id+'" />');
 
             productId.push(id);
             $('.emptyItems').hide();
@@ -233,9 +285,11 @@
             
             $(this).closest('tr').remove();
             $('#productTable').DataTable().ajax.reload();
+
+            $('#idAppended_'+id).remove();
         });
 
-        $("#productTable").on("click", ".sendMaterialBtn", function(){
+        $("#productTable").on("click", ".productModalSendConvection", function(){
             var id = this.id;
             id = id.substring(5);
 

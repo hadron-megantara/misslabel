@@ -66,10 +66,17 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/convection/material-in/get-material-in', 'ConvectionController@getMaterialIn')->name('convection.getMaterialIn');
 		Route::post('/convection/material-in/convert-to-product', 'ConvectionController@convertToProduct')->name('convection.materialIn.convertToProduct');
 
+		// Convection-Product-In
+		Route::get('/convection/product-in', 'ConvectionController@productIn')->name('convection.productIn');
+		Route::get('/convection/product-in/get-product-in', 'ConvectionController@getProductIn')->name('convection.getProductIn');
+		Route::post('/convection/product-in/product-accessories', 'ConvectionController@productAccessories')->name('convection.productIn.productAccessories');
+
 		// Convection-Product
 		Route::get('/convection/product', 'ConvectionController@product')->name('convection.product');
 		Route::get('/convection/product/get-product', 'ConvectionController@getProduct')->name('convection.product.getProduct');
 		Route::post('/convection/product/send-product', 'ConvectionController@sendProduct')->name('convection.product.sendProduct');
+		Route::post('/convection/product/send-product-convection', 'ConvectionController@sendProductConvection')->name('convection.product.sendProductConvection');
+		Route::post('/convection/product/send-product-from-convection', 'ConvectionController@sendProductFromConvection')->name('convection.product.sendProductFromConvection');
 
 		// Convection-Type
 		Route::get('/convection/list', 'ConvectionController@convectionList');

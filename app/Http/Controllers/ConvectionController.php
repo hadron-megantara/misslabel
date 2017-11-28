@@ -8,6 +8,7 @@ use App\Material;
 use App\MaterialIn;
 use App\ConvectionList;
 use App\ConvectionMaterialIn;
+use App\ConvectionProduct;
 use App\Product;
 use App\DeliveryNote;
 use App\Warehouse;
@@ -119,7 +120,6 @@ class ConvectionController extends Controller
         $product->material_type = $request->materialType;
         $product->color = $request->materialColor;
         $product->length = $request->materialLength;
-        $product->price = $request->materialPrice;
 
         if($request->materialUnit == 'kodi'){
             $product->total = $request->materialTotal * 20;
@@ -130,6 +130,13 @@ class ConvectionController extends Controller
         $product->unit = $request->materialUnit;
 
         $product->save();
+
+        $convectionProduct =  new ConvectionProduct;
+        $convectionProduct->product_id = $product->id;
+        $convectionProduct->convection_id = $request->materialConvectionId;
+        $convectionProduct->price = $request->materialPrice;
+        $convectionProduct->description = $request->productDescription;
+        $convectionProduct->save();
 
         $materialIn = MaterialIn::find($request->materialId);
 
@@ -220,9 +227,87 @@ class ConvectionController extends Controller
             $deliveryNote->description = $request->description;
             $deliveryNote->save();
 
-            return redirect('/convection/product')->with('success', 'Sukses menyimpan barang ke gudang');
+            $convectionProduct =  new ConvectionProduct;
+            $convectionProduct->product_id = $request->productId;
+            $convectionProduct->convection_id = $request->convectionId;
+            $convectionProduct->price = $request->productPrice;
+            $convectionProduct->description = $request->productDescription;
+            $convectionProduct->save();
+
+            return redirect('/convection/product')->with('success', 'Sukses mengirim produk ke gudang');
         } else{
             return redirect('/convection/product')->with('error', 'Proses gagal, harap lampirkan surat jalan');
+        }
+    }
+
+    public function productIn(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $convectionList = ConvectionList::all();
+
+        $convection = 0;
+        if($request->has('convection')){
+            $convection = $request->convection;
+        } else{
+            $firstConvection = ConvectionList::first();
+            $convection = $firstConvection->id;
+        }
+
+        $status = 0;
+        if($request->has('status')){
+            $status = $request->status;
+        }
+
+        return view("convection.product-in", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection, 'status' => $status));
+    }
+
+    public function getProductIn(Request $request){
+        if(!$request->has('status') || $request->status == ''){
+            $status = 0;
+        } else{
+            $status = $request->status;
+        }
+
+        if(!$request->has('convection') || $request->convection == '' || $request->convection == 0){
+            $convectionProductIn = Product::select('id','name','material_type','color','length','price','description','total','unit')->where('status', 2)->orderBy('updated_at','desc')->get();
+        } else{
+            $convectionProductIn = Product::select('id','name','material_type','color','length','price','description','total','unit')->where('status', 2)->where('convection_id', $request->convection)->orderBy('updated_at','desc')->get();
+        }
+        
+        return Datatables::of($convectionProductIn)->make();
+    }
+
+    public function sendProductConvection(Request $request){
+        $countId = count($request->productId);
+        for($i = 0;$i < $countId;$i++){
+            $productData = Product::find($request->productId[$i]);
+            $productData->status = 2;
+            $productData->convection_id = $request->convectionId;
+            $productData->save();
+        }
+
+        return redirect('/convection/product')->with('success', 'Sukses mengirim produk ke konveksi');
+    }
+
+    public function sendProductFromConvection(Request $request){
+        if($request->has('productId')){
+            $productData = Product::find($request->productId);
+            $productData->status = 1;
+            $productData->save();
+
+            $convectionProduct =  new ConvectionProduct;
+            $convectionProduct->product_id = $request->productId;
+            $convectionProduct->convection_id = $request->convectionId;
+            $convectionProduct->price = $request->productPrice;
+            $convectionProduct->description = $request->productDescription;
+            $convectionProduct->save();
+
+            return redirect('/convection/product-in')->with('success', 'Sukses menyimpan data');
+        } else{
+            return redirect('/convection/product-in')->with('error', 'Proses gagal, terjadi kesalahan sistem');
         }
     }
 
