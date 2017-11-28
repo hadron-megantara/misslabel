@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWarehouseProductsTable extends Migration
+class CreateWarehouseDeliveryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateWarehouseProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('warehouse_products', function (Blueprint $table) {
+        Schema::create('warehouse_delivery', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('warehouse_delivery_id');
-            $table->integer('product_id');
+            $table->integer('warehouse_id');
+            $table->string('description')->nullable();
+            $table->string('file_path')->nullable();
+            $table->date('date_delivery');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateWarehouseProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warehouse_products');
+        Schema::dropIfExists('warehouse_delivery');
     }
 }

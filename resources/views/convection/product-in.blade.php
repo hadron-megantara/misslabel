@@ -23,11 +23,6 @@
                 @endforeach
                 <option value="" @if($convection == 0) selected="" @endif >Semua Konveksi</option>
             </select>
-
-            <select id="searchMaterialUsed" name="searchMaterialUsed">
-                <option value="0" @if($status == 0) selected="" @endif>Stok</option>
-                <option value="1" @if($status == 1) selected="" @endif>Terpakai</option>
-            </select>
         </div>
 
         <div class="row"></div>
@@ -80,6 +75,7 @@
                         <div class="col-md-6">
                             <input id="sendProductName" type="text" class="form-control" readonly="">
                             <input type="hidden" id="sendProductId" name="productId" />
+                            <input type="hidden" name="convectionIdRedirect" value="{{$convection}}" />
                         </div>
                     </div>
 
@@ -209,11 +205,11 @@
         });
 
         $("#searchMaterialBy").change(function() {
-            window.location = "{{ route('convection.index')}}" + '?convection='+ $(this).val()+'&status='+$("#searchMaterialUsed").val();
+            window.location = "{{ route('convection.productIn')}}" + '?convection='+ $(this).val()+'&status='+$("#searchMaterialUsed").val();
         });
 
         $("#searchMaterialUsed").change(function() {
-            window.location = "{{ route('convection.index')}}" + '?convection='+ $('#searchMaterialBy').val()+'&status='+$(this).val();
+            window.location = "{{ route('convection.productIn')}}" + '?convection='+ $('#searchMaterialBy').val()+'&status='+$(this).val();
         });
 
 	});

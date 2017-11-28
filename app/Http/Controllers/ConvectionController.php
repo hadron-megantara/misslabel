@@ -13,7 +13,9 @@ use App\Product;
 use App\DeliveryNote;
 use App\Warehouse;
 use App\WarehouseProduct;
+use App\WarehouseDelivery;
 use Carbon\Carbon;
+use session;
 
 class ConvectionController extends Controller
 {
@@ -238,8 +240,12 @@ class ConvectionController extends Controller
         $convectionList = ConvectionList::all();
 
         $convection = 0;
-        if($request->has('convection')){
-            $convection = $request->convection;
+        if($request->has('convection') || session::has('convection')){
+            if($request->has('convection')){
+                $convection = $request->convection;
+            } else{
+                $convection = session('convection');
+            }
         } else{
             $firstConvection = ConvectionList::first();
             $convection = $firstConvection->id;
@@ -294,9 +300,44 @@ class ConvectionController extends Controller
             $convectionProduct->description = $request->productAccessories;
             $convectionProduct->save();
 
-            return redirect('/convection/product-in')->with('success', 'Sukses menyimpan data');
+            return redirect('/convection/product-in')->with(array('success'=>'Sukses menyimpan data', 'convection' => $request->convectionIdRedirect));
         } else{
             return redirect('/convection/product-in')->with('error', 'Proses gagal, terjadi kesalahan sistem');
+        }
+    }
+
+    public function sendProductToWarehouse(Request $request){
+        if($request->has('product_id') && $request->has('warehouse_id')){
+            $countId = count($request->productId);
+            for($i = 0;$i < $countId;$i++){
+                $productData = Product::find($request->productId[$i]);
+                $productData->status = 1;
+                $productData->save();
+
+                $warehouseDelivery = new WarehouseProduct;
+                $warehouseDelivery->warehouse_id = $request->warehouseId;
+                $warehouseDelivery->date_delivery = $request->dateDelivery;
+                $warehouseDelivery->description = $request->description;
+
+                if($request->hasFile('deliveryNote'))
+                {
+                    $f = $request->file('deliveryNote');
+                    $path = $request->file('deliveryNote')->storeAs(
+                        'delivery_note', pathinfo($request->file('deliveryNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+                    );
+
+                    $warehouseDelivery->file_path = $path;
+                }
+
+                $warehouseDelivery->save();
+
+                $warehouseProduct = new WarehouseProduct;
+                $warehouseProduct->warehouse_delivery_id = $warehouseDelivery->id;
+                $warehouseProduct->product_id = $request->productId[$i];
+                $warehouseProduct->save();
+            }
+
+            return redirect('/convection/product')->with('success', 'Sukses mengirim produk ke gudang');
         }
     }
 
