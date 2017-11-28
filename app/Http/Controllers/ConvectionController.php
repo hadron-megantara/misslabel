@@ -12,6 +12,7 @@ use App\ConvectionProduct;
 use App\Product;
 use App\DeliveryNote;
 use App\Warehouse;
+use App\WarehouseProduct;
 use Carbon\Carbon;
 
 class ConvectionController extends Controller
@@ -135,7 +136,7 @@ class ConvectionController extends Controller
         $convectionProduct->product_id = $product->id;
         $convectionProduct->convection_id = $request->materialConvectionId;
         $convectionProduct->price = $request->materialPrice;
-        $convectionProduct->description = $request->productDescription;
+        $convectionProduct->description = $request->materialProductDescription;
         $convectionProduct->save();
 
         $materialIn = MaterialIn::find($request->materialId);
@@ -195,49 +196,37 @@ class ConvectionController extends Controller
             $items = json_decode($request->productId);
         }
 
-        $product = Product::select('id','name','material_type','color','length','price','description','total','unit')->whereNotIn('id', $items)->where('status', 0)->orderBy('updated_at','desc')->get();
+        $product = Product::selectRaw('id, name, material_type, color, length, (SELECT c.description from convection_products c WHERE c.product_id = products.id ORDER BY created_at DESC LIMIT 1) as description,total, unit')->whereNotIn('id', $items)->where('status', 0)->orderBy('updated_at','desc')->get();
 
         return Datatables::of($product)->make();
     }
 
     public function sendProduct(Request $request){
-        if($request->has('deliveryNote')){
-            $productItem = explode(',', $request->productId);
-            $productId = '';
-            foreach($productItem as $productItem){
-                $productData = Product::find($productItem);
-                $productData->status = 1;
-                $productData->warehouse = $request->warehouseId;
-                $productData->save();
+        $countProduct = count($request->productId);
+        for($i=0;$i < $countProduct;$i++){
+            $productData = Product::find($request->productId[$i]);
+            $productData->status = 1;
+            $productData->save();
 
-                if($productId == ''){
-                    $productId = $productItem;
-                } else{
-                    $productId = $productId.','.$productItem;
-                }
+            $warehouseProduct =  new WarehouseProduct;
+            $warehouseProduct->product_id = $request->productId[$i];
+            $warehouseProduct->warehouse_id = $request->warehouseId;
+            $warehouseProduct->description = $request->description;
+
+            if($request->hasFile('deliveryNote'))
+            {
+                $f = $request->file('deliveryNote');
+                $path = $request->file('deliveryNote')->storeAs(
+                    'delivery_note', pathinfo($request->file('deliveryNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+                );
+
+                $warehouseProduct->file_path = $path;
             }
 
-            $file = $request->file('deliveryNote');
-            $deliveryNote = new DeliveryNote;
-            $deliveryNote->product_id = $productId;
-            $deliveryNote->name = $file->getClientOriginalName();
-            $deliveryNote->file = base64_encode(file_get_contents($file->getRealPath()));
-            $deliveryNote->mime = $file->getMimeType();
-            $deliveryNote->size = $file->getSize();
-            $deliveryNote->description = $request->description;
-            $deliveryNote->save();
-
-            $convectionProduct =  new ConvectionProduct;
-            $convectionProduct->product_id = $request->productId;
-            $convectionProduct->convection_id = $request->convectionId;
-            $convectionProduct->price = $request->productPrice;
-            $convectionProduct->description = $request->productDescription;
-            $convectionProduct->save();
-
-            return redirect('/convection/product')->with('success', 'Sukses mengirim produk ke gudang');
-        } else{
-            return redirect('/convection/product')->with('error', 'Proses gagal, harap lampirkan surat jalan');
+            $warehouseProduct->save();
         }
+
+        return redirect('/convection/product')->with('success', 'Sukses mengirim produk ke gudang');
     }
 
     public function productIn(Request $request){
@@ -272,9 +261,9 @@ class ConvectionController extends Controller
         }
 
         if(!$request->has('convection') || $request->convection == '' || $request->convection == 0){
-            $convectionProductIn = Product::select('id','name','material_type','color','length','price','description','total','unit')->where('status', 2)->orderBy('updated_at','desc')->get();
+            $convectionProductIn = Product::select('id','name','material_type','color','length','description','total','unit')->where('status', 2)->orderBy('updated_at','desc')->get();
         } else{
-            $convectionProductIn = Product::select('id','name','material_type','color','length','price','description','total','unit')->where('status', 2)->where('convection_id', $request->convection)->orderBy('updated_at','desc')->get();
+            $convectionProductIn = Product::select('id','name','material_type','color','length','description','total','unit')->where('status', 2)->where('convection_id', $request->convection)->orderBy('updated_at','desc')->get();
         }
         
         return Datatables::of($convectionProductIn)->make();
@@ -295,14 +284,14 @@ class ConvectionController extends Controller
     public function sendProductFromConvection(Request $request){
         if($request->has('productId')){
             $productData = Product::find($request->productId);
-            $productData->status = 1;
+            $productData->status = 0;
             $productData->save();
 
             $convectionProduct =  new ConvectionProduct;
             $convectionProduct->product_id = $request->productId;
-            $convectionProduct->convection_id = $request->convectionId;
+            $convectionProduct->convection_id = $productData->convection_id;
             $convectionProduct->price = $request->productPrice;
-            $convectionProduct->description = $request->productDescription;
+            $convectionProduct->description = $request->productAccessories;
             $convectionProduct->save();
 
             return redirect('/convection/product-in')->with('success', 'Sukses menyimpan data');

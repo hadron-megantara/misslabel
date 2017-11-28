@@ -32,6 +32,16 @@
 
         <div class="row"></div>
 
+        @if(session('success'))
+            <div class="panel panel-success">
+                <div class="panel-heading notification text-center">
+                    {{session('success')}}
+                </div>
+            </div>
+
+            <div class="row"></div>
+        @endif
+
         <div class="table-responsive">
         	<table id="materialInTable" class="table-bordered">
         		<thead>

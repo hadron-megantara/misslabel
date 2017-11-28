@@ -32,6 +32,16 @@
 
         <div class="row"></div>
 
+        @if(session('success'))
+            <div class="panel panel-success">
+                <div class="panel-heading notification text-center">
+                    {{session('success')}}
+                </div>
+            </div>
+
+            <div class="row"></div>
+        @endif
+
         <div class="table-responsive">
         	<table id="productInTable" class="table-bordered">
         		<thead>
@@ -40,7 +50,6 @@
                         <th>Bahan</th>
                         <th>Warna</th>
                         <th>Panjang Bahan</th>
-                        <th>Harga</th>
                         <th>Total</th>
                         <th>Deskripsi</th>
                         <th class="actions-column">Aksi</th>
@@ -62,7 +71,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('convection.product.sendProductConvection') }}" role="form" id="sendForm">
+                <form class="form-horizontal" method="POST" action="{{ route('convection.product.sendProductFromConvection') }}" role="form" id="sendForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
@@ -151,11 +160,6 @@
                 { data: 'length', name: 'length', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         return data+' yard';
-                    }
-                },
-                { data: 'price', name: 'price', render: function(data, type, full) {
-                        data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        return 'Rp '+data;
                     }
                 },
                 { data: 'total', name: 'total', render: function(data, type, full) {
