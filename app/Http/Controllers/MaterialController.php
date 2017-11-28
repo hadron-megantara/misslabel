@@ -272,7 +272,8 @@ class MaterialController extends Controller
 
         $materialTransaction->save();
 
-        for($i=0;$i < $request->totalMaterial; $i++){
+        $totalMaterial = count($request->materialName);
+        for($i=0;$i < $totalMaterial; $i++){
             $material = new Material;
             $material->transaction_id = $materialTransaction->id;
             $material->material_type = $request->materialName[$i];
@@ -304,7 +305,8 @@ class MaterialController extends Controller
 
         $materialTransaction->save();
 
-        for($i=0;$i < $request->totalMaterial; $i++){
+        $totalMaterial = count($request->materialName);
+        for($i=0;$i < $totalMaterial; $i++){
             $material = new Material;
             $material->transaction_id = $materialTransaction->id;
             $material->material_type = $request->materialName[$i];
