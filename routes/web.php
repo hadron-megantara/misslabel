@@ -89,12 +89,6 @@ Route::middleware(['userAuth'])->group(function () {
 	// Warehouse
 		Route::get('/warehouse', 'WarehouseController@index')->name('warehouse.index');
 
-		// Warehouse-Incoming-Stock
-		Route::get('/warehouse/incoming-stock', 'WarehouseController@incomingStock')->name('warehouse.incomingStock');
-
-		// Warehouse-Incoming-Stock
-		Route::get('/warehouse/incoming-stock', 'WarehouseController@incomingStock')->name('warehouse.incomingStock');
-
 		// Warehouse-Stock
 		Route::get('/warehouse/stock', 'WarehouseController@stock')->name('warehouse.stock');
 		Route::get('/warehouse/get-stock', 'WarehouseController@getStock')->name('warehouse.getStock');

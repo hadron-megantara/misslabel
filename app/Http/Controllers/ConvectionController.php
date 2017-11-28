@@ -204,31 +204,38 @@ class ConvectionController extends Controller
     }
 
     public function sendProduct(Request $request){
-        $countProduct = count($request->productId);
-        for($i=0;$i < $countProduct;$i++){
-            $productData = Product::find($request->productId[$i]);
-            $productData->status = 1;
-            $productData->save();
+        if($request->has('productId') && $request->has('warehouseId')){
+            $countId = count($request->productId);
+            for($i = 0;$i < $countId;$i++){
+                $productData = Product::find($request->productId[$i]);
+                $productData->status = 1;
+                $productData->save();
 
-            $warehouseProduct =  new WarehouseProduct;
-            $warehouseProduct->product_id = $request->productId[$i];
-            $warehouseProduct->warehouse_id = $request->warehouseId;
-            $warehouseProduct->description = $request->description;
+                $warehouseDelivery = new WarehouseDelivery;
+                $warehouseDelivery->warehouse_id = $request->warehouseId;
+                $warehouseDelivery->date_delivery = $request->deliveryDate;
+                $warehouseDelivery->description = $request->description;
 
-            if($request->hasFile('deliveryNote'))
-            {
-                $f = $request->file('deliveryNote');
-                $path = $request->file('deliveryNote')->storeAs(
-                    'delivery_note', pathinfo($request->file('deliveryNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
-                );
+                if($request->hasFile('deliveryNote'))
+                {
+                    $f = $request->file('deliveryNote');
+                    $path = $request->file('deliveryNote')->storeAs(
+                        'delivery_note', pathinfo($request->file('deliveryNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+                    );
 
-                $warehouseProduct->file_path = $path;
+                    $warehouseDelivery->file_path = $path;
+                }
+
+                $warehouseDelivery->save();
+
+                $warehouseProduct = new WarehouseProduct;
+                $warehouseProduct->warehouse_delivery_id = $warehouseDelivery->id;
+                $warehouseProduct->product_id = $request->productId[$i];
+                $warehouseProduct->save();
             }
 
-            $warehouseProduct->save();
+            return redirect('/convection/product')->with('success', 'Sukses mengirim Produk ke Gudang');
         }
-
-        return redirect('/convection/product')->with('success', 'Sukses mengirim produk ke gudang');
     }
 
     public function productIn(Request $request){
@@ -303,41 +310,6 @@ class ConvectionController extends Controller
             return redirect('/convection/product-in')->with(array('success'=>'Sukses menyimpan data', 'convection' => $request->convectionIdRedirect));
         } else{
             return redirect('/convection/product-in')->with('error', 'Proses gagal, terjadi kesalahan sistem');
-        }
-    }
-
-    public function sendProductToWarehouse(Request $request){
-        if($request->has('product_id') && $request->has('warehouse_id')){
-            $countId = count($request->productId);
-            for($i = 0;$i < $countId;$i++){
-                $productData = Product::find($request->productId[$i]);
-                $productData->status = 1;
-                $productData->save();
-
-                $warehouseDelivery = new WarehouseProduct;
-                $warehouseDelivery->warehouse_id = $request->warehouseId;
-                $warehouseDelivery->date_delivery = $request->dateDelivery;
-                $warehouseDelivery->description = $request->description;
-
-                if($request->hasFile('deliveryNote'))
-                {
-                    $f = $request->file('deliveryNote');
-                    $path = $request->file('deliveryNote')->storeAs(
-                        'delivery_note', pathinfo($request->file('deliveryNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
-                    );
-
-                    $warehouseDelivery->file_path = $path;
-                }
-
-                $warehouseDelivery->save();
-
-                $warehouseProduct = new WarehouseProduct;
-                $warehouseProduct->warehouse_delivery_id = $warehouseDelivery->id;
-                $warehouseProduct->product_id = $request->productId[$i];
-                $warehouseProduct->save();
-            }
-
-            return redirect('/convection/product')->with('success', 'Sukses mengirim produk ke gudang');
         }
     }
 

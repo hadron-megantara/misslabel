@@ -140,6 +140,14 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="sendProductDeliveryDate" class="col-md-4 control-label">Tanggal Kirim</label>
+
+                        <div class="col-md-6">
+                            <input id="sendProductDeliveryDate" type="text" class="form-control" name="deliveryDate" required placeholder="Tanggal Kirim">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="sendProductDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
@@ -320,7 +328,17 @@
             $('#sendProductDeliveryNoteHidden').val($(this).val());
         });
 
+        $('#sendProductDeliveryDate').datepicker({
+            dateFormat: 'yy-mm-dd',
+            regional: 'id',
+            orientation: "auto",
+            maxDate : 'now',
+            changeYear: true
+        });
 
+        $('#sendProductDeliveryDate').keypress(function(event){
+            event.preventDefault();
+        });
 
 	});
 </script>
