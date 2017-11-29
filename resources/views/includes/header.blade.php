@@ -168,7 +168,7 @@
                       </a>
                       <ul class="sub-menu" @if(\Request::is('warehouse') || \Request::is('warehouse/*')) style="display: block;" @endif>
                           <li @if(\Request::is('warehouse/stock') || \Request::is('warehouse/stock/*')) class="active" @endif><a href="/warehouse/stock">Stok</a></li>
-                          <li @if(\Request::is('warehouse/transfer-stock') || \Request::is('warehouse/transfer-stock/*')) class="active" @endif><a href="/warehouse/transfer-stock">Transfer Gudang</a></li>
+                          {{-- <li @if(\Request::is('warehouse/transfer-stock') || \Request::is('warehouse/transfer-stock/*')) class="active" @endif><a href="/warehouse/transfer-stock">Transfer Gudang</a></li> --}}
                           <li @if(\Request::is('warehouse/warehouse-list') || \Request::is('warehouse/warehouse-list/*')) class="active" @endif><a href="/warehouse/warehouse-list">Daftar Gudang</a></li>
                       </ul>
                   </li>

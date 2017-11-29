@@ -62,14 +62,16 @@
 
         <div class="page-title">
             <h3>Produk terpilih</h3>
+
             <div class="pull-right" style="margin-top: 5px;margin-left: 20px">
-                <a href="#materialModalSendConvection" class="btn btn-success productModalSendConvection" data-toggle="modal">
-                    <span class="fa fa-send"></span> Kirim ke Konveksi
-                </a>
-            </div>
-            <div class="pull-right" style="margin-top: 5px">
                 <a href="#materialModalSend" class="btn btn-success productModalSend" data-toggle="modal">
                     <span class="fa fa-send"></span> Kirim ke Gudang
+                </a>
+            </div>
+
+            <div class="pull-right" style="margin-top: 5px;">
+                <a href="#materialModalSendConvection" class="btn btn-primary productModalSendConvection" data-toggle="modal">
+                    <span class="fa fa-send"></span> Kirim ke Konveksi
                 </a>
             </div>
         </div>
