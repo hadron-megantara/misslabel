@@ -118,7 +118,17 @@ class WareHouseController extends Controller
             $warehouse = $firstWarehouse->id;
         }
 
-        return view("warehouse.delivery-note", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse));
+        $dateFrom = '';
+        if($request->has('dateFrom')){
+            $dateFrom = $request->dateFrom;
+        }
+
+        $dateTo = '';
+        if($request->has('dateTo')){
+            $dateTo = $request->dateTo;
+        }
+
+        return view("warehouse.delivery-note", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo));
     }
 
     public function getDeliveryNote(Request $request){
@@ -141,5 +151,12 @@ class WareHouseController extends Controller
         }
 
         return Datatables::of($warehouseDelivery)->make();
+    }
+
+    public function downloadNote(Request $request){
+        if($request->has('id')){
+            $file = WarehouseDelivery::find($request->id);
+            return response()->download(storage_path("app/".$file->file_path));
+        }
     }
 }

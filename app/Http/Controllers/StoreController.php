@@ -33,6 +33,7 @@ class StoreController extends Controller
         }
 
         $warehouseList = Warehouse::all();
+        $storeList = Store::all();
 
         $warehouse = 0;
         if($request->has('warehouse')){
@@ -42,7 +43,7 @@ class StoreController extends Controller
             $warehouse = $firstWarehouse->id;
         }
 
-        return view("warehouse.list", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse));
+        return view("warehouse.list", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse, 'storeList' => $storeList));
     }
 
     public function getStock(Request $request){
