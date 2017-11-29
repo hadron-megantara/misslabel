@@ -11,6 +11,7 @@ use App\ConvectionMaterialIn;
 use App\Product;
 use App\DeliveryNote;
 use App\Warehouse;
+use App\Store;
 use Carbon\Carbon;
 
 class WareHouseController extends Controller
@@ -54,69 +55,48 @@ class WareHouseController extends Controller
         return Datatables::of($product)->make();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function warehouseList(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        return view("warehouse.warehouse-list", array('user' => $user));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function getWarehouseList(){
+        $warehouseList = Warehouse::select(['id', 'name', 'description'])->orderBy('updated_at', 'desc');
+     
+        return Datatables::of($warehouseList)->make();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function storeWarehouseList(Request $request){
+        $warehouseList = new Warehouse;
+
+        $warehouseList->name = $request->warehouseListName;
+        $warehouseList->description = $request->warehouseListDescription;
+
+        $warehouseList->save();
+
+        return redirect('/warehouse/warehouse-list')->with('success', 'Sukses menyimpan data gudang');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    public function updateWarehouseList(Request $request){
+        $warehouseList = Warehouse::find($request->warehouseListId);
+        
+        $warehouseList->name = $request->warehouseListName;
+        $warehouseList->description = $request->warehouseListDescription;
+
+        $warehouseList->save();
+
+        return redirect('/warehouse/warehouse-list')->with('success', 'Sukses mengubah data gudang');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    public function destroyWarehouseList(Request $request){
+        $warehouseList = Warehouse::find($request->warehouseListId);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $warehouseList->delete();
+
+        return redirect('/warehouse/warehouse-list')->with('success', 'Sukses menghapus data gudang');
     }
 }

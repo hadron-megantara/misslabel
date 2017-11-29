@@ -168,18 +168,28 @@
                       </a>
                       <ul class="sub-menu" @if(\Request::is('warehouse') || \Request::is('warehouse/*')) style="display: block;" @endif>
                           <li @if(\Request::is('warehouse/stock') || \Request::is('warehouse/stock/*')) class="active" @endif><a href="/warehouse/stock">Stok</a></li>
-                          <li @if(\Request::is('warehouse/sold-out') || \Request::is('warehouse/sold-out/*')) class="active" @endif><a href="/warehouse/sold-out">Barang Terjual</a></li>
                           <li @if(\Request::is('warehouse/transfer-stock') || \Request::is('warehouse/transfer-stock/*')) class="active" @endif><a href="/warehouse/transfer-stock">Transfer Gudang</a></li>
                           <li @if(\Request::is('warehouse/warehouse-list') || \Request::is('warehouse/warehouse-list/*')) class="active" @endif><a href="/warehouse/warehouse-list">Daftar Gudang</a></li>
                       </ul>
                   </li>
 
-                	<li class="">
-                      <a href="#">
-                          <i class="fa fa-institution"></i>
+                  <li class="">
+                      <a href="javascript:;">
+                          <i class="fa fa-bank"></i>
                           <span class="title">Toko</span>
+                          @if(\Request::is('store') || \Request::is('store/*'))
+                            <span class="arrow open"></span>
+                          @else
+                            <span class="arrow"></span>
+                          @endif
                       </a>
-                	</li>
+                      <ul class="sub-menu" @if(\Request::is('store') || \Request::is('store/*')) style="display: block;" @endif>
+                          <li @if(\Request::is('store/stock') || \Request::is('store/stock/*')) class="active" @endif><a href="/store/stock">Stok</a></li>
+                          <li @if(\Request::is('store/sold-out') || \Request::is('store/sold-out/*')) class="active" @endif><a href="/store/sold-out">Produk Terjual</a></li>
+                          <li @if(\Request::is('store/transfer-product') || \Request::is('store/transfer-product/*')) class="active" @endif><a href="/store/transfer-product">Transfer Gudang</a></li>
+                          <li @if(\Request::is('store/store-list') || \Request::is('store/store-list/*')) class="active" @endif><a href="/store/store-list">Daftar Toko</a></li>
+                      </ul>
+                  </li>
 
                 	<li class="">
                     	<a href="#">

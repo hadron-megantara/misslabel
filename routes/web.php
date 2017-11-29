@@ -93,14 +93,37 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/warehouse/stock', 'WarehouseController@stock')->name('warehouse.stock');
 		Route::get('/warehouse/get-stock', 'WarehouseController@getStock')->name('warehouse.getStock');
 
-		// Warehouse-Sold-Out
-		Route::get('/warehouse/sold-out', 'WarehouseController@soldOut')->name('warehouse.soldOut');
-
 		// Warehouse-Transfer-Stock
 		Route::get('/warehouse/transfer-stock', 'WarehouseController@transferStock')->name('warehouse.transferStock');
 
 		// Warehouse-Warehouse-List
 		Route::get('/warehouse/warehouse-list', 'WarehouseController@warehouseList')->name('warehouse.warehouseList');
+		Route::get('/warehouse/list/get-warehouse', 'WarehouseController@getWarehouseList')->name('warehouse.getWarehouseList');
+		Route::post('/warehouse/list/add-warehouse', 'WarehouseController@storeWarehouseList')->name('warehouse.addWarehouseList');
+		Route::post('/warehouse/list/edit-warehouse', 'WarehouseController@updateWarehouseList')->name('warehouse.editWarehouseList');
+		Route::post('/warehouse/list/delete-warehouse', 'WarehouseController@destroyWarehouseList')->name('warehouse.deleteWarehouseList');
+	// End of Warehouse
+
+	// Store
+		Route::get('/store', 'StoreController@index')->name('store.index');
+
+		// Warehouse-Stock
+		Route::get('/store/stock', 'StoreController@stock')->name('store.stock');
+		Route::get('/store/get-store', 'StoreController@getStock')->name('store.getStock');
+
+		// Warehouse-Sold-Out
+		Route::get('/store/sold-out', 'StoreController@soldOut')->name('store.soldOut');
+		Route::get('/store/get-sold-out', 'StoreController@getSoldOut')->name('store.getSoldOut');
+
+		// Warehouse-Transfer-Stock
+		Route::get('/store/transfer-stock', 'StoreController@transferStock')->name('store.transferStock');
+
+		// Warehouse-Warehouse-List
+		Route::get('/store/store-list', 'StoreController@storeList')->name('store.warehouseList');
+		Route::get('/store/list/get-store', 'StoreController@getStoreList')->name('store.getStoreList');
+		Route::post('/store/list/add-store', 'StoreController@storeStoreList')->name('store.addStoreList');
+		Route::post('/store/list/edit-store', 'StoreController@updateStoreList')->name('store.editStoreList');
+		Route::post('/store/list/delete-store', 'StoreController@destroyStoreList')->name('store.deleteStoreList');
 	// End of Warehouse
 
 	// Configuration
