@@ -11,6 +11,7 @@ use App\ConvectionMaterialIn;
 use App\Product;
 use App\DeliveryNote;
 use App\Warehouse;
+use App\WarehouseDelivery;
 use App\Store;
 use Carbon\Carbon;
 
@@ -99,5 +100,46 @@ class WareHouseController extends Controller
         $warehouseList->delete();
 
         return redirect('/warehouse/warehouse-list')->with('success', 'Sukses menghapus data gudang');
+    }
+
+    public function deliveryNote(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $warehouseList = Warehouse::all();
+
+        $warehouse = 0;
+        if($request->has('warehouse')){
+            $warehouse = $request->warehouse;
+        } else{
+            $firstWarehouse = Warehouse::first();
+            $warehouse = $firstWarehouse->id;
+        }
+
+        return view("warehouse.delivery-note", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse));
+    }
+
+    public function getDeliveryNote(Request $request){
+        if(!$request->has('dateFrom') || $request->dateFrom == ''){
+            $dateFrom = '1990-01-01';
+        } else{
+            $dateFrom = $request->dateFrom;
+        }
+
+        if(!$request->has('dateTo') || $request->dateTo == ''){
+            $dateTo = date('Y-m-d');
+        } else{
+            $dateTo = $request->dateTo;
+        }
+
+        if($request->has('warehouse') && $request->warehouse != ''){
+            $warehouseDelivery = WarehouseDelivery::join('warehouses', 'warehouse_delivery.warehouse_id', '=', 'warehouses.id')->select(['warehouses.name', 'warehouse_delivery.id', 'warehouse_delivery.description', 'warehouse_delivery.file_path', 'warehouse_delivery.date_delivery'])->orderBy('warehouse_delivery.updated_at', 'desc')->where('warehouse_delivery.warehouse_id', $request->warehouse)->whereBetween('warehouse_delivery.date_delivery', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+        } else{
+            $warehouseDelivery = WarehouseDelivery::join('warehouses', 'warehouse_delivery.warehouse_id', '=', 'warehouses.id')->select(['warehouses.name', 'warehouse_delivery.id', 'warehouse_delivery.description', 'warehouse_delivery.file_path', 'warehouse_delivery.date_delivery'])->orderBy('warehouse_delivery.updated_at', 'desc')->whereBetween('warehouse_delivery.date_delivery', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+        }
+
+        return Datatables::of($warehouseDelivery)->make();
     }
 }

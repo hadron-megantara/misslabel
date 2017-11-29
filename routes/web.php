@@ -93,6 +93,11 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/warehouse/stock', 'WarehouseController@stock')->name('warehouse.stock');
 		Route::get('/warehouse/get-stock', 'WarehouseController@getStock')->name('warehouse.getStock');
 
+		// Warehouse-Delivery-Note
+		Route::get('/warehouse/delivery-note', 'WarehouseController@deliveryNote')->name('warehouse.deliveryNote');
+		Route::get('/warehouse/delivery-note/get-delivery-note', 'WarehouseController@getDeliveryNote')->name('warehouse.deliveryNote.getDeliveryNote');
+		Route::get('/warehouse/delivery-note/download-note', 'WarehouseController@downloadNote')->name('warehouse.deliveryNote.downloadNote');
+
 		// Warehouse-Transfer-Stock
 		Route::get('/warehouse/transfer-stock', 'WarehouseController@transferStock')->name('warehouse.transferStock');
 
