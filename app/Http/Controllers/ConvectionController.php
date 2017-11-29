@@ -33,8 +33,12 @@ class ConvectionController extends Controller
         $convectionList = ConvectionList::all();
 
         $convection = 0;
-        if($request->has('convection')){
-            $convection = $request->convection;
+        if($request->has('convection') || session::has('convection')){
+            if($request->has('convection')){
+                $convection = $request->convection;
+            } else{
+                $convection = session('convection');
+            }
         } else{
             $firstConvection = ConvectionList::first();
             $convection = $firstConvection->id;
@@ -163,7 +167,8 @@ class ConvectionController extends Controller
 
         $materialInConverted->save();
 
-        return redirect('/convection/material-in')->with('success', 'Sukses konversi bahan ke produk');
+
+        return redirect('/convection/material-in')->with(array('success'=>'Sukses konversi Produk', 'convection' => $request->materialConvectionId));
     }
 
     public function product(Request $request){
@@ -209,6 +214,7 @@ class ConvectionController extends Controller
             for($i = 0;$i < $countId;$i++){
                 $productData = Product::find($request->productId[$i]);
                 $productData->status = 1;
+                $productData->warehouse_id = $request->warehouseId;
                 $productData->save();
 
                 $warehouseDelivery = new WarehouseDelivery;
@@ -298,6 +304,27 @@ class ConvectionController extends Controller
         if($request->has('productId')){
             $productData = Product::find($request->productId);
             $productData->status = 0;
+
+            $description = "";
+
+            $convectionGetDescriptionOfProduct = ConvectionProduct::select('description')->where('product_id', $request->productId)->orderBy('created_at','asc')->get();
+
+            foreach($convectionGetDescriptionOfProduct as $productDescription){
+                if($description != ''){
+                    $description = $description.' - '.$productDescription->description;
+                } else{
+                    $description = $productDescription->description;
+                }
+            }
+
+            if($description != ''){
+                $description = $description.' - '.$request->productAccessories;
+            } else{
+                $description = $request->productAccessories;
+            }
+
+            $productData->description = $description;
+
             $productData->save();
 
             $convectionProduct =  new ConvectionProduct;

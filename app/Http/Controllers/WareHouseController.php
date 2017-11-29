@@ -33,8 +33,6 @@ class WareHouseController extends Controller
 
         $warehouseList = Warehouse::all();
 
-        $product = Product::all();
-
         $warehouse = 0;
         if($request->has('warehouse')){
             $warehouse = $request->warehouse;
@@ -43,19 +41,14 @@ class WareHouseController extends Controller
             $warehouse = $firstWarehouse->id;
         }
 
-        $status = 0;
-        if($request->has('status')){
-            $status = $request->status;
-        }
-
-        return view("product.list", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse, 'status' => $status));
+        return view("warehouse.list", array('user' => $user, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse));
     }
 
     public function getStock(Request $request){
         if($request->has('warehouse') && $request->warehouse != ''){
-            $product = Product::select('id','name','material_type','color','price','description','total','unit')->where('warehouse', $request->warehouse)->where('status', 1)->orderBy('updated_at','desc')->get();
+            $product = Product::select('id','name','material_type','color', 'description', 'total','unit')->where('warehouse_id', $request->warehouse)->where('status', 1)->orderBy('updated_at','desc')->get();
         } else{
-            $product = Product::select('id','name','material_type','color','price','description','total','unit')->where('status', 1)->orderBy('updated_at','desc')->get();
+            $product = Product::select('id','name','material_type','color', 'description','total','unit')->where('status', 1)->orderBy('updated_at','desc')->get();
         }
 
         return Datatables::of($product)->make();
