@@ -205,7 +205,7 @@ class ConvectionController extends Controller
             $items = json_decode($request->productId);
         }
 
-        $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'products.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit', 'product_details.name'])->orderBy('products.updated_at', 'desc')->get();
+        $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->whereNotIn('products.id', $items)->where('products.status', 0)->orderBy('products.updated_at', 'desc')->get();
 
         return Datatables::of($product)->make();
     }
@@ -282,9 +282,9 @@ class ConvectionController extends Controller
         }
 
         if(!$request->has('convection') || $request->convection == '' || $request->convection == 0){
-            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'products.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit', 'product_details.name'])->where('products.status', 2)->orderBy('products.updated_at', 'desc')->get();
+            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->where('products.status', 2)->orderBy('products.updated_at', 'desc')->get();
         } else{
-            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'products.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit', 'product_details.name'])->where('products.status', 2)->where('products.convection_id', $request->convection)->orderBy('products.updated_at', 'desc')->get();
+            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->where('products.status', 2)->where('products.convection_id', $request->convection)->orderBy('products.updated_at', 'desc')->get();
         }
         
         return Datatables::of($convectionProductIn)->make();
