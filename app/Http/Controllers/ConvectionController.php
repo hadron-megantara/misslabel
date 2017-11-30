@@ -214,7 +214,7 @@ class ConvectionController extends Controller
         if($request->has('productId') && $request->has('warehouseId')){
             $explodedId = explode(",",$request->productId);
             $countId = count($explodedId);
-            
+
             for($i = 0;$i < $countId;$i++){
                 $productData = Product::find($explodedId[$i]);
                 $productData->status = 1;
@@ -240,7 +240,7 @@ class ConvectionController extends Controller
 
                 $warehouseProduct = new WarehouseProduct;
                 $warehouseProduct->warehouse_delivery_id = $warehouseDelivery->id;
-                $warehouseProduct->product_id = $request->explodedId[$i];
+                $warehouseProduct->product_id = $explodedId[$i];
                 $warehouseProduct->save();
             }
 

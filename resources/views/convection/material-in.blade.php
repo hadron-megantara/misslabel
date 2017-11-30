@@ -49,7 +49,9 @@
         				<th>Tipe Bahan</th>
                         <th>Warna Bahan</th>
                         <th>Panjang Bahan</th>
-        				<th class="actions-column">Aksi</th>
+                        @if($status != 1)
+        				    <th class="actions-column">Aksi</th>
+                        @endif
         			</tr>
         		</thead>
         		<tbody>
@@ -175,15 +177,29 @@
             columns: [
                 { data: 'material_type', name: 'material_type' },
                 { data: 'color', name: 'color' },
-                { data: 'length', name: 'length', render: function(data, type, full) {
-                        data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        return data+' yard';
+
+                @if($status != 1)
+                    { data: 'length', name: 'length', render: function(data, type, full) {
+                            data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                            return data+' yard';
+                        }
+                    },
+
+                    { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
+                            var html = '';
+
+                            html = html+'<div class="text-center"><a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+data+'" value="'+full.convection_id+'" />';
+
+                            return html;
+                        }
                     }
-                },
-                { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"> <a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+data+'" value="'+full.convection_id+'" />';
-                    }
-                }
+                @else
+                    { data: 'length', name: 'length', render: function(data, type, full) {
+                            data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                            return data+' yard <input type="hidden" id="materialType_'+full.id+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+full.id+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+full.id+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+full.id+'" value="'+full.convection_id+'" />';
+                        }
+                    },
+                @endif
             ],
             "oLanguage": {
                 "sProcessing": "Memproses...",
