@@ -212,9 +212,11 @@ class ConvectionController extends Controller
 
     public function sendProduct(Request $request){
         if($request->has('productId') && $request->has('warehouseId')){
-            $countId = count($request->productId);
+            $explodedId = explode(",",$request->productId);
+            $countId = count($explodedId);
+            
             for($i = 0;$i < $countId;$i++){
-                $productData = Product::find($request->productId[$i]);
+                $productData = Product::find($explodedId[$i]);
                 $productData->status = 1;
                 $productData->warehouse_id = $request->warehouseId;
                 $productData->save();
@@ -238,7 +240,7 @@ class ConvectionController extends Controller
 
                 $warehouseProduct = new WarehouseProduct;
                 $warehouseProduct->warehouse_delivery_id = $warehouseDelivery->id;
-                $warehouseProduct->product_id = $request->productId[$i];
+                $warehouseProduct->product_id = $request->explodedId[$i];
                 $warehouseProduct->save();
             }
 

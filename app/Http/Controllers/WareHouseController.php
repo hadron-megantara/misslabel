@@ -13,6 +13,7 @@ use App\DeliveryNote;
 use App\Warehouse;
 use App\WarehouseDelivery;
 use App\Store;
+use App\StoreStock;
 use Carbon\Carbon;
 
 class WareHouseController extends Controller
@@ -158,5 +159,17 @@ class WareHouseController extends Controller
             $file = WarehouseDelivery::find($request->id);
             return response()->download(storage_path("app/".$file->file_path));
         }
+    }
+
+    public function sendProductToStore(Request $request){
+        $storeStock = new StoreStock;
+        $storeStock->product_id;
+        $storeStock->warehouse_store_id;
+        $storeStock->store_id;
+        $storeStock->total_product;
+        $storeStock->status;
+        $storeStock->save();
+
+        return redirect('/warehouse/stock')->with('success', 'Sukses menyimpan data toko');
     }
 }

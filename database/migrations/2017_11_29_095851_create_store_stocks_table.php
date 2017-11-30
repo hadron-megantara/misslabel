@@ -19,7 +19,7 @@ class CreateStoreStocksTable extends Migration
             $table->integer('warehouse_store_id');
             $table->integer('store_id');
             $table->integer('total_product');
-            $table->char('status');
+            $table->char('status')->default(0);
             $table->timestamps();
         });
     }
