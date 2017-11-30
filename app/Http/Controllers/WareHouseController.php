@@ -49,9 +49,9 @@ class WareHouseController extends Controller
 
     public function getStock(Request $request){
         if($request->has('warehouse') && $request->warehouse != ''){
-            $product = Product::select('id','name','material_type','color', 'description', 'total','unit')->where('warehouse_id', $request->warehouse)->where('status', 1)->orderBy('updated_at','desc')->get();
+            $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'products.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit', 'product_details.name'])->where('products.status', 1)->where('products.warehouse_id', $request->warehouse)->orderBy('products.updated_at', 'desc')->get();
         } else{
-            $product = Product::select('id','name','material_type','color', 'description','total','unit')->where('status', 1)->orderBy('updated_at','desc')->get();
+            $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'products.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit', 'product_details.name'])->where('products.status', 1)->orderBy('products.updated_at', 'desc')->get();
         }
 
         return Datatables::of($product)->make();

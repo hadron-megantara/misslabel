@@ -137,7 +137,12 @@
                         <label for="convertMaterialProductName" class="col-md-4 control-label">Nama Produk</label>
 
                         <div class="col-md-6">
-                            <input id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required placeholder="Masukkan Nama Produk">
+                            <select id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required>
+                                <option value="">--- Pilih Nama/Model Produk ---</option>
+                                @foreach($productDetailList as $productDetailList2)
+                                    <option value="{{$productDetailList2->id}}">{{$productDetailList2->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 

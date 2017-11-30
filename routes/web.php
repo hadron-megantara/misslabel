@@ -138,6 +138,12 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/config/update-color', 'ConfigController@updateColor')->name('config.color.update');
 		Route::post('/config/destroy-color', 'ConfigController@destroyColor')->name('config.color.destroy');
 
+		Route::get('/config/product', 'ConfigController@product')->name('config.product');
+		Route::get('/config/get-product', 'ConfigController@getProduct')->name('config.product.get');
+		Route::post('/config/store-product', 'ConfigController@storeProduct')->name('config.product.store');
+		Route::post('/config/update-product', 'ConfigController@updateProduct')->name('config.product.update');
+		Route::post('/config/destroy-product', 'ConfigController@destroyProduct')->name('config.product.destroy');
+
 		Route::get('/config/seller', 'ConfigController@seller')->name('config.seller');
 		Route::get('/config/get-seller', 'ConfigController@getSeller')->name('config.seller.get');
 		Route::post('/config/store-seller', 'ConfigController@storeSeller')->name('config.seller.store');

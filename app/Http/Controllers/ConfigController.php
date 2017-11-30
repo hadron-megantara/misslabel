@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use App\Color;
 use App\Seller;
+use App\ProductDetail;
 
 class ConfigController extends Controller
 {
@@ -101,5 +102,54 @@ class ConfigController extends Controller
         $seller->delete();
 
         return redirect('/config/seller')->with('success', 'Sukses menghapus penjual');
+    }
+
+    public function product(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $seller = Seller::get();
+
+        return view("config.product", array('user' => $user, 'seller' => $seller));
+    }
+
+    public function getProduct(Request $request){
+        $product = ProductDetail::select(['id', 'name', 'price', 'unit'])->orderBy('updated_at', 'desc')->get();
+     
+        return Datatables::of($product)->make();
+    }
+
+    public function storeProduct(Request $request){
+        $product = new ProductDetail;
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->unit = $request->unit;
+
+        $product->save();
+
+        return redirect('/config/product')->with('success', 'Sukses menambah Produk');
+    }
+
+    public function updateProduct(Request $request){
+        $product = ProductDetail::find($request->id);
+        
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->unit = $request->unit;
+
+        $product->save();
+
+        return redirect('/config/product')->with('success', 'Sukses mengubah Produk');
+    }
+
+    public function destroyProduct(Request $request){
+        $product = ProductDetail::find($request->id);
+
+        $product->delete();
+
+        return redirect('/config/product')->with('success', 'Sukses menghapus Produk');
     }
 }
