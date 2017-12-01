@@ -162,14 +162,22 @@ class WareHouseController extends Controller
     }
 
     public function sendProductToStore(Request $request){
-        $storeStock = new StoreStock;
-        $storeStock->product_id;
-        $storeStock->warehouse_store_id;
-        $storeStock->store_id;
-        $storeStock->total_product;
-        $storeStock->status;
-        $storeStock->save();
+        if($request->has('productId')){
+            $count = count($request->productId);
 
-        return redirect('/warehouse/stock')->with('success', 'Sukses menyimpan data toko');
+            for($i=0;$i < $count;$i++){
+                $storeStock = new StoreStock;
+                $storeStock->product_id = $request->productId[$i];
+                $storeStock->warehouse_store_id = $request->warehouseId;
+                $storeStock->store_id;
+                $storeStock->total_product;
+                $storeStock->status;
+                $storeStock->save();
+            }
+
+            return redirect('/warehouse/stock')->with('success', 'Sukses menyimpan data toko');
+        } else{
+
+        }
     }
 }

@@ -97,27 +97,12 @@
                         <label for="sendProductWarehouse" class="col-md-4 control-label">Toko</label>
 
                         <div class="col-md-6">
-                            <select class="form-control" name="warehouseId" >
+                            <select class="form-control" name="storeId" >
                                 <option value="">Pilih Toko</option>
                                 @foreach($storeList as $storeList2)
                                     <option value="{{$storeList2->id}}">{{$storeList2->name}}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendProductDeliveryNote" class="col-md-4 control-label">Nota Surat Jalan</label>
-
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-btn">
-                                    <span class="btn btn-primary">
-                                        <span class="fa fa-file"></span><input id="sendProductDeliveryNote" type="file" style="display: none;" name="deliveryNote">
-                                    </span>
-                                </label>
-                                <input type="text" id="sendProductDeliveryNoteHidden" class="form-control" readonly>
-                            </div>
                         </div>
                     </div>
 
@@ -134,7 +119,8 @@
 
                         <div class="col-md-6">
                             <textarea id="sendProductDescription" name="description" class="form-control"></textarea>
-                            <input type="hidden" id="sendProductId" name="productId" style="resize: none;" />
+
+                            <div id="sendItemHidden"></div>
                         </div>
                     </div>
                 </form>
@@ -251,25 +237,18 @@
             }
         });
 
-        $("#productTable").on("click", ".productModalSend", function(){
+        $(".content").on("click", ".productModalSend", function(){
             var id = this.id;
             id = id.substring(5);
+            $('#sendItemHidden').html('');
 
-            $("#sendProductId").val(id);
-            $("#sendProductName").val($('#productName_'+id).val());
+            $('#totalListedHidden').children('input').each(function (e) {
+                var id = this.id;
+                id = id.substring(18);
 
-            var length = $('#productLength_'+id).val();
-            length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            $("#sendProductLength").val(length+' yard');
-
-            $("#sendProductMaterialType").val($('#productMaterialType_'+id).val());
-            $("#sendProductDescription").val($('#productDescription_'+id).val());
-            $("#sendProductColor").val($('#productColor_'+id).val());
-            $("#sendProductTotal").val($('#productTotal_'+id).val()+' '+$('#productUnit_'+id).val());
-
-            // var price = $('#productPrice_'+id).val();
-            // price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-            // $("#sendProductPrice").val(price);
+                $('#sendItemHidden').append('<input type="hidden" name="productId[]" value="'+$('#productSendId_'+id).val()+'" /><input type="hidden" name="productTotal[]" value="'+$('#totalListedHidden_'+id).val()+'"/>');
+            });
+            
         });
 
         $('#sendProductDeliveryNote').change(function(){
