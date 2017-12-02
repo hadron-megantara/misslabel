@@ -30,6 +30,7 @@
         		<thead>
         			<tr>
         				<th>Nama Produk</th>
+                        <th>Deskripsi</th>
                         <th>Harga</th>
                         <th>Satuan</th>
         				<th class="actions-column">Aksi</th>
@@ -59,6 +60,14 @@
 
                         <div class="col-md-6">
                             <input id="name" type="text" class="form-control" name="name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="col-md-4 control-label">Deskripsi Produk</label>
+
+                        <div class="col-md-6">
+                            <textarea id="description" class="form-control" name="description" required style="resize: none;"></textarea>
                         </div>
                     </div>
 
@@ -111,6 +120,14 @@
                         <div class="col-md-6">
                             <input id="editName" type="text" class="form-control" name="name" required>
                             <input id="editId" type="hidden" name="id" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editDescription" class="col-md-4 control-label">Deskripsi Produk</label>
+
+                        <div class="col-md-6">
+                            <textarea id="editDescription" class="form-control" name="description" required style="resize: none;"></textarea>
                         </div>
                     </div>
 
@@ -179,6 +196,7 @@
             ajax: '{{ route('config.product.get') }}',
             columns: [
                 { data: 'name', name: 'name' },
+                { data: 'description', name: 'description' },
                 { data: 'price', name: 'price', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         return 'Rp '+data;
@@ -186,7 +204,7 @@
                 },
                 { data: 'unit', name: 'unit' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<a class="btn btn-success editBtn" id="edit_'+data+'" href="#modalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteBtn" id="delete_'+data+'" href="#modalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="name_'+data+'" value="'+full.name+'" /><input type="hidden" id="price_'+data+'" value="'+full.price+'" /><input type="hidden" id="unit_'+data+'" value="'+full.unit+'" />';
+                        return '<a class="btn btn-success editBtn" id="edit_'+data+'" href="#modalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteBtn" id="delete_'+data+'" href="#modalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="name_'+data+'" value="'+full.name+'" /><input type="hidden" id="price_'+data+'" value="'+full.price+'" /><input type="hidden" id="unit_'+data+'" value="'+full.unit+'" /><input type="hidden" id="description_'+data+'" value="'+full.description+'" />';
                     }
                 }
             ],
@@ -210,7 +228,9 @@
 
             $("#editId").val(id);
             $("#editName").val($('#name_'+id).val());
+            $("#editDescription").val($('#description_'+id).val());
             $("#editPrice").val($('#price_'+id).val());
+            $("#editPriceHidden").val($('#price_'+id).val());
             $("#editUnit").val($('#unit_'+id).val());
 
             $('#editPrice').priceFormat({

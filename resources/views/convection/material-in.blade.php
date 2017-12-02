@@ -147,14 +147,6 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="convertMaterialProductDescription" class="col-md-4 control-label">Keterangan</label>
-
-                        <div class="col-md-6">
-                            <textarea id="convertMaterialProductDescription" class="form-control" name="materialProductDescription" required style="resize: none;" placeholder="Masukkan Keterangan"></textarea>
-                        </div>
-                    </div>
                 </form>
             </div>
             

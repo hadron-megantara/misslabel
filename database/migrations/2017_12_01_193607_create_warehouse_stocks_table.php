@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConvectionProductsTable extends Migration
+class CreateWarehouseStocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateConvectionProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('convection_products', function (Blueprint $table) {
+        Schema::create('warehouse_stocks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_id');
-            $table->integer('convection_id');
-            $table->integer('price');
+            $table->integer('product_detail_id');
+            $table->string('material_type');
+            $table->string('color');
+            $table->integer('total');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateConvectionProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('convection_products');
+        Schema::dropIfExists('warehouse_stocks');
     }
 }

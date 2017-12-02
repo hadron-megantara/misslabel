@@ -116,7 +116,7 @@ class ConfigController extends Controller
     }
 
     public function getProduct(Request $request){
-        $product = ProductDetail::select(['id', 'name', 'price', 'unit'])->orderBy('updated_at', 'desc')->get();
+        $product = ProductDetail::select(['id', 'name', 'description', 'price', 'unit'])->orderBy('updated_at', 'desc')->get();
      
         return Datatables::of($product)->make();
     }
@@ -125,6 +125,7 @@ class ConfigController extends Controller
         $product = new ProductDetail;
 
         $product->name = $request->name;
+        $product->description = $request->description;
         $product->price = $request->price;
         $product->unit = $request->unit;
 
@@ -137,6 +138,7 @@ class ConfigController extends Controller
         $product = ProductDetail::find($request->id);
         
         $product->name = $request->name;
+        $product->description = $request->description;
         $product->price = $request->price;
         $product->unit = $request->unit;
 

@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
             $table->string('material_type');
             $table->string('color');
             $table->integer('length');
-            $table->string('description')->nullable();
             $table->integer('total');
             $table->string('unit');
             $table->char('status')->default('0');

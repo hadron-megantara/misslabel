@@ -14,6 +14,7 @@ use App\DeliveryNote;
 use App\Warehouse;
 use App\WarehouseProduct;
 use App\WarehouseDelivery;
+use App\WarehouseStock;
 use App\ProductDetail;
 use Carbon\Carbon;
 use session;
@@ -125,7 +126,6 @@ class ConvectionController extends Controller
         $product = new Product;
 
         $product->product_detail_id = $request->materialProductName;
-        $product->description = $request->materialProductDescription;
         $product->material_type = $request->materialType;
         $product->color = $request->materialColor;
         $product->length = $request->materialLength;
@@ -144,7 +144,6 @@ class ConvectionController extends Controller
         $convectionProduct->product_id = $product->id;
         $convectionProduct->convection_id = $request->materialConvectionId;
         $convectionProduct->price = $request->materialPrice;
-        $convectionProduct->description = $request->materialProductDescription;
         $convectionProduct->save();
 
         $materialIn = MaterialIn::find($request->materialId);
@@ -335,7 +334,6 @@ class ConvectionController extends Controller
             $convectionProduct->product_id = $request->productId;
             $convectionProduct->convection_id = $productData->convection_id;
             $convectionProduct->price = $request->productPrice;
-            $convectionProduct->description = $request->productAccessories;
             $convectionProduct->save();
 
             return redirect('/convection/product-in')->with(array('success'=>'Sukses menyimpan data', 'convection' => $request->convectionIdRedirect));
