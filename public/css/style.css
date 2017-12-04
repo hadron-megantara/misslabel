@@ -228,3 +228,7 @@ table.selectedItems tr td{
 .fa.addBtn, .fa.deleteBtn{
   margin-right: 0;
 }
+
+.transaction-add-form .control-label{
+  text-align: left;
+}

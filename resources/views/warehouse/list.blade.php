@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Stok Produk</h3>
+            <h3>Gudang - Stok Produk</h3>
 
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionModalExport" class="btn btn-danger" data-toggle="modal">
@@ -90,7 +90,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('convection.product.sendProduct') }}" role="form" id="editForm" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="{{ route('warehouse.transferStock') }}" role="form" id="editForm" enctype="multipart/form-data">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
@@ -103,6 +103,7 @@
                                     <option value="{{$storeList2->id}}">{{$storeList2->name}}</option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="warehouseId" value="{{$warehouse}}" />
                         </div>
                     </div>
 
@@ -118,7 +119,7 @@
                         <label for="sendProductDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
-                            <textarea id="sendProductDescription" name="description" class="form-control"></textarea>
+                            <textarea id="sendProductDescription" name="description" class="form-control" style="resize: none;"></textarea>
 
                             <div id="sendItemHidden"></div>
                         </div>
@@ -154,12 +155,12 @@
                             data = parseInt(data) - parseInt($('#totalListedHidden_'+full.id).val());
                         }
 
-                        data = data+' '+full.unit;
+                        data = data+' pcs';
                         return data;
                     }
                 },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<div class="text-center"> <input type="text" id="totalSendProduct_'+data+'" class="totalSendProduct" placeholder="0" /><button type="button" class="btn-sm btn-success btnSend" id="btnSend_'+data+'" style="margin-left:5px;margin-top:2px"><span class="fa fa-send"></span></button></div><input type="hidden" id="productMaterialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="productColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="productTotal_'+data+'" value="'+full.total+'" /><input type="hidden" id="productUnit_'+data+'" value="'+full.unit+'" /><input type="hidden" id="productDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="productName_'+data+'" value="'+full.name+'" />';
+                        return '<div class="text-center"> <input type="text" id="totalSendProduct_'+data+'" class="totalSendProduct" placeholder="0" /><button type="button" class="btn-sm btn-success btnSend" id="btnSend_'+data+'" style="margin-left:5px;margin-top:2px"><span class="fa fa-send"></span></button></div><input type="hidden" id="productMaterialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="productColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="productTotal_'+data+'" value="'+full.total+'" /><input type="hidden" id="productDescription_'+data+'" value="'+full.description+'" /><input type="hidden" id="productName_'+data+'" value="'+full.name+'" />';
                     }
                 }
             ],
@@ -199,7 +200,7 @@
 
                 $("#lineListed_"+id).remove();
 
-                $("#checkedItems").append('<tr id="lineListed_'+id+'"><td>'+$('#productName_'+id).val()+'</td><td>'+$('#productMaterialType_'+id).val()+'</td><td>'+$('#productColor_'+id).val()+'</td><td>'+$('#productDescription_'+id).val()+'</td><td id="productListedTotal_'+id+'">'+total+' '+$('#productUnit_'+id).val()+'</td><td class="productItemsHidden"><div class="text-center"><input type="text" id="totalSendProductListed_'+id+'" class="totalSendProduct" placeholder="0" /><button type="button" class="btn-sm btn-danger btnSendListed" id="btnSendListed_'+id+'" style="margin-left:5px;margin-top:2px"><span class="fa fa-minus"></span></button></div><input type="hidden" id="productSendId_'+id+'" name="" value="'+id+'" /><input type="hidden" id="productMaterialType_'+id+'" value="'+$('#productMaterialType_'+id).val()+'" /><input type="hidden" id="productColor_'+id+'" value="'+$('#productColor_'+id).val()+'" /><input type="hidden" id="productTotal_'+id+'" value="'+$('#productTotal_'+id).val()+'" /><input type="hidden" id="productUnit_'+id+'" value="'+$('#productUnit_'+id).val()+'" /><input type="hidden" id="productDescription_'+id+'" value="'+$('#productDescription_'+id).val()+'" /><input type="hidden" id="productName_'+id+'" value="'+$('#productName_'+id).val()+'" /></td></tr>');
+                $("#checkedItems").append('<tr id="lineListed_'+id+'"><td>'+$('#productName_'+id).val()+'</td><td>'+$('#productMaterialType_'+id).val()+'</td><td>'+$('#productColor_'+id).val()+'</td><td>'+$('#productDescription_'+id).val()+'</td><td id="productListedTotal_'+id+'">'+total+' pcs</td><td class="productItemsHidden"><div class="text-center"><input type="text" id="totalSendProductListed_'+id+'" class="totalSendProduct" placeholder="0" /><button type="button" class="btn-sm btn-danger btnSendListed" id="btnSendListed_'+id+'" style="margin-left:5px;margin-top:2px"><span class="fa fa-minus"></span></button></div><input type="hidden" id="productSendId_'+id+'" name="" value="'+id+'" /><input type="hidden" id="productMaterialType_'+id+'" value="'+$('#productMaterialType_'+id).val()+'" /><input type="hidden" id="productColor_'+id+'" value="'+$('#productColor_'+id).val()+'" /><input type="hidden" id="productTotal_'+id+'" value="'+$('#productTotal_'+id).val()+'" /><input type="hidden" id="productUnit_'+id+'" value="'+$('#productUnit_'+id).val()+'" /><input type="hidden" id="productDescription_'+id+'" value="'+$('#productDescription_'+id).val()+'" /><input type="hidden" id="productName_'+id+'" value="'+$('#productName_'+id).val()+'" /></td></tr>');
 
                 $("#productIdAppend").append('<input type="hidden" id="idAppended_'+id+'" name="productId[]" value="'+id+'" />');
 

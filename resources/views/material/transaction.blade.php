@@ -134,10 +134,10 @@
                                         <div class="input-group">
                                             <label class="input-group-btn">
                                                 <span class="btn btn-primary">
-                                                    <span class="fa fa-file"></span><input id="materialNote" type="file" style="display: none;" name="materialNote">
+                                                    <span class="fa fa-file"></span><input id="materialNote" type="file" style="display: none;" name="materialNote" required="">
                                                 </span>
                                             </label>
-                                            <input type="text" id="materialNoteShow" class="form-control" readonly placeholder="Lampirkan nota">
+                                            <input type="text" id="materialNoteShow" class="form-control" readonly placeholder="Lampirkan nota" required="">
                                         </div>
                                     </div>
 

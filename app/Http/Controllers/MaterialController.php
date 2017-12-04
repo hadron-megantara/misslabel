@@ -46,7 +46,7 @@ class MaterialController extends Controller
             $dateTo = $request->dateTo;
         }
 
-        $materialType = MaterialType::all();
+        $materialType = MaterialType::select('id', 'name', 'created_at')->orderBy('name', 'asc')->get();
 
         $convectionList = ConvectionList::all();
 
@@ -221,7 +221,7 @@ class MaterialController extends Controller
 
         $color = Color::orderBy('name', 'asc')->get();
 
-        $materialType = MaterialType::all();
+        $materialType = MaterialType::select('id', 'name', 'created_at')->orderBy('name', 'asc')->get();
 
         $convectionList = ConvectionList::all();
 

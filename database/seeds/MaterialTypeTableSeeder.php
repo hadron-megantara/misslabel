@@ -16,6 +16,10 @@ class MaterialTypeTableSeeder extends Seeder
 	    $materialType->name = 'SIFON/CHIFFON';
 	    $materialType->save();
 
+	    $materialType = new MaterialType();
+	    $materialType->name = 'SATIN';
+	    $materialType->save();
+
 	    $materialType2 = new MaterialType();
 	    $materialType2->name = 'HYCON';
 	    $materialType2->save();

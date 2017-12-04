@@ -99,7 +99,7 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/warehouse/delivery-note/download-note', 'WarehouseController@downloadNote')->name('warehouse.deliveryNote.downloadNote');
 
 		// Warehouse-Transfer-Stock
-		Route::get('/warehouse/transfer-stock', 'WarehouseController@transferStock')->name('warehouse.transferStock');
+		Route::post('/warehouse/transfer-stock', 'WarehouseController@transferStock')->name('warehouse.transferStock');
 
 		// Warehouse-Warehouse-List
 		Route::get('/warehouse/warehouse-list', 'WarehouseController@warehouseList')->name('warehouse.warehouseList');
@@ -112,24 +112,36 @@ Route::middleware(['userAuth'])->group(function () {
 	// Store
 		Route::get('/store', 'StoreController@index')->name('store.index');
 
-		// Warehouse-Stock
-		Route::get('/store/stock', 'StoreController@stock')->name('store.stock');
-		Route::get('/store/get-store', 'StoreController@getStock')->name('store.getStock');
+		// Stock-Incoming-Product
+		Route::get('/store/incoming-product', 'StoreController@incomingProduct')->name('store.incomingProduct');
+		Route::get('/store/get-incoming-product', 'StoreController@getIncomingProduct')->name('store.incomingProduct.get');
+		Route::post('/store/verificate-incoming-product', 'StoreController@verificateIncomingProduct')->name('store.incomingProduct.verificate');
 
-		// Warehouse-Sold-Out
+		// Stock-Stock
+		Route::get('/store/stock', 'StoreController@stock')->name('store.stock');
+		Route::get('/store/get-stock', 'StoreController@getStock')->name('store.getStock');
+
+		// Stock-Transaction
+		Route::get('/store/add-transaction', 'StoreController@addTransaction')->name('store.transaction.add');
+
+		// Stock-Sales
+		Route::get('/store/sales', 'StoreController@sales')->name('store.sales');
+		Route::get('/store/add-sales', 'StoreController@addSales')->name('store.sales.add');
+
+		// Stock-Sold-Out
 		Route::get('/store/sold-out', 'StoreController@soldOut')->name('store.soldOut');
 		Route::get('/store/get-sold-out', 'StoreController@getSoldOut')->name('store.getSoldOut');
 
-		// Warehouse-Transfer-Stock
+		// Stock-Transfer-Stock
 		Route::get('/store/transfer-stock', 'StoreController@transferStock')->name('store.transferStock');
 
-		// Warehouse-Warehouse-List
+		// Stock-Store-List
 		Route::get('/store/store-list', 'StoreController@storeList')->name('store.warehouseList');
 		Route::get('/store/list/get-store', 'StoreController@getStoreList')->name('store.getStoreList');
 		Route::post('/store/list/add-store', 'StoreController@storeStoreList')->name('store.addStoreList');
 		Route::post('/store/list/edit-store', 'StoreController@updateStoreList')->name('store.editStoreList');
 		Route::post('/store/list/delete-store', 'StoreController@destroyStoreList')->name('store.deleteStoreList');
-	// End of Warehouse
+	// End of Store
 
 	// Configuration
 		Route::get('/config/color', 'ConfigController@color')->name('config.color');

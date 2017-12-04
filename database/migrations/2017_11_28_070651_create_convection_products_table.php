@@ -17,6 +17,7 @@ class CreateConvectionProductsTable extends Migration
             $table->increments('id');
             $table->integer('product_id');
             $table->integer('convection_id');
+            $table->string('description');
             $table->integer('price');
             $table->timestamps();
         });

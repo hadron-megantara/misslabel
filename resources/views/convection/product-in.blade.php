@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sendProductDescription" class="col-md-4 control-label">Keterangan</label>
+                        <label for="sendProductDescription" class="col-md-4 control-label">Deskripsi</label>
 
                         <div class="col-md-6">
                             <textarea id="sendProductDescription" class="form-control" style="resize: none;" readonly=""></textarea>
@@ -115,7 +115,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sendProductAccessoriesDescription" class="col-md-4 control-label">Deskripsi Aksesoris</label>
+                        <label for="sendProductAccessoriesDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
                             <textarea id="sendProductAccessoriesDescription" class="form-control" name="productAccessories" required style="resize: none;" placeholder="Masukkan Keterangan"></textarea>

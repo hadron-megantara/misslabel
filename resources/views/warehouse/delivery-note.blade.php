@@ -9,7 +9,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Nota Barang Keluar</h3>
+            <h3>Nota Barang Masuk</h3>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
                     <span class="fa fa-print"> </span>Print

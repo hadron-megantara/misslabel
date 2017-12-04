@@ -11,9 +11,13 @@ use App\ConvectionMaterialIn;
 use App\Product;
 use App\DeliveryNote;
 use App\Warehouse;
+use App\WarehouseStock;
 use App\WarehouseDelivery;
+use App\WarehouseProduct;
+use App\WarehouseStore;
 use App\Store;
 use App\StoreStock;
+use App\StoreIn;
 use Carbon\Carbon;
 
 class WareHouseController extends Controller
@@ -50,9 +54,9 @@ class WareHouseController extends Controller
 
     public function getStock(Request $request){
         if($request->has('warehouse') && $request->warehouse != ''){
-            $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->where('products.status', 1)->where('products.warehouse_id', $request->warehouse)->orderBy('products.updated_at', 'desc')->get();
+            $product = WarehouseStock::join('product_details', 'warehouse_stocks.product_detail_id', '=', 'product_details.id')->select(['product_details.id', 'product_details.name', 'warehouse_stocks.material_type', 'warehouse_stocks.color', 'product_details.description', 'warehouse_stocks.total'])->where('warehouse_stocks.warehouse_id', $request->warehouse)->where('warehouse_stocks.total', '>', 0)->orderBy('warehouse_stocks.updated_at', 'desc')->get();
         } else{
-            $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->where('products.status', 1)->orderBy('products.updated_at', 'desc')->get();
+            $product = WarehouseStock::join('product_details', 'warehouse_stocks.product_detail_id', '=', 'product_details.id')->select(['product_details.id', 'product_details.name', 'warehouse_stocks.material_type', 'warehouse_stocks.color', 'product_details.description', 'warehouse_stocks.total'])->orderBy('warehouse_stocks.updated_at', 'desc')->get();
         }
 
         return Datatables::of($product)->make();
@@ -161,18 +165,31 @@ class WareHouseController extends Controller
         }
     }
 
-    public function sendProductToStore(Request $request){
-        if($request->has('productId')){
+    public function transferStock(Request $request){
+        if($request->has('productId') && $request->has('productTotal') && $request->has('storeId') && $request->has('deliveryDate') && $request->has('warehouseId')){
+            $warehouseStore = new WarehouseStore;
+            $warehouseStore->warehouse_id = $request->warehouseId;
+            $warehouseStore->store_id = $request->storeId;
+            $warehouseStore->description = $request->description;
+            $warehouseStore->date_delivery = $request->deliveryDate;
+            $warehouseStore->save();
+
             $count = count($request->productId);
 
             for($i=0;$i < $count;$i++){
-                $storeStock = new StoreStock;
-                $storeStock->product_id = $request->productId[$i];
-                $storeStock->warehouse_store_id = $request->warehouseId;
-                $storeStock->store_id;
-                $storeStock->total_product;
-                $storeStock->status;
-                $storeStock->save();
+                $warehouseStock = WarehouseStock::where('warehouse_id', $request->warehouseId)->where('product_detail_id', $request->productId[$i])->first();
+                $totalRest = (int) $warehouseStock->total - (int) $request->productTotal[$i];
+                $warehouseStock->total = $totalRest;
+                $warehouseStock->save();
+
+                $storeIn = new StoreIn;
+                $storeIn->product_detail_id = $request->productId[$i];
+                $storeIn->warehouse_store_id = $warehouseStore->id;
+                $storeIn->total_product = $request->productTotal[$i];
+                $storeIn->material_type = $warehouseStock->material_type;
+                $storeIn->color = $warehouseStock->color;
+                $storeIn->status = 0;
+                $storeIn->save();
             }
 
             return redirect('/warehouse/stock')->with('success', 'Sukses menyimpan data toko');

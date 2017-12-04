@@ -143,6 +143,7 @@ class ConvectionController extends Controller
         $convectionProduct =  new ConvectionProduct;
         $convectionProduct->product_id = $product->id;
         $convectionProduct->convection_id = $request->materialConvectionId;
+        $convectionProduct->description  = $request->description;
         $convectionProduct->price = $request->materialPrice;
         $convectionProduct->save();
 
@@ -204,7 +205,7 @@ class ConvectionController extends Controller
             $items = json_decode($request->productId);
         }
 
-        $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->whereNotIn('products.id', $items)->where('products.status', 0)->orderBy('products.updated_at', 'desc')->get();
+        $product = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'product_details.description', 'products.total', 'products.unit'])->whereNotIn('products.id', $items)->where('products.status', 0)->orderBy('products.updated_at', 'desc')->get();
 
         return Datatables::of($product)->make();
     }
@@ -220,29 +221,44 @@ class ConvectionController extends Controller
                 $productData->warehouse_id = $request->warehouseId;
                 $productData->save();
 
-                $warehouseDelivery = new WarehouseDelivery;
-                $warehouseDelivery->warehouse_id = $request->warehouseId;
-                $warehouseDelivery->date_delivery = $request->deliveryDate;
-                $warehouseDelivery->description = $request->description;
-
-                if($request->hasFile('deliveryNote'))
-                {
-                    $f = $request->file('deliveryNote');
-                    $path = $request->file('deliveryNote')->storeAs(
-                        'delivery_note', pathinfo($request->file('deliveryNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
-                    );
-
-                    $warehouseDelivery->file_path = $path;
+                $warehouseStock  = WarehouseStock::where('product_detail_id', $productData->product_detail_id)->first();
+                if($warehouseStock == null){
+                    $warehouseStock = new WarehouseStock;
+                    $warehouseStock->warehouse_id = $request->warehouseId;
+                    $warehouseStock->product_detail_id = $productData->product_detail_id;
+                    $warehouseStock->material_type = $productData->material_type;
+                    $warehouseStock->color = $productData->color;
+                    $warehouseStock->total = $productData->total;
+                } else{
+                    $warehouseStock->total = (int) $warehouseStock->total + (int) $productData->total;
                 }
-
-                $warehouseDelivery->save();
-
-                $warehouseProduct = new WarehouseProduct;
-                $warehouseProduct->warehouse_delivery_id = $warehouseDelivery->id;
-                $warehouseProduct->product_id = $explodedId[$i];
-                $warehouseProduct->save();
+                $warehouseStock->save();
             }
 
+            $warehouseDelivery = new WarehouseDelivery;
+            $warehouseDelivery->warehouse_id = $request->warehouseId;
+            $warehouseDelivery->date_delivery = $request->deliveryDate;
+            $warehouseDelivery->description = $request->description;
+
+            if($request->hasFile('deliveryNote'))
+            {
+                $f = $request->file('deliveryNote');
+                $path = $request->file('deliveryNote')->storeAs(
+                    'delivery_note', pathinfo($request->file('deliveryNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+                );
+
+                $warehouseDelivery->file_path = $path;
+            }
+
+            $warehouseDelivery->save();
+
+            for($j = 0;$j < $countId;$j++){
+                $warehouseProduct = new WarehouseProduct;
+                $warehouseProduct->warehouse_delivery_id = $warehouseDelivery->id;
+                $warehouseProduct->product_id = $explodedId[$j];
+                $warehouseProduct->save();
+            }
+            
             return redirect('/convection/product')->with('success', 'Sukses mengirim Produk ke Gudang');
         }
     }
@@ -283,9 +299,9 @@ class ConvectionController extends Controller
         }
 
         if(!$request->has('convection') || $request->convection == '' || $request->convection == 0){
-            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->where('products.status', 2)->orderBy('products.updated_at', 'desc')->get();
+            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'product_details.description', 'products.total', 'products.unit'])->where('products.status', 2)->orderBy('products.updated_at', 'desc')->get();
         } else{
-            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'products.description', 'products.total', 'products.unit'])->where('products.status', 2)->where('products.convection_id', $request->convection)->orderBy('products.updated_at', 'desc')->get();
+            $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'product_details.description', 'products.total', 'products.unit'])->where('products.status', 2)->where('products.convection_id', $request->convection)->orderBy('products.updated_at', 'desc')->get();
         }
         
         return Datatables::of($convectionProductIn)->make();
@@ -307,32 +323,12 @@ class ConvectionController extends Controller
         if($request->has('productId')){
             $productData = Product::find($request->productId);
             $productData->status = 0;
-
-            $description = "";
-
-            $convectionGetDescriptionOfProduct = ConvectionProduct::select('description')->where('product_id', $request->productId)->orderBy('created_at','asc')->get();
-
-            foreach($convectionGetDescriptionOfProduct as $productDescription){
-                if($description != ''){
-                    $description = $description.' - '.$productDescription->description;
-                } else{
-                    $description = $productDescription->description;
-                }
-            }
-
-            if($description != ''){
-                $description = $description.' - '.$request->productAccessories;
-            } else{
-                $description = $request->productAccessories;
-            }
-
-            $productData->description = $description;
-
             $productData->save();
 
             $convectionProduct =  new ConvectionProduct;
             $convectionProduct->product_id = $request->productId;
             $convectionProduct->convection_id = $productData->convection_id;
+            $convectionProduct->description = $request->productAccessories;
             $convectionProduct->price = $request->productPrice;
             $convectionProduct->save();
 

@@ -21,9 +21,9 @@ class CreateProductsTable extends Migration
             $table->integer('length');
             $table->integer('total');
             $table->string('unit');
-            $table->char('status')->default('0');
             $table->integer('convection_id')->nullable();
             $table->integer('warehouse_id')->nullable();
+            $table->char('status')->default('0');
             $table->timestamps();
         });
     }

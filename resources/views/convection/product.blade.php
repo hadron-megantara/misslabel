@@ -117,7 +117,7 @@
                         <label for="sendProductWarehouse" class="col-md-4 control-label">Gudang</label>
 
                         <div class="col-md-6">
-                            <select class="form-control" name="warehouseId" >
+                            <select class="form-control" name="warehouseId" required="">
                                 <option value="">Pilih Gudang</option>
                                 @foreach($warehouseList as $warehouseList2)
                                     <option value="{{$warehouseList2->id}}">{{$warehouseList2->name}}</option>
@@ -153,7 +153,7 @@
                         <label for="sendProductDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
-                            <textarea id="sendProductDescription" name="description" class="form-control"></textarea>
+                            <textarea id="sendProductDescription" name="description" required="" class="form-control"></textarea>
                             <input type="hidden" id="sendProductId" name="productId" style="resize: none;" />
                         </div>
                     </div>

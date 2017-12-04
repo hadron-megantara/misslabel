@@ -205,9 +205,11 @@
                           @endif
                       </a>
                       <ul class="sub-menu" @if(\Request::is('store') || \Request::is('store/*')) style="display: block;" @endif>
-                          <li @if(\Request::is('store/stock') || \Request::is('store/stock/*')) class="active" @endif><a href="/store/stock">Stok</a></li>
-                          <li @if(\Request::is('store/sold-out') || \Request::is('store/sold-out/*')) class="active" @endif><a href="/store/sold-out">Produk Terjual</a></li>
-                          <li @if(\Request::is('store/transfer-product') || \Request::is('store/transfer-product/*')) class="active" @endif><a href="/store/transfer-product">Transfer Gudang</a></li>
+                          <li @if(\Request::is('store/incoming-product') || \Request::is('store/incoming-product/*')) class="active" @endif><a href="/store/incoming-product">Barang Masuk</a></li>
+                          <li @if(\Request::is('store/stock') || \Request::is('store/stock/*')) class="active" @endif><a href="/store/stock">Stok - Tambah Transaksi</a></li>
+                          <li @if(\Request::is('store/sales') || \Request::is('store/sales/*')) class="active" @endif><a href="/store/sales">Penjualan</a></li>
+                          {{-- <li @if(\Request::is('store/sold-out') || \Request::is('store/sold-out/*')) class="active" @endif><a href="/store/sold-out">Produk Terjual</a></li>
+                          <li @if(\Request::is('store/transfer-product') || \Request::is('store/transfer-product/*')) class="active" @endif><a href="/store/transfer-product">Transfer Gudang</a></li> --}}
                           <li @if(\Request::is('store/store-list') || \Request::is('store/store-list/*')) class="active" @endif><a href="/store/store-list">Daftar Toko</a></li>
                       </ul>
                   </li>

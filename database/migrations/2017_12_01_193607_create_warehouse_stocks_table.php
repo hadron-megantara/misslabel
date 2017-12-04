@@ -15,6 +15,7 @@ class CreateWarehouseStocksTable extends Migration
     {
         Schema::create('warehouse_stocks', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('warehouse_id');
             $table->integer('product_detail_id');
             $table->string('material_type');
             $table->string('color');

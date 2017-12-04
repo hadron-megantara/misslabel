@@ -147,10 +147,18 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="convertMaterialProductName" class="col-md-4 control-label">Keterangan</label>
+
+                        <div class="col-md-6">
+                            <textarea class="form-control" name="description" id="convertMaterialProductDescription" required="" style="resize: none;" rows="3"></textarea>
+                        </div>
+                    </div>
                 </form>
             </div>
             
-            <div class="modal-footer">
+            <div class="modal-footer" style="margin-top: -20px">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Simpan</button>
             </div>

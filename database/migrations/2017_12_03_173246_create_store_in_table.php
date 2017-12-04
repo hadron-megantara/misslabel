@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStoreStocksTable extends Migration
+class CreateStoreInTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateStoreStocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('store_stocks', function (Blueprint $table) {
+        Schema::create('store_in', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('store_id');
             $table->integer('product_detail_id');
+            $table->integer('warehouse_store_id');
+            $table->integer('total_product');
             $table->string('material_type');
             $table->string('color');
-            $table->integer('total_product');
+            $table->char('status')->default(0);
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateStoreStocksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store_stocks');
+        Schema::dropIfExists('store_in');
     }
 }
