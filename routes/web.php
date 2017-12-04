@@ -122,11 +122,11 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/store/get-stock', 'StoreController@getStock')->name('store.getStock');
 
 		// Stock-Transaction
-		Route::get('/store/add-transaction', 'StoreController@addTransaction')->name('store.transaction.add');
+		Route::post('/store/add-transaction', 'StoreController@addTransaction')->name('store.transaction.add');
 
 		// Stock-Sales
 		Route::get('/store/sales', 'StoreController@sales')->name('store.sales');
-		Route::get('/store/add-sales', 'StoreController@addSales')->name('store.sales.add');
+		Route::get('/store/get-sales', 'StoreController@getSales')->name('store.sales.get');
 
 		// Stock-Sold-Out
 		Route::get('/store/sold-out', 'StoreController@soldOut')->name('store.soldOut');
@@ -161,6 +161,12 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/config/store-seller', 'ConfigController@storeSeller')->name('config.seller.store');
 		Route::post('/config/update-seller', 'ConfigController@updateSeller')->name('config.seller.update');
 		Route::post('/config/destroy-seller', 'ConfigController@destroySeller')->name('config.seller.destroy');
+
+		Route::get('/config/payment-type', 'ConfigController@paymentType')->name('config.paymentType');
+		Route::get('/config/get-payment-type', 'ConfigController@getPaymentType')->name('config.paymentType.get');
+		Route::post('/config/store-payment-type', 'ConfigController@storePaymentType')->name('config.paymentType.store');
+		Route::post('/config/update-payment-type', 'ConfigController@updatePaymentType')->name('config.paymentType.update');
+		Route::post('/config/destroy-payment-type', 'ConfigController@destroyPaymentType')->name('config.paymentType.destroy');
 	// End of Configuration
 
 	// Employee
@@ -172,7 +178,8 @@ Route::middleware(['userAuth'])->group(function () {
 	// End of Employee
 
 	// Report
-		Route::get('/report/sales', 'ReportController@sales')->name('report.sales');
+		Route::get('/report/sales-year', 'ReportController@salesYear')->name('report.salesYear');
+		Route::get('/report/sales-month', 'ReportController@salesMonth')->name('report.salesMonth');
 		Route::get('/report/turn-over', 'ReportController@turnOver')->name('report.turn-over');
 		Route::get('/report/profit', 'ReportController@profit')->name('report.profit');
 		Route::get('/report/cash', 'ReportController@cash')->name('report.cash');

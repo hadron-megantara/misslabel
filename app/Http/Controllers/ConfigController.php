@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use App\Color;
 use App\Seller;
+use App\PaymentType;
 use App\ProductDetail;
 
 class ConfigController extends Controller
@@ -153,5 +154,48 @@ class ConfigController extends Controller
         $product->delete();
 
         return redirect('/config/product')->with('success', 'Sukses menghapus Produk');
+    }
+
+    public function paymentType(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $paymentType = PaymentType::get();
+
+        return view("config.payment-type", array('user' => $user, 'paymentType' => $paymentType));
+    }
+
+    public function getPaymentType(Request $request){
+        $paymentType = PaymentType::select(['id', 'name'])->orderBy('updated_at', 'desc')->get();
+     
+        return Datatables::of($paymentType)->make();
+    }
+
+    public function storePaymentType(Request $request){
+        $paymentType = new PaymentType;
+        $paymentType->name = $request->name;
+
+        $paymentType->save();
+
+        return redirect('/config/payment-type')->with('success', 'Sukses menambah tipe pembayaran');
+    }
+
+    public function updatePaymentType(Request $request){
+        $paymentType = PaymentType::find($request->id);
+        $paymentType->name = $request->name;
+
+        $paymentType->save();
+
+        return redirect('/config/payment-type')->with('success', 'Sukses mengubah tipe pembayaran');
+    }
+
+    public function destroyPaymentType(Request $request){
+        $paymentType = PaymentType::find($request->id);
+
+        $paymentType->delete();
+
+        return redirect('/config/payment-type')->with('success', 'Sukses menghapus tipe pembayaran');
     }
 }

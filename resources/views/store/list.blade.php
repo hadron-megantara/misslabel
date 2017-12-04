@@ -87,11 +87,12 @@
                             <label for="transactionDate" class="col-md-12 control-label">Tanggal Transaksi</label>
                             <div class="col-md-12">
                                 <input id="transactionDate" type="text" class="form-control" name="date" required placeholder="Tanggal Pembelian" style="position: relative; z-index: 100" />
+                                <input type="hidden" name="storeId" value="{{$store}}" />
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <label for="materialNote" class="control-label">Nota Penjualan</label>
+                            <label for="transactionNote" class="control-label">Nota Penjualan</label>
                             <div class="input-group">
                                 <label class="input-group-btn">
                                     <span class="btn btn-primary">
@@ -101,13 +102,12 @@
                                 <input type="text" id="transactionNoteShow" class="form-control" readonly placeholder="Lampirkan nota" required="">
                             </div>
 
-                            <label for="materialNote" class="control-label" style="margin-top:10px">Tipe Pembayaran</label>
-                            <select class="form-control" id="paymentType" name="paymentType">
+                            <label for="paymentType" class="control-label" style="margin-top:10px">Tipe Pembayaran</label>
+                            <select class="form-control" id="paymentType" name="paymentType" required="">
                                 <option value="">--- Pilih Tipe Pembayaran ---</option>
-                                <option value="cash">Uang Tunai/Cash</option>
-                                <option value="debt">Hutang</option>
-                                <option value="trasnfer">Transfer</option>
-                                <option value="giro">Giro</option>
+                                @foreach($paymentType as $paymentType2)
+                                    <option value="{{$paymentType2->id}}">{{$paymentType2->name}}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -135,9 +135,9 @@
 
                         <div class="col-md-12" style="margin-top: 20px">
                             <div class="pull-right">
-                                <a href="#convectionModalExport" class="btn btn-primary" data-toggle="modal">
+                                <button type="submit" class="btn btn-primary">
                                     <span class="fa fa-save"> </span>Simpan Transaksi
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -207,7 +207,7 @@
                     total = parseInt(totalSend) + parseInt($("#totalListedHidden_"+id).val());
                     $("#totalListedHidden_"+id).val(total);
                 } else{
-                    $("#totalListedHidden").append('<input type="hidden" value="'+totalSend+'" id="totalListedHidden_'+id+'"/>');
+                    $("#totalListedHidden").append('<input type="hidden" value="'+id+'" id="totalListedIdHidden_'+id+'" name="storeStockId[]" /><input type="hidden" value="'+totalSend+'" id="totalListedHidden_'+id+'" name="storeStockTotal[]" /><input type="hidden" value="'+$('#productPrice_'+id).val()+'" id="totalListedPriceHidden_'+id+'" name="storeStockPrice[]" />');
                     total = parseInt(totalSend);
                     $("#totalListedHidden_"+id).val(total);
                 }
@@ -224,10 +224,10 @@
                 totalAllPriceFormated = totalAllPriceFormated.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                 totalAllPriceFormated =  'Rp '+totalAllPriceFormated;
                 $("#transactionPrice").val(totalAllPriceFormated);
-                $("#transactionPriceHidden").val(totalAllPriceFormated);
+                $("#transactionPriceHidden").val(totalAllPrice);
 
                 $("#transactionFinalPrice").val(totalAllPriceFormated);
-                $("#transactionFinalPriceHidden").val(totalAllPriceFormated);
+                $("#transactionFinalPriceHidden").val(totalAllPrice);
 
 
                 var productPriceFormated = $('#productPrice_'+id).val();
@@ -276,15 +276,18 @@
             totalAllPriceFormated = totalAllPriceFormated.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             totalAllPriceFormated =  'Rp '+totalAllPriceFormated;
             $("#transactionPrice").val(totalAllPriceFormated);
-            $("#transactionPriceHidden").val(totalAllPriceFormated);
+            $("#transactionPriceHidden").val(totalAllPrice);
 
             $("#transactionFinalPrice").val(totalAllPriceFormated);
-            $("#transactionFinalPriceHidden").val(totalAllPriceFormated);
+            $("#transactionFinalPriceHidden").val(totalAllPrice);
             
             $('#productTable').DataTable().ajax.reload();
 
             if(totalListedLast == 0){
                 $(this).closest('tr').remove();
+                $("#totalListedHidden_"+id).remove();
+                $("#totalListedPriceHidden_"+id).remove();
+                $("#totalListedIdHidden_"+id).remove();
                 $('#idAppended_'+id).remove();
             }
 
@@ -322,6 +325,10 @@
             orientation: "auto",
             maxDate : 'now',
             changeYear: true,
+        });
+
+        $('#transactionNote').change(function(){
+            $('#transactionNoteShow').val($(this).val());
         });
 	});
 </script>

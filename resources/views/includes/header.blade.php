@@ -124,7 +124,8 @@
                           @endif
                       </a>
                       <ul class="sub-menu" @if(\Request::is('report') || \Request::is('report/*')) style="display: block;" @endif>
-                          <li @if(\Request::is('report/sales') || \Request::is('report/sales/*')) class="active" @endif><a href="/report/sales">Penjualan</a></li>
+                          <li @if(\Request::is('report/sales-month') || \Request::is('report/sales-month/*')) class="active" @endif><a href="/report/sales-month">Penjualan - Bulanan</a></li>
+                          <li @if(\Request::is('report/sales-year') || \Request::is('report/sales-year/*')) class="active" @endif><a href="/report/sales-year">Penjualan - Tahunan</a></li>
                           <li @if(\Request::is('report/turn-over') || \Request::is('report/turn-over/*')) class="active" @endif><a href="/report/turn-over">Omset</a></li>
                           <li @if(\Request::is('report/customer') || \Request::is('report/customer/*')) class="active" @endif><a href="/report/customer">Langganan</a></li>
                           <li @if(\Request::is('report/transaction') || \Request::is('report/transaction/*')) class="active" @endif><a href="/report/transaction">Nota Penjualan</a></li>
@@ -243,6 +244,7 @@
                           <li @if(\Request::is('config/product') || \Request::is('config/product/*')) class="active" @endif><a href="/config/product">Produk</a></li>
                           <li @if(\Request::is('config/seller') || \Request::is('config/seller/*')) class="active" @endif><a href="/config/seller">Penjual</a></li>
                           <li @if(\Request::is('config/user') || \Request::is('config/user/*')) class="active" @endif><a href="/config/user">Pengguna</a></li>
+                          <li @if(\Request::is('config/payment-type') || \Request::is('config/payment-type/*')) class="active" @endif><a href="/config/payment-type">Tipe Pembayaran</a></li>
                       </ul>
                   </li>
 

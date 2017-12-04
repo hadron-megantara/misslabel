@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Toko - Stok Produk</h3>
+            <h3>Toko - Produk Masuk</h3>
 
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionModalExport" class="btn btn-danger" data-toggle="modal">

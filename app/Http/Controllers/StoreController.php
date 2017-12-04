@@ -17,6 +17,8 @@ use App\Store;
 use App\StoreStock;
 use App\StoreIn;
 use App\StoreSold;
+use App\StoreTransaction;
+use App\PaymentType;
 use Carbon\Carbon;
 use session;
 
@@ -40,6 +42,7 @@ class StoreController extends Controller
 
         $warehouseList = Warehouse::all();
         $storeList = Store::all();
+        $paymentType = PaymentType::all();
 
         $store = 0;
         if($request->has('store') || session::has('store')){
@@ -53,7 +56,7 @@ class StoreController extends Controller
             $store = $firstStore->id;
         }
 
-        return view("store.list", array('user' => $user, 'store' => $store, 'storeList' => $storeList));
+        return view("store.list", array('user' => $user, 'store' => $store, 'storeList' => $storeList, 'paymentType' => $paymentType));
     }
 
     public function getStock(Request $request){
@@ -149,13 +152,13 @@ class StoreController extends Controller
 
     public function getIncomingProduct(Request $request){
         if(($request->has('store') && $request->store != '') && ($request->has('warehouse') && $request->warehouse != '')){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, product_details.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouse_stores.store_id', $request->store)->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouse_stores.store_id', $request->store)->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         } else if($request->has('store') && $request->store != ''){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, product_details.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouse_stores.store_id', $request->store)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouse_stores.store_id', $request->store)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         } else if($request->has('warehouse') && $request->warehouse != ''){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, product_details.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         } else{
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, product_details.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         }
 
         return Datatables::of($product)->make();
@@ -195,6 +198,42 @@ class StoreController extends Controller
         }
     }
 
+    public function addTransaction(Request $request){
+        $storeTransaction = new StoreTransaction;
+        $storeTransaction->payment_type_id = $request->paymentType;
+        $storeTransaction->store_id = $request->storeId;
+        $storeTransaction->price = $request->price;
+        $storeTransaction->final_price = $request->finalPrice;
+        $storeTransaction->date = $request->date;
+        $storeTransaction->description = $request->description;
+        $storeTransaction->status = 1;
+
+        if($request->hasFile('note'))
+        {
+            $f = $request->file('note');
+            $path = $request->file('note')->storeAs(
+                'transaction_note', pathinfo($request->file('note')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+            );
+
+            $storeTransaction->file_path = $path;
+        }
+
+        $storeTransaction->save();
+
+        $countStock = count($request->storeStockId);
+        for($i=0;$i < $countStock;$i++){
+            $storeSold = new StoreSold;
+            $storeSold->store_transaction_id = $storeTransaction->id;
+            $storeSold->store_stock_id = $request->storeStockId[$i];
+            $storeSold->price = $request->storeStockPrice[$i];
+            $storeSold->total_price = (int) $request->storeStockPrice[$i] * (int) $request->storeStockTotal[$i];
+            $storeSold->total_product = $request->storeStockTotal[$i];
+            $storeSold->save();
+        }
+
+        return redirect('/store/incoming-product')->with('success', 'Sukses menambah transaksi');
+    }
+
     public function sales(Request $request){
         $user = array();
         if($request->has('user')){
@@ -203,6 +242,7 @@ class StoreController extends Controller
 
         $storeList = Store::all();
         $productDetail = ProductDetail::all();
+        $paymentType = PaymentType::all();
 
         $store = 0;
         if($request->has('store') || session::has('store')){
@@ -216,6 +256,54 @@ class StoreController extends Controller
             $store = $firstStore->id;
         }
 
-        return view("store.sales", array('user' => $user, 'store' => $store, 'storeList' => $storeList, 'productDetail' => $productDetail));
+        $payment = 0;
+        if($request->has('payment') || session::has('payment')){
+            if($request->has('payment')){
+                $payment = $request->payment;
+            } else{
+                $payment = session('payment');
+            }
+        } else{
+            $firstPaymentType = PaymentType::first();
+            $payment = $firstPaymentType->id;
+        }
+
+        $dateFrom = '';
+        if($request->has('dateFrom')){
+            $dateFrom = $request->dateFrom;
+        }
+
+        $dateTo = '';
+        if($request->has('dateTo')){
+            $dateTo = $request->dateTo;
+        }
+
+        return view("store.sales", array('user' => $user, 'store' => $store, 'storeList' => $storeList, 'productDetail' => $productDetail, 'paymentType' => $paymentType, 'payment' => $payment, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+    }
+
+    public function getSales(Request $request){
+        if(!$request->has('dateFrom') || $request->dateFrom == ''){
+            $dateFrom = '1990-01-01';
+        } else{
+            $dateFrom = $request->dateFrom;
+        }
+
+        if(!$request->has('dateTo') || $request->dateTo == ''){
+            $dateTo = date('Y-m-d');
+        } else{
+            $dateTo = $request->dateTo;
+        }
+
+        if($request->has('store') && $request->store != '' && $request->has('payment') && $request->payment != ''){
+            $transaction = StoreTransaction::join('payment_types', 'store_transactions.payment_type_id', '=', 'payment_types.id')->join('stores', 'store_transactions.store_id', '=', 'stores.id')->selectRaw('store_transactions.id, payment_types.name, store_transactions.final_price, store_transactions.description, store_transactions.file_path, stores.name as store_name, store_transactions.date')->where('store_transactions.store_id', $request->store)->where('store_transactions.payment_type_id', $request->payment)->orderBy('store_transactions.date', 'desc')->whereBetween('store_transactions.date', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+        } else if($request->has('store') && $request->store != ''){
+            $transaction = StoreTransaction::join('payment_types', 'store_transactions.payment_type_id', '=', 'payment_types.id')->join('stores', 'store_transactions.store_id', '=', 'stores.id')->selectRaw('store_transactions.id, payment_types.name, store_transactions.final_price, store_transactions.description, store_transactions.file_path, stores.name as store_name, store_transactions.date')->where('store_transactions.store_id', $request->store)->orderBy('store_transactions.date', 'desc')->whereBetween('store_transactions.date', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+        } else if($request->has('payment') && $request->payment != ''){
+            $transaction = StoreTransaction::join('payment_types', 'store_transactions.payment_type_id', '=', 'payment_types.id')->join('stores', 'store_transactions.store_id', '=', 'stores.id')->selectRaw('store_transactions.id, payment_types.name, store_transactions.final_price, store_transactions.description, store_transactions.file_path, stores.name as store_name, store_transactions.date')->where('store_transactions.payment_type_id', $request->payment)->orderBy('store_transactions.date', 'desc')->whereBetween('store_transactions.date', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+        } else{
+            $transaction = StoreTransaction::join('payment_types', 'store_transactions.payment_type_id', '=', 'payment_types.id')->join('stores', 'store_transactions.store_id', '=', 'stores.id')->selectRaw('store_transactions.id, payment_types.name, store_transactions.final_price, store_transactions.description, store_transactions.file_path, stores.name as store_name, store_transactions.date')->orderBy('store_transactions.date', 'desc')->whereBetween('store_transactions.date', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+        }
+
+        return Datatables::of($transaction)->make();
     }
 }
