@@ -135,7 +135,7 @@ class ReportController extends Controller
             $yearList[] = $i;
         }
 
-        $transactionData = StoreTransaction::selectRaw('MONTH(date) as month, SUM(final_price) AS value')->where(DB::raw('YEAR(date)='.$year))->orderBy('date')->groupBy(DB::raw("MONTH(date)"))->get();
+        $transactionData = StoreTransaction::selectRaw('MONTH(date) as month, SUM(final_price) AS value')->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTH(date)"))->get();
         dd($transactionData);
 
         $expense = array();
