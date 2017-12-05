@@ -117,7 +117,7 @@
             serverSide: true,
             ajax:
             {
-                "url": '{{ route('store.incomingProduct.get') }}'+'?store='+'{{$store}}',
+                "url": '{{ route('store.incomingProduct.get') }}'+'?store='+'{{$store}}&warehouse={{$warehouse}}',
                 "type": "GET",
             },
             columns: [
@@ -150,6 +150,14 @@
             $('#productNameVerificate').html($('#name_'+id).val());
             $('#productTotalVerificate').html($('#total_'+id).val());
             $('#productDescriptionVerificate').html($('#description_'+id).val());
+        });
+
+        $("#searchByStore").change(function() {
+            window.location = "{{ route('store.incomingProduct')}}" + '?store='+ $(this).val()+'&warehouse='+$("#searchByWarehouse").val();
+        });
+
+        $("#searchByWarehouse").change(function() {
+            window.location = "{{ route('store.incomingProduct')}}" + '?store='+ $("#searchByStore").val()+'&warehouse='+$(this).val();
         });
 	});
 </script>

@@ -229,9 +229,13 @@ class StoreController extends Controller
             $storeSold->total_price = (int) $request->storeStockPrice[$i] * (int) $request->storeStockTotal[$i];
             $storeSold->total_product = $request->storeStockTotal[$i];
             $storeSold->save();
+
+            $storeStock = StoreStock::find($request->storeStockId[$i]);
+            $storeStock->total_product = (int) $storeStock->total_product - (int) $request->storeStockTotal[$i];
+            $storeStock->save();
         }
 
-        return redirect('/store/incoming-product')->with('success', 'Sukses menambah transaksi');
+        return redirect('/store/stock')->with('success', 'Sukses menambah transaksi');
     }
 
     public function sales(Request $request){
