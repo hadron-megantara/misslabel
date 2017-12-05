@@ -60,7 +60,7 @@
 
         <div class="row">
 	    	<div class="col-md-12">
-		    	<div id="chartExpense" style="height:300px;">
+		    	<div id="chartOmset" style="height:300px;">
 		    		
 		    	</div>
 		    </div>
@@ -70,41 +70,50 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		var month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-		var expenseValue = [670000000, 720000000, 650000000, 710000000, 800000000, 750000000, 680000000, 720000000, 760000000];
-		var income = [1000000000, 1300000000, 1250000000, 1400000000, 1800000000, 1350000000, 1400000000, 1430000000, 1480000000];
+		var month = [];
+		var omset = [];
+		@foreach($transactionDataArray as $transactionDataArray2)
+			month.push('{{$transactionDataArray2["month"]}}');
+			omset.push({{$transactionDataArray2["value"]}});
+		@endforeach
 
 		$(function () { 
-		    var myChart = Highcharts.chart('chartExpense', {
+		    var myChart = Highcharts.chart('chartOmset', {
 		        chart: {
 		            type: 'column'
 		        },
 		        title: {
-		            text: 'Penjualan'
+		            text: 'Omset Toko {{$storeName}}'
 		        },
 		        xAxis: {
 		        	title: {
-		                text: 'Tahun 2017'
+		                text: 'Tahun {{$year}}'
 		            },
 		            categories: month
 		        },
 		        yAxis: {
+		            tickInterval: 20,
+		            lineColor: '#FF0000',
+		            lineWidth: 1,
 		            title: {
 		                text: 'Dalam rupiah'
-		            }
+
+		            },
+		            plotLines: [{
+		                value: 0,
+		                width: 10,
+		                color: '#808080'
+		            }]
 		        },
 		        series: [{
-		            name: 'Pengeluaran',
-		            data: expenseValue,
-		        },{
 		            name: 'Omset',
-		            data: income,
+		            data: omset,
 		        }]
 		    });
 		});
 
 		$('#filterProcess').click(function(){
-            window.location = "{{ route('store.sales')}}" + '?store='+$("#searchMaterialBy").val()+'&payment='+$("#searchMaterialByPaymentType").val()+'&year='+$("#searchMaterialByYear").val();
+            window.location = "{{ route('report.salesMonth')}}" + '?store='+$("#searchMaterialBy").val()+'&payment='+$("#searchMaterialByPaymentType").val()+'&year='+$("#searchMaterialByYear").val();
         });
 
 	});

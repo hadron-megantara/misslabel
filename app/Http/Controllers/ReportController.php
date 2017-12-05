@@ -96,15 +96,18 @@ class ReportController extends Controller
         $paymentType = PaymentType::all();
 
         $store = 0;
+        $storeName = '';
         if($request->has('store') || session::has('store')){
-            if($request->has('store')){
+            if($request->has('store') && $request->store != ''){
                 $store = $request->store;
-            } else{
+                $storeName = $request->storeName;
+            } else if(session('store') != '' && session('store') != null){
                 $store = session('store');
             }
         } else{
             $firstStore = Store::first();
             $store = $firstStore->id;
+            $storeName = $firstStore->name;
         }
 
         $payment = 0;
@@ -135,16 +138,31 @@ class ReportController extends Controller
             $yearList[] = $i;
         }
 
-        $transactionData = StoreTransaction::selectRaw('MONTH(date) as month, SUM(final_price) AS value')->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTH(date)"))->get();
-        dd($transactionData);
-
-        $expense = array();
-        foreach($expenseData as $expenseData){
-          $monthName = strftime("%B", mktime(0, 0, 0, $expenseData->month, 1));
-          $expense[] = array('month' => $monthName, 'value' => $expenseData->value);
+        $dateFrom = '';
+        if($request->has('dateFrom')){
+            $dateFrom = $request->dateFrom;
         }
 
-        return view("report.sales-month", array('user' => $user, 'expense' => $expense, 'store' => $store, 'storeList' => $storeList, 'productDetail' => $productDetail, 'paymentType' => $paymentType, 'payment' => $payment, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo, 'yearList' => $yearList, 'year' => $year));
+        $dateTo = '';
+        if($request->has('dateTo')){
+            $dateTo = $request->dateTo;
+        }
+
+        if($store != 0){
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('store_id', $store)->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+        } else{
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+        }
+
+        if(count($transactionData) > 0){
+            foreach($transactionData as $transactionData){
+                $transactionDataArray[] = array('month' => $transactionData->month, 'value' => $transactionData->value);
+            }
+        } else{
+            $transactionDataArray = null;
+        }
+
+        return view("report.sales-month", array('user' => $user, 'store' => $store, 'storeList' => $storeList, 'productDetail' => $productDetail, 'paymentType' => $paymentType, 'payment' => $payment, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo, 'yearList' => $yearList, 'year' => $year, 'transactionDataArray' => $transactionDataArray, 'storeName' => $storeName));
     }
 
     public function turnOver(Request $request){

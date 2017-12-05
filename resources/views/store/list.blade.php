@@ -21,11 +21,20 @@
                 @foreach($storeList as $storeList2)
                     <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
                 @endforeach
-                <option value="" @if($store == 0) selected="" @endif >Semua Toko</option>
             </select>
         </div>
 
         <div class="row"></div>
+
+        @if(session('success'))
+            <div class="panel panel-success">
+                <div class="panel-heading notification text-center">
+                    {{session('success')}}
+                </div>
+            </div>
+            
+            <div class="row"></div>
+        @endif
 
         <div class="table-responsive">
         	<table id="productTable" class="table-bordered">

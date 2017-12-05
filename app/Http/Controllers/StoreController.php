@@ -61,9 +61,9 @@ class StoreController extends Controller
 
     public function getStock(Request $request){
         if($request->has('store') && $request->store != ''){
-            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->selectRaw('store_stocks.id, product_details.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, store_stocks.color, store_stocks.total_product')->where('store_stocks.store_id', $request->store)->orderBy('product_details.name', 'asc')->get();
+            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->selectRaw('store_stocks.id, product_details.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, store_stocks.color, store_stocks.total_product')->where('store_stocks.store_id', $request->store)->where('store_stocks.total_product', '>', '0')->orderBy('product_details.name', 'asc')->get();
         } else{
-            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->selectRaw('product_details.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, store_stocks.color, store_stocks.total_product')->orderBy('product_details.name', 'asc')->get();
+            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->selectRaw('product_details.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, store_stocks.color, store_stocks.total_product')->where('store_stocks.total_product', '>', '0')->orderBy('product_details.name', 'asc')->get();
         }
 
         return Datatables::of($product)->make();
