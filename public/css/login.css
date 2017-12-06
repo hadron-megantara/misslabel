@@ -1,7 +1,7 @@
 .login-body{
 	height: 100%;
 	width: 100%;
-	background-image: url("/img/background/default.jpg");
+	/*background-image: url("/img/background/default.jpg");*/
 	content: "";
     position: absolute;
     top: 0;
