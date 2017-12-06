@@ -134,6 +134,9 @@ Route::middleware(['userAuth'])->group(function () {
 
 		// Stock-Transfer-Stock
 		Route::get('/store/transfer-stock', 'StoreController@transferStock')->name('store.transferStock');
+		Route::post('/store/transfer-stock-process', 'StoreController@transferStockProcess')->name('store.transferStockProcess');
+		Route::get('/store/transfer-stock-history', 'StoreController@transferStockHistory')->name('store.transferStockHistory');
+		Route::get('/store/transfer-stock-history/get', 'StoreController@getTransferStockHistory')->name('store.transferStockHistory.get');
 
 		// Stock-Store-List
 		Route::get('/store/store-list', 'StoreController@storeList')->name('store.warehouseList');
@@ -176,6 +179,14 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::post('/employee/update-employee', 'EmployeeController@updateEmployee')->name('employee.update');
 		Route::post('/employee/destroy-employee', 'EmployeeController@destroyEmployee')->name('employee.destroy');
 	// End of Employee
+
+	// Expense
+		Route::get('/expense/list', 'ExpenseController@list')->name('expense.list');
+		Route::get('/expense/get', 'ExpenseController@get')->name('expense.get');
+		Route::post('/expense/store', 'ExpenseController@store')->name('expense.store');
+		Route::post('/expense/update', 'ExpenseController@update')->name('expense.update');
+		Route::post('/expense/destroy', 'ExpenseController@destroy')->name('expense.destroy');
+	// End of Expense
 
 	// Report
 		Route::get('/report/sales-year', 'ReportController@salesYear')->name('report.salesYear');

@@ -150,6 +150,15 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="sendProductDeliveryPrice" class="col-md-4 control-label">Ongkos Kirim</label>
+
+                        <div class="col-md-6">
+                            <input id="sendProductDeliveryPrice" type="text" class="form-control number" required placeholder="Masukkan Ongkos Kirim">
+                            <input id="sendProductDeliveryPriceHidden" type="hidden" name="deliveryPrice">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="sendProductDescription" class="col-md-4 control-label">Keterangan</label>
 
                         <div class="col-md-6">
@@ -340,6 +349,18 @@
 
         $('#sendProductDeliveryDate').keypress(function(event){
             event.preventDefault();
+        });
+
+        $('#sendProductDeliveryPrice').keyup(function(){
+            var number = $(this).val().split('.').join("");
+            number = number.replace(/Rp /gi,'');
+            $('#sendProductDeliveryPriceHidden').val(number);
+        });
+
+        $('#sendProductDeliveryPrice').priceFormat({
+            prefix: 'Rp ',
+            centsLimit: 0,
+            thousandsSeparator: '.'
         });
 
 	});

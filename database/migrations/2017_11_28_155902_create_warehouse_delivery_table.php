@@ -19,6 +19,7 @@ class CreateWarehouseDeliveryTable extends Migration
             $table->string('description')->nullable();
             $table->string('file_path')->nullable();
             $table->date('date_delivery');
+            $table->integer('price')->nullable();
             $table->timestamps();
         });
     }

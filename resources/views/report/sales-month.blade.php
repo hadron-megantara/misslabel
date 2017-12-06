@@ -72,10 +72,12 @@
 	$(document).ready(function(){
 		var month = [];
 		var omset = [];
-		@foreach($transactionDataArray as $transactionDataArray2)
-			month.push('{{$transactionDataArray2["month"]}}');
-			omset.push({{$transactionDataArray2["value"]}});
-		@endforeach
+		@if(count($transactionDataArray) > 0)
+			@foreach($transactionDataArray as $transactionDataArray2)
+				month.push('{{$transactionDataArray2["month"]}}');
+				omset.push({{$transactionDataArray2["value"]}});
+			@endforeach
+		@endif
 
 		$(function () { 
 		    var myChart = Highcharts.chart('chartOmset', {

@@ -155,6 +155,15 @@
                             <textarea class="form-control" name="description" id="convertMaterialProductDescription" required="" style="resize: none;" rows="3"></textarea>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="convertMaterialDate" class="col-md-4 control-label">Tanggal</label>
+
+                        <div class="col-md-6">
+                            <input id="convertMaterialDate" type="text" class="form-control number" name="materialDate" placeholder="Masukkan Tanggal">
+                        </div>
+                    </div>
+
                 </form>
             </div>
             
@@ -218,6 +227,7 @@
             $("#convertMaterialColorHidden").val($('#materialColor_'+id).val());
             $("#convertMaterialLengthHidden").val($('#materialLength_'+id).val());
             $("#convertMaterialConvectionIdHidden").val($('#materialConvectionId_'+id).val());
+            $('#convertMaterialDate').val('');
 
             var length = $('#materialLength_'+id).val();
             length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -263,6 +273,14 @@
 
         $("#searchMaterialUsed").change(function() {
             window.location = "{{ route('convection.index')}}" + '?convection='+ $('#searchMaterialBy').val()+'&status='+$(this).val();
+        });
+
+        $('#convertMaterialDate').datepicker({
+            dateFormat: 'yy-mm-dd',
+            regional: 'id',
+            orientation: "auto",
+            maxDate : 'now',
+            changeYear: true
         });
 
 	});

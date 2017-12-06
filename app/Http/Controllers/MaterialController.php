@@ -272,6 +272,7 @@ class MaterialController extends Controller
 
         $materialTransaction->save();
 
+        $expenseDescription = '';
         $totalMaterial = count($request->materialName);
         for($i=0;$i < $totalMaterial; $i++){
             $material = new Material;
@@ -281,7 +282,19 @@ class MaterialController extends Controller
             $material->color = $request->materialColor[$i];
             $material->price = $request->materialPrice[$i];
             $material->save();
+
+            if($expenseDescription == ''){
+                $expenseDescription = 'Pembelian Bahan : '.$request->materialName[$i].' '.$request->materialLength[$i].'yard'. ' Rp '. number_format($request->materialPrice[$i],2,",",".");
+            } else{
+                $expenseDescription = $expenseDescription.' - '.$request->materialName[$i].' '.$request->materialLength[$i].'yard'.' Rp '. number_format($request->materialPrice[$i],2,",",".");
+            }
         }
+
+        $expense = new Expense;
+        $expense->description = $expenseDescription;
+        $expense->value = $request->materialTotalPrice;
+        $expense->date = $request->materialDatePurchase;
+        $expense->save();
 
         return redirect('/material/transaction')->with('success', 'Sukses menambah nota baru');
     }

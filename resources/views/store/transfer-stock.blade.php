@@ -57,7 +57,7 @@
         <hr style="border-top: 2px solid #000000;">
 
         <div class="page-title">
-            <h3>Transaksi - Produk Terpilih</h3>
+            <h3>Transfer Barang - Produk Terpilih</h3>
         </div>
 
         <div class="table-responsive bottomTable">
@@ -87,67 +87,42 @@
         <div class="" style="margin-bottom: 100px;padding-bottom: 20px;padding-top:20px;margin-top: -70px;background-color: #ffffff">
             <div class="form-group row">
                 <div class="col-md-12 row">
-                    <form class="form-horizontal transaction-add-form" method="POST" action="{{ route('store.transaction.add') }}" role="form" id="addForm" enctype="multipart/form-data">
+                    <form class="form-horizontal transaction-add-form" method="POST" action="{{ route('store.transferStockProcess') }}" role="form" id="addForm" enctype="multipart/form-data">
                     {!! csrf_field() !!}
 
                         <div id="totalListedHidden"></div>
 
                         <div class="col-md-3">
-                            <label for="transactionDate" class="col-md-12 control-label">Tanggal Transaksi</label>
+                            <label for="transferDate" class="col-md-12 control-label">Tanggal Transfer Barang</label>
                             <div class="col-md-12">
-                                <input id="transactionDate" type="text" class="form-control" name="date" required placeholder="Tanggal Pembelian" style="position: relative; z-index: 100" />
-                                <input type="hidden" name="storeId" value="{{$store}}" />
+                                <input id="transferDate" type="text" class="form-control" name="date" required placeholder="Tanggal Transfer" style="position: relative; z-index: 100" />
+                                <input type="hidden" name="storeFrom" value="{{$store}}" />
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <label for="transactionNote" class="control-label">Nota Penjualan</label>
-                            <div class="input-group">
-                                <label class="input-group-btn">
-                                    <span class="btn btn-primary">
-                                        <span class="fa fa-file"></span><input id="transactionNote" type="file" style="display: none;" name="note" required="">
-                                    </span>
-                                </label>
-                                <input type="text" id="transactionNoteShow" class="form-control" readonly placeholder="Lampirkan nota" required="">
-                            </div>
-
-                            <label for="paymentType" class="control-label" style="margin-top:10px">Tipe Pembayaran</label>
-                            <select class="form-control" id="paymentType" name="paymentType" required="">
-                                <option value="">--- Pilih Tipe Pembayaran ---</option>
-                                @foreach($paymentType as $paymentType2)
-                                    <option value="{{$paymentType2->id}}">{{$paymentType2->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="transactionDescription" class="col-md-12 control-label">Keterangan</label>
+                            <label for="transferStore" class="col-md-12 control-label">Transfer ke Toko</label>
                             <div class="col-md-12">
-                                <textarea id="transactionDescription" class="form-control" name="description" style="resize: none" rows="4" placeholder="Masukkan Keterangan..."></textarea>
+                                <select id="transferStore" type="text" class="form-control" name="storeTo" required>
+                                    <option value="">--- Pilih Toko ---</option>
+                                    @foreach($storeList as $storeList2)
+                                        <option value="{{$storeList2->id}}">{{$storeList2->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
+                        <div class="col-md-3" style="margin-top:50px">
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="fa fa-save"> </span>Transfer Barang
+                                </button>
+                        </div>
+
                         <div class="col-md-3">
-                            <label for="transactionPrice" class="control-label">Jumlah</label>
-                            <input id="transactionPrice" type="text" class="form-control number" placeholder="Rp 0">
-                            <input id="transactionPriceHidden" type="hidden" name="price" required>
-
-                            <label for="transactionDiscount" class="control-label" style="margin-top:10px">Diskon</label>
-                            <input id="transactionDiscount" type="text" class="form-control number" placeholder="Masukkan Diskon" name="discount">
-
-                            <label for="transactionFinalPrice" class="control-label" style="margin-top:10px">Total Harga</label>
-                            <input id="transactionFinalPrice" type="text" class="form-control number" placeholder="Rp 0">
-                            <input id="transactionFinalPriceHidden" type="hidden" name="finalPrice" required>
+                            &nbsp;
                         </div>
 
                         <div class="row"></div>
-
-                        <div class="col-md-12" style="margin-top: 20px">
-                            <div class="pull-right">
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="fa fa-save"> </span>Simpan Transaksi
-                                </button>
-                            </div>
                         </div>
                     </form>
                 </div>
@@ -311,7 +286,7 @@
 
 
         $("#searchMaterialBy").change(function() {
-            window.location = "{{ route('store.stock')}}" + '?store='+ $(this).val();
+            window.location = "{{ route('store.transferStock')}}" + '?store='+ $(this).val();
         });
 
         $("body").on("keypress", "#transactionDate,#transactionPrice,#transactionFinalPrice", function(e){
@@ -328,7 +303,7 @@
                 e.preventDefault();
         });
 
-        $('#transactionDate').datepicker({
+        $('#transactionDate, #transferDate').datepicker({
             dateFormat: 'yy-mm-dd',
             regional: 'id',
             orientation: "auto",

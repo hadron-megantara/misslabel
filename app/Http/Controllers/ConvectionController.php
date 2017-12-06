@@ -16,6 +16,7 @@ use App\WarehouseProduct;
 use App\WarehouseDelivery;
 use App\WarehouseStock;
 use App\ProductDetail;
+use App\Expense;
 use Carbon\Carbon;
 use session;
 
@@ -145,6 +146,7 @@ class ConvectionController extends Controller
         $convectionProduct->convection_id = $request->materialConvectionId;
         $convectionProduct->description  = $request->description;
         $convectionProduct->price = $request->materialPrice;
+        $convectionProduct->date = $request->materialDate;
         $convectionProduct->save();
 
         $materialIn = MaterialIn::find($request->materialId);
@@ -168,6 +170,12 @@ class ConvectionController extends Controller
         }
 
         $materialInConverted->save();
+
+        $expense = new Expense;
+        $expense->description = 'Konveksi : '.$request->description;
+        $expense->value = $request->materialPrice;
+        $expense->date = $request->materialDate;
+        $expense->save();
 
 
         return redirect('/convection/material-in')->with(array('success'=>'Sukses konversi Produk', 'convection' => $request->materialConvectionId));
@@ -215,6 +223,7 @@ class ConvectionController extends Controller
             $explodedId = explode(",",$request->productId);
             $countId = count($explodedId);
 
+            $productDelivery = '';
             for($i = 0;$i < $countId;$i++){
                 $productData = Product::find($explodedId[$i]);
                 $productData->status = 1;
@@ -233,12 +242,27 @@ class ConvectionController extends Controller
                     $warehouseStock->total = (int) $warehouseStock->total + (int) $productData->total;
                 }
                 $warehouseStock->save();
+
+                $productDetail = ProductDetail::find($productData->product_detail_id);
+                $warehouseData = Warehouse::find($request->warehouseId);
+                if($productDelivery == ''){
+                    $productDelivery = 'Pengiriman Barang ke Gudang '.$warehouseData->name.' : '.$productDetail->name.' '.$productData->total.'pcs';
+                } else{
+                    $productDelivery = $productDelivery.' - '.$productDetail->name.' '.$productData->total.'pcs';
+                }
             }
+
+            $expense = new Expense;
+            $expense->description = $productDelivery;
+            $expense->value = $request->deliveryPrice;
+            $expense->date = $request->deliveryDate;
+            $expense->save();
 
             $warehouseDelivery = new WarehouseDelivery;
             $warehouseDelivery->warehouse_id = $request->warehouseId;
             $warehouseDelivery->date_delivery = $request->deliveryDate;
             $warehouseDelivery->description = $request->description;
+            $warehouseDelivery->price = $request->deliveryPrice;
 
             if($request->hasFile('deliveryNote'))
             {

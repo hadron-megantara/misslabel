@@ -18,6 +18,7 @@ use App\StoreStock;
 use App\StoreIn;
 use App\StoreSold;
 use App\StoreTransaction;
+use App\StoreTransfer;
 use App\PaymentType;
 use Carbon\Carbon;
 use session;
@@ -309,5 +310,100 @@ class StoreController extends Controller
         }
 
         return Datatables::of($transaction)->make();
+    }
+
+    public function transferStock(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $warehouseList = Warehouse::all();
+        $storeList = Store::all();
+        $paymentType = PaymentType::all();
+
+        $store = 0;
+        if($request->has('store') || session::has('store')){
+            if($request->has('store')){
+                $store = $request->store;
+            } else{
+                $store = session('store');
+            }
+        } else{
+            $firstStore = Store::first();
+            $store = $firstStore->id;
+        }
+
+        return view("store.transfer-stock", array('user' => $user, 'store' => $store, 'storeList' => $storeList, 'paymentType' => $paymentType));
+    }
+
+    public function transferStockProcess(Request $request){
+        $description = '';
+        $countStock = count($request->storeStockId);
+        for($i=0;$i < $countStock;$i++){
+            $storeStock = StoreStock::find($request->storeStockId[$i]);
+            $storeStock->total_product = (int) $storeStock->total_product - (int) $request->storeStockTotal[$i];
+            $storeStock->save();
+
+            $storeStockTo = StoreStock::where('store_id', $request->storeTo)->where('product_detail_id', $storeStock->product_detail_id)->where('material_type', $storeStock->material_type)->where('color', $storeStock->color)->first();
+
+            if($storeStockTo == null){
+                $storeStockSave = new StoreStock;
+                $storeStockSave->store_id = $request->storeTo;
+                $storeStockSave->product_detail_id = $storeStockTo->product_detail_id;
+                $storeStockSave->material_type = $storeStockTo->material_type;
+                $storeStockSave->color = $storeStockTo->color;
+                $storeStockSave->total_product = $request->storeStockTotal[$i];
+                $storeStockSave->save();
+            } else{
+                $storeStockTo->total_product = (int) $storeStockTo->total_product + (int) $request->storeStockTotal[$i];
+                $storeStockTo->save();
+            }
+
+            $productDetailData = ProductDetail::find($storeStock->product_detail_id);
+            if($description == ''){
+                $description = 'Transfer '.$productDetailData->name.' '.$request->storeStockTotal[$i].'pcs';
+            } else{
+                $description = $description. ' - '.$productDetailData->name.' '.$request->storeStockTotal[$i].'pcs';
+            }
+        }
+
+        $storeTransfer = new StoreTransfer;
+        $storeTransfer->store_from_id = $request->storeFrom;
+        $storeTransfer->store_to_id = $request->storeTo;
+        $storeTransfer->date = $request->date;
+        $storeTransfer->description = $description;
+        $storeTransfer->save();
+
+        return redirect('/store/transfer-stock')->with('success', 'Sukses mentransfer barang');
+    }
+
+    public function transferStockHistory(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $storeList = Store::all();
+
+        $store = 0;
+        if($request->has('store') || session::has('store')){
+            if($request->has('store')){
+                $store = $request->store;
+            } else{
+                $store = session('store');
+            }
+        } else{
+            $firstStore = Store::first();
+            $store = $firstStore->id;
+        }
+
+        return view("store.transfer-stock-history", array('user' => $user, 'store' => $store, 'storeList' => $storeList));
+    }
+
+    public function getTransferStockHistory(Request $request){
+        $stockHistory = StoreTransfer::join('stores as store_from', 'store_transfers.store_from_id', '=', 'store_from.id')->join('stores as store_to', 'store_transfers.store_to_id', '=', 'store_to.id')->selectRaw('store_from.name as stock_from, store_to.name as stock_to, store_transfers.date, store_transfers.description')->orderBy('store_transfers.updated_at', 'desc')->get();
+        
+        return Datatables::of($stockHistory)->make();
     }
 }
