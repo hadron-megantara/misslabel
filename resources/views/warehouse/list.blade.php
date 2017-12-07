@@ -21,7 +21,6 @@
                 @foreach($warehouseList as $warehouseList2)
                     <option value="{{$warehouseList2->id}}" @if($warehouse == $warehouseList2->id) selected="" @endif>{{$warehouseList2->name}}</option>
                 @endforeach
-                <option value="" @if($warehouse == 0) selected="" @endif >Semua Gudang</option>
             </select>
         </div>
 

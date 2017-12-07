@@ -9,7 +9,7 @@
         </div>
 
         <div class="row">
-	    	<div class="col-md-3 col-sm-6 col-xs-12">
+        	<div class="col-md-3 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
 	    				<span class="fa fa-dollar"></span>
@@ -17,7 +17,20 @@
 
 	    			<div class="info-box-content">
 		              	<span class="info-box-text">Omset</span>
-		              	<span class="info-box-number">Rp 370.000.000</span>
+		              	<span class="info-box-number">Rp {{number_format($omset->total,2,",",".")}}</span>
+		            </div>
+	    		</div>
+	    	</div>
+
+	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    		<div class="info-box">
+	    			<span class="info-box-icon bg-yellow">
+	    				<span class="fa fa-dollar"></span>
+	    			</span>
+
+	    			<div class="info-box-content">
+		              	<span class="info-box-text">Profit</span>
+		              	<span class="info-box-number">Rp {{number_format($profit,2,",",".")}}</span>
 		            </div>
 	    		</div>
 	    	</div>
@@ -43,7 +56,7 @@
 
 	    			<div class="info-box-content">
 		              	<span class="info-box-text">Piutang</span>
-		              	<span class="info-box-number">Rp 305.000.000</span>
+		              	<span class="info-box-number">Rp {{number_format($receivable->total,2,",",".")}}</span>
 		            </div>
 	    		</div>
 	    	</div>
@@ -55,8 +68,34 @@
 	    			</span>
 
 	    			<div class="info-box-content">
-		              	<span class="info-box-text">Stok</span>
-		              	<span class="info-box-number">12.500</span>
+		              	<span class="info-box-text">Stok Gudang</span>
+		              	<span class="info-box-number">{{number_format($stockWarehouse->total,0,".",".")}}</span>
+		            </div>
+	    		</div>
+	    	</div>
+
+	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    		<div class="info-box">
+	    			<span class="info-box-icon bg-yellow">
+	    				<span class="fa fa-th-list "></span>
+	    			</span>
+
+	    			<div class="info-box-content">
+		              	<span class="info-box-text">Stok Toko</span>
+		              	<span class="info-box-number">{{number_format($stockStore->total,0,".",".")}}</span>
+		            </div>
+	    		</div>
+	    	</div>
+
+	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    		<div class="info-box">
+	    			<span class="info-box-icon bg-yellow">
+	    				<span class="fa fa-th-list "></span>
+	    			</span>
+
+	    			<div class="info-box-content">
+		              	<span class="info-box-text">Pengeluaran</span>
+		              	<span class="info-box-number">Rp {{number_format($expense->total,2,",",".")}}</span>
 		            </div>
 	    		</div>
 	    	</div>

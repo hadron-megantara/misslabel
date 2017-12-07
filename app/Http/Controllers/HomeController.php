@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Expense;
+use App\WarehouseStock;
+use App\StoreStock;
+use App\StoreTransaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -24,15 +27,14 @@ class HomeController extends Controller
             $user = $request->user;
         }
 
-        $expenseData = Expense::selectRaw('MONTH(date) as month, SUM(value) AS value')->orderBy('date')->groupBy(DB::raw("MONTH(date)"))->get();
+        $stockWarehouse = WarehouseStock::selectRaw('SUM(total) as total')->first();
+        $stockStore = StoreStock::selectRaw('SUM(total_product) as total')->first();
+        $omset = StoreTransaction::selectRaw('SUM(final_price) as total')->whereMonth('date', '=', date('m'))->where('payment_type_id', '<>', '3')->first();
+        $expense = Expense::selectRaw('SUM(value) as total')->first();
+        $receivable = StoreTransaction::selectRaw('SUM(final_price) as total')->where('payment_type_id', '3')->first();
+        $profit = (int) $omset->total - (int) $expense->total;
 
-        $expense = array();
-        foreach($expenseData as $expenseData){
-          $monthName = strftime("%B", mktime(0, 0, 0, $expenseData->month, 1));
-          $expense[] = array('month' => $monthName, 'value' => $expenseData->value);
-        }
-
-        return view("home", array('user' => $user, 'expense' => $expense));
+        return view("home", array('user' => $user, 'expense' => $expense, 'stockWarehouse' => $stockWarehouse, 'stockStore' => $stockStore, 'omset' => $omset, 'receivable' => $receivable, 'profit' => $profit));
     }
 
       /*
