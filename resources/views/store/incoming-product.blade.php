@@ -15,22 +15,22 @@
         </div>
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
-            <span style="font-weight: bold; margin-right: 10px">Filter Gudang</span>
+            {{-- <span style="font-weight: bold; margin-right: 10px">Filter Gudang</span>
 
             <select id="searchByWarehouse" name="searchByWarehouse">
                 @foreach($warehouseList as $warehouseList2)
                     <option value="{{$warehouseList2->id}}" @if($warehouse == $warehouseList2->id) selected="" @endif>{{$warehouseList2->name}}</option>
                 @endforeach
-                <option value="" @if($store == 0) selected="" @endif >Semua Gudang</option>
+                <option value="0" @if($warehouse == 0) selected="" @endif >Semua Gudang</option>
             </select>
-
+ --}}
             <span style="font-weight: bold; margin-right: 10px; margin-left: 20px">Filter Toko</span>
 
             <select id="searchByStore" name="searchByStore">
                 @foreach($storeList as $storeList2)
                     <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
                 @endforeach
-                <option value="" @if($store == 0) selected="" @endif >Semua Toko</option>
+                <option value="0" @if($store == 0) selected="" @endif >Semua Toko</option>
             </select>
 
             {{-- <div class="row"></div>
@@ -66,6 +66,7 @@
         	<table id="productTable" class="table-bordered">
         		<thead>
         			<tr>
+                        <th class="text-center">Toko</th>
         				<th class="text-center">Nama Produk</th>
                         <th class="text-center">Keterangan</th>
                         <th class="text-center">Tanggal Masuk</th>
@@ -98,6 +99,7 @@
                     <br/>
                     <label style="margin-top:-20px">Keterangan : <b><span id="productDescriptionVerificate"></span></b></label>
                     <input type="hidden" name="id" value="" id="verificationId" />
+                    <input type="hidden" name="redirectStore" value="{{$store}}" />
                 </form>
             </div>
             
@@ -121,6 +123,7 @@
                 "type": "GET",
             },
             columns: [
+                { data: 'store_name', name: 'store_name' },
                 { data: 'name', name: 'name' },
                 { data: 'description', name: 'description' },
                 { data: 'date_delivery', name: 'date_delivery' },

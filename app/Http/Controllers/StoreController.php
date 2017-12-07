@@ -143,23 +143,20 @@ class StoreController extends Controller
             } else{
                 $warehouse = session('warehouse');
             }
-        } else{
-            $firstWarehouse = Warehouse::first();
-            $warehouse = $firstWarehouse->id;
         }
 
         return view("store.incoming-product", array('user' => $user, 'store' => $store, 'storeList' => $storeList, 'warehouseList' => $warehouseList, 'warehouse' => $warehouse));
     }
 
     public function getIncomingProduct(Request $request){
-        if(($request->has('store') && $request->store != '') && ($request->has('warehouse') && $request->warehouse != '')){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouse_stores.store_id', $request->store)->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
-        } else if($request->has('store') && $request->store != ''){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouse_stores.store_id', $request->store)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
-        } else if($request->has('warehouse') && $request->warehouse != ''){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+        if(($request->has('store') && $request->store != 0) && ($request->has('warehouse') && $request->warehouse != 0)){
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouse_stores.store_id', $request->store)->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+        } else if($request->has('store') && $request->store != 0){
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouse_stores.store_id', $request->store)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+        } else if($request->has('warehouse') && $request->warehouse != 0){
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         } else{
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product')->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         }
 
         return Datatables::of($product)->make();
@@ -190,7 +187,7 @@ class StoreController extends Controller
 
                 $storeStock->save();
 
-                return redirect('/store/incoming-product')->with('success', 'Sukses verifikasi data');
+                return redirect('/store/incoming-product')->with(array('success' => 'Sukses verifikasi data', 'store' => $request->redirectStore));
             } else{
                 return redirect('/store/incoming-product')->with('error', 'Terjadi kesalahan sistem, gagal memverifikasi data');
             }
@@ -236,7 +233,7 @@ class StoreController extends Controller
             $storeStock->save();
         }
 
-        return redirect('/store/stock')->with('success', 'Sukses menambah transaksi');
+        return redirect('/store/stock')->with(array('success' => 'Sukses menambah transaksi', 'store' => $request->redirectStore));
     }
 
     public function sales(Request $request){

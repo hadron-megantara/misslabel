@@ -104,10 +104,6 @@ class ReportController extends Controller
             } else if(session('store') != '' && session('store') != null){
                 $store = session('store');
             }
-        } else{
-            $firstStore = Store::first();
-            $store = $firstStore->id;
-            $storeName = $firstStore->name;
         }
 
         $payment = 0;
@@ -117,9 +113,6 @@ class ReportController extends Controller
             } else{
                 $payment = session('payment');
             }
-        } else{
-            $firstPaymentType = PaymentType::first();
-            $payment = $firstPaymentType->id;
         }
 
         $year = 0;
@@ -148,8 +141,12 @@ class ReportController extends Controller
             $dateTo = $request->dateTo;
         }
 
-        if($store != 0){
+        if($store != 0 && $payment != 0){
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('store_id', $store)->where('payment_type_id', $payment)->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+        } else if($store != 0 && $payment == 0){
             $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('store_id', $store)->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+        } else if($store == 0 && $payment != 0){
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('payment_type_id', $payment)->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
         } else{
             $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
         }

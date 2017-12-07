@@ -92,6 +92,8 @@
 
                         <div id="totalListedHidden"></div>
 
+                        <input type="hidden" name="redirectStore" value="{{$store}}" />
+
                         <div class="col-md-3">
                             <label for="transactionDate" class="col-md-12 control-label">Tanggal Transaksi</label>
                             <div class="col-md-12">

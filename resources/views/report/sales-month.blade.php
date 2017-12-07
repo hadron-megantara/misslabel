@@ -26,7 +26,7 @@
 	                @foreach($storeList as $storeList2)
 	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
 	                @endforeach
-	                <option value="" @if($store == 0) selected="" @endif >Semua Toko</option>
+	                <option value="0" @if($store == 0) selected="" @endif >Semua Toko</option>
 	            </select>
 	        </div>
 
@@ -37,7 +37,7 @@
 	                @foreach($paymentType as $paymentType2)
 	                    <option value="{{$paymentType2->id}}" @if($payment == $paymentType2->id) selected="" @endif>{{$paymentType2->name}}</option>
 	                @endforeach
-	                <option value="" @if($store == 0) selected="" @endif >Semua Tipe Pembayaran</option>
+	                <option value="0" @if($payment == 0) selected="" @endif >Semua Tipe Pembayaran</option>
 	            </select>
 	        </div>
 
