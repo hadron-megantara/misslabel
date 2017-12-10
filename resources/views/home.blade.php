@@ -9,7 +9,7 @@
         </div>
 
         <div class="row">
-        	<div class="col-md-3 col-sm-6 col-xs-12">
+        	<div class="col-md-4 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
 	    				<span class="fa fa-dollar"></span>
@@ -22,7 +22,7 @@
 	    		</div>
 	    	</div>
 
-	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    	<div class="col-md-4 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
 	    				<span class="fa fa-dollar"></span>
@@ -35,7 +35,20 @@
 	    		</div>
 	    	</div>
 
-	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    	<div class="col-md-4 col-sm-6 col-xs-12">
+	    		<div class="info-box">
+	    			<span class="info-box-icon bg-yellow">
+	    				<span class="fa fa-dollar "></span>
+	    			</span>
+
+	    			<div class="info-box-content">
+		              	<span class="info-box-text">Pengeluaran</span>
+		              	<span class="info-box-number">Rp {{number_format($expense->total,2,",",".")}}</span>
+		            </div>
+	    		</div>
+	    	</div>
+
+	    	<div class="col-md-4 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
 	    				<span class="fa fa-money"></span>
@@ -48,7 +61,7 @@
 	    		</div>
 	    	</div>
 
-	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    	<div class="col-md-4 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
 	    				<span class="fa fa-money"></span>
@@ -61,48 +74,50 @@
 	    		</div>
 	    	</div>
 
-	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    	<div class="col-md-4 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
-	    				<span class="fa fa-th-list "></span>
+	    				<span class="fa fa-google "></span>
 	    			</span>
 
 	    			<div class="info-box-content">
 		              	<span class="info-box-text">Stok Gudang</span>
-		              	<span class="info-box-number">{{number_format($stockWarehouse->total,0,".",".")}}</span>
+		              	<span class="info-box-number">{{number_format($stockWarehouse->total,0,".",".")}} pcs</span>
 		            </div>
 	    		</div>
 	    	</div>
 
-	    	<div class="col-md-3 col-sm-6 col-xs-12">
+	    	<div class="col-md-4 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
-	    				<span class="fa fa-th-list "></span>
+	    				<span class="fa fa-text-width "></span>
 	    			</span>
 
 	    			<div class="info-box-content">
-		              	<span class="info-box-text">Stok Toko</span>
-		              	<span class="info-box-number">{{number_format($stockStore->total,0,".",".")}}</span>
+		              	<span class="info-box-text">Stok Toko - Total</span>
+		              	<span class="info-box-number">{{number_format($stockStore->total,0,".",".")}} pcs</span>
 		            </div>
 	    		</div>
 	    	</div>
 
-	    	<div class="col-md-3 col-sm-6 col-xs-12">
-	    		<div class="info-box">
-	    			<span class="info-box-icon bg-yellow">
-	    				<span class="fa fa-th-list "></span>
-	    			</span>
+	    	@foreach($stockStoreDetail as $stockStoreDetail2)
+		    	<div class="col-md-4 col-sm-6 col-xs-12">
+		    		<div class="info-box">
+		    			<span class="info-box-icon bg-yellow">
+		    				<span class="fa fa-text-width "></span>
+		    			</span>
 
-	    			<div class="info-box-content">
-		              	<span class="info-box-text">Pengeluaran</span>
-		              	<span class="info-box-number">Rp {{number_format($expense->total,2,",",".")}}</span>
-		            </div>
-	    		</div>
-	    	</div>
+		    			<div class="info-box-content">
+			              	<span class="info-box-text">Stok Toko - {{$stockStoreDetail2->name}}</span>
+			              	<span class="info-box-number">{{number_format($stockStoreDetail2->total,0,".",".")}} pcs</span>
+			            </div>
+		    		</div>
+		    	</div>
+		    @endforeach
 
 	    	<div class="row"></div>
 
-	    	<div class="col-md-12">
+	    	{{-- <div class="col-md-12">
 	    		<hr style="border-top: 2px solid #949494;">
 	    	</div>
 
@@ -114,7 +129,7 @@
 
 		    <div class="col-md-12">
 	    		<hr style="border-top: 2px solid #949494;">
-	    	</div>
+	    	</div> --}}
 	    </div>
     </div>
 </div>
