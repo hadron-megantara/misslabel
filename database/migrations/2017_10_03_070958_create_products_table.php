@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->string('unit');
             $table->integer('convection_id')->nullable();
             $table->integer('warehouse_id')->nullable();
+            $table->string('file_path')->nullable();
             $table->char('status')->default('0');
             $table->timestamps();
         });

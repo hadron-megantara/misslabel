@@ -16,9 +16,9 @@
         		<thead>
         			<tr>
         				<th>Keterangan</th>
-                        <th>Total</th>
+                        <th style="width:100px">Total</th>
                         <th>Tanggal</th>
-        				<th class="actions-column">Aksi</th>
+        				<th class="actions-column" style="width:50px">Aksi</th>
         			</tr>
         		</thead>
         		<tbody>

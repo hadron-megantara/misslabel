@@ -139,6 +139,16 @@ class ConvectionController extends Controller
 
         $product->unit = $request->materialUnit;
 
+        if($request->hasFile('note'))
+        {
+            $f = $request->file('note');
+            $path = $request->file('note')->storeAs(
+                'product_conversion', pathinfo($request->file('note')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+            );
+
+            $product->file_path = $path;
+        }
+
         $product->save();
 
         $convectionProduct =  new ConvectionProduct;
