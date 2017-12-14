@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Konveksi - Bahan Masuk</h3>
+            <h3>Konveksi - Nota</h3>
 
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionModalExport" class="btn btn-danger" data-toggle="modal">
@@ -24,9 +24,17 @@
                 <option value="" @if($convection == 0) selected="" @endif >Semua Konveksi</option>
             </select>
 
-            <select id="searchMaterialUsed" name="searchMaterialUsed">
-                <option value="0" @if($status == 0) selected="" @endif>Stok</option>
-                <option value="1" @if($status == 1) selected="" @endif>Terpakai</option>
+            <select id="searchMaterialStatus" name="searchMaterialStatus">
+                @foreach($paymentTypeList as $paymentTypeList2)
+                    <option value="{{$paymentTypeList2->id}}" @if($paymentType == 1) selected="" @endif>{{$paymentTypeList2->name}}</option>
+                @endforeach
+
+                <option value="0" @if($paymentType == 0) selected="" @endif>Semua Pembayaran</option>
+            </select>
+
+            <select id="searchMaterialPaidStatus" name="searchMaterialPaidStatus">
+                <option value="1" @if($paidStatus == 1) selected="" @endif>Lunas</option>
+                <option value="0" @if($paidStatus == 0) selected="" @endif>Belum Lunas</option>
             </select>
         </div>
 
@@ -46,12 +54,12 @@
         	<table id="materialInTable" class="table-bordered">
         		<thead>
         			<tr>
-        				<th>Tipe Bahan</th>
-                        <th>Warna Bahan</th>
-                        <th>Panjang Bahan</th>
-                        @if($status != 1)
-        				    <th class="actions-column">Aksi</th>
-                        @endif
+                        <th>Tanggal</th>
+        				<th>Nama Produk</th>
+                        <th>Keterangan</th>
+                        <th>Biaya</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
         			</tr>
         		</thead>
         		<tbody>
@@ -70,7 +78,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="{{ route('convection.materialIn.convertToProduct') }}" role="form" id="editForm" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="{{ route('convection.materialIn.convertToProduct') }}" role="form" id="editForm">
                     {!! csrf_field() !!}
 
                     <div class="form-group">
@@ -105,7 +113,7 @@
                         <div class="col-md-6">
                             <label for="convertMaterialPrice" class="col-md-4 control-label">Harga</label>
                             <div class="col-md-8">
-                                <input id="convertMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required placeholder="Masukkan Harga" required="">
+                                <input id="convertMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required placeholder="Masukkan Harga">
                                 <input id="convertMaterialPriceHidden" type="hidden" name="materialPrice">
                             </div>
                         </div>
@@ -115,7 +123,7 @@
                         <div class="col-md-6">
                             <label for="convertMaterialLengthUsed" class="col-md-4 control-label">Panjang (digunakan)</label>
                             <div class="col-md-8">
-                                <input id="convertMaterialLengthUsed" type="text" class="form-control" placeholder="Dalam yard" required="" />
+                                <input id="convertMaterialLengthUsed" type="text" class="form-control" placeholder="Dalam yard" />
                                 <input id="convertMaterialLengthUsedHidden" name="materialLength" type="hidden" class="form-control">
                             </div>
                         </div>
@@ -161,7 +169,7 @@
                             <label for="convertMaterialDate" class="col-md-4 control-label">Tanggal</label>
 
                             <div class="col-md-8">
-                                <input id="convertMaterialDate" type="text" class="form-control number" name="materialDate" placeholder="Masukkan Tanggal" required>
+                                <input id="convertMaterialDate" type="text" class="form-control number" name="materialDate" placeholder="Masukkan Tanggal">
                             </div>
                         </div>
 

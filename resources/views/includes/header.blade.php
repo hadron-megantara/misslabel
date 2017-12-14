@@ -173,6 +173,7 @@
                           <li @if(\Request::is('convection/material-in') || \Request::is('convection/material-in/*')) class="active" @endif><a href="/convection/material-in">Bahan Masuk</a></li>
                           <li @if(\Request::is('convection/product-in') || \Request::is('convection/product-in/*')) class="active" @endif><a href="/convection/product-in">Produk Masuk</a></li>
                           <li @if(\Request::is('convection/product') || \Request::is('material/product/*')) class="active" @endif><a href="/convection/product">Produk Selesai</a></li>
+                          <li @if(\Request::is('convection/note') || \Request::is('convection/note/*')) class="active" @endif><a href="/convection/note">Nota Konveksi</a></li>
                           <li @if(\Request::is('convection/list') || \Request::is('convection/convection-list/*')) class="active" @endif><a href="/convection/list">Daftar Konveksi</a></li>
                       </ul>
                   </li>

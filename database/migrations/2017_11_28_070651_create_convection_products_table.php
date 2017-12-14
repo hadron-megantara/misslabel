@@ -19,6 +19,8 @@ class CreateConvectionProductsTable extends Migration
             $table->integer('convection_id');
             $table->string('description');
             $table->integer('price');
+            $table->string('file_path')->nullable();
+            $table->char('status')->default('0');
             $table->date('date')->nullable();
             $table->timestamps();
         });

@@ -66,6 +66,11 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/convection/material-in/get-material-in', 'ConvectionController@getMaterialIn')->name('convection.getMaterialIn');
 		Route::post('/convection/material-in/convert-to-product', 'ConvectionController@convertToProduct')->name('convection.materialIn.convertToProduct');
 
+		// Convection-Note
+		Route::get('/convection/note', 'ConvectionController@note')->name('convection.note');
+		Route::get('/convection/note/get-note', 'ConvectionController@getNote')->name('convection.note.get');
+		Route::get('/convection/note/download-note', 'ConvectionController@downloadNote')->name('convection.note.download');
+
 		// Convection-Product-In
 		Route::get('/convection/product-in', 'ConvectionController@productIn')->name('convection.productIn');
 		Route::get('/convection/product-in/get-product-in', 'ConvectionController@getProductIn')->name('convection.getProductIn');

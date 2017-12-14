@@ -16,6 +16,7 @@ use App\WarehouseProduct;
 use App\WarehouseDelivery;
 use App\WarehouseStock;
 use App\ProductDetail;
+use App\PaymentType;
 use App\Expense;
 use Carbon\Carbon;
 use session;
@@ -139,16 +140,6 @@ class ConvectionController extends Controller
 
         $product->unit = $request->materialUnit;
 
-        if($request->hasFile('note'))
-        {
-            $f = $request->file('note');
-            $path = $request->file('note')->storeAs(
-                'product_conversion', pathinfo($request->file('note')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
-            );
-
-            $product->file_path = $path;
-        }
-
         $product->save();
 
         $convectionProduct =  new ConvectionProduct;
@@ -157,6 +148,17 @@ class ConvectionController extends Controller
         $convectionProduct->description  = $request->description;
         $convectionProduct->price = $request->materialPrice;
         $convectionProduct->date = $request->materialDate;
+
+        if($request->hasFile('materialNote'))
+        {
+            $f = $request->file('materialNote');
+            $path = $request->file('materialNote')->storeAs(
+                'product_conversion', pathinfo($request->file('materialNote')->getClientOriginalName(), PATHINFO_FILENAME).'-'.time().'.'.$f->getClientOriginalExtension()
+            );
+
+            $convectionProduct->file_path = $path;
+        }
+
         $convectionProduct->save();
 
         $materialIn = MaterialIn::find($request->materialId);
@@ -370,6 +372,70 @@ class ConvectionController extends Controller
         } else{
             return redirect('/convection/product-in')->with('error', 'Proses gagal, terjadi kesalahan sistem');
         }
+    }
+
+    public function note(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $convectionList = ConvectionList::all();
+        $productDetailList = ProductDetail::all();
+        $paymentTypeList = PaymentType::all();
+
+        $convection = 0;
+        if($request->has('convection') || session::has('convection')){
+            if($request->has('convection')){
+                $convection = $request->convection;
+            } else{
+                $convection = session('convection');
+            }
+        } else{
+            $firstConvection = ConvectionList::first();
+            $convection = $firstConvection->id;
+        }
+
+        $status = 0;
+        if($request->has('status')){
+            $status = $request->status;
+        }
+
+        $paymentType = 0;
+        if($request->has('paymentType') || session::has('paymentType')){
+            if($request->has('paymentType')){
+                $paymentType = $request->paymentType;
+            } else{
+                $paymentType = session('paymentType');
+            }
+        }
+
+        $paidStatus = 1;
+        if($request->has('paidStatus') || session::has('paidStatus')){
+            if($request->has('paidStatus')){
+                $paidStatus = $request->paidStatus;
+            } else{
+                $paidStatus = session('paidStatus');
+            }
+        }
+
+        return view("convection.note", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection, 'status' => $status, 'productDetailList' => $productDetailList, 'paymentTypeList' => $paymentTypeList, 'paymentType' => $paymentType, 'paidStatus' => $paidStatus));
+    }
+
+    public function getNote(Request $request){
+        if(!$request->has('status') || $request->status == ''){
+            $status = 0;
+        } else{
+            $status = $request->status;
+        }
+
+        if(!$request->has('convection') || $request->convection == '' || $request->convection == 0){
+            $note = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->join('convection_products', 'products.id', '=', 'convection_products.product_id')->selectRaw('product_details.id as id, ')->where('convection_products.convection_id', $request->convection)->where('convection_products.status', $status)->orderBy('product_details.updated_at')->get();
+        } else{
+            $note = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->join('convection_products', 'products.id', '=', 'convection_products.product_id')->selectRaw('product_details.id as id, ')->where('convection_products.status', $status)->orderBy('product_details.updated_at')->get();
+        }
+        
+        return Datatables::of($convectionMaterialIn)->make();
     }
 
 }
