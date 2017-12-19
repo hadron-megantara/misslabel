@@ -243,7 +243,8 @@
                       </a>
                       <ul class="sub-menu" @if(\Request::is('config') || \Request::is('config/*')) style="display: block;" @endif>
                           <li @if(\Request::is('config/color') || \Request::is('config/color/*')) class="active" @endif><a href="/config/color">Warna</a></li>
-                          <li @if(\Request::is('config/product') || \Request::is('config/product/*')) class="active" @endif><a href="/config/product">Produk</a></li>
+                          <li @if(\Request::is('config/product-model') || \Request::is('config/product-model/*')) class="active" @endif><a href="/config/product-model">Produk - Model</a></li>
+                          <li @if(\Request::is('config/product') || \Request::is('config/product/*')) class="active" @endif><a href="/config/product">Produk - Detail - Harga</a></li>
                           <li @if(\Request::is('config/seller') || \Request::is('config/seller/*')) class="active" @endif><a href="/config/seller">Penjual</a></li>
                           <li @if(\Request::is('config/user') || \Request::is('config/user/*')) class="active" @endif><a href="/config/user">Pengguna</a></li>
                           <li @if(\Request::is('config/payment-type') || \Request::is('config/payment-type/*')) class="active" @endif><a href="/config/payment-type">Tipe Pembayaran</a></li>

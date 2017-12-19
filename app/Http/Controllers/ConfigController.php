@@ -8,6 +8,7 @@ use App\Color;
 use App\Seller;
 use App\PaymentType;
 use App\ProductDetail;
+use App\ProductModel;
 
 class ConfigController extends Controller
 {
@@ -112,12 +113,14 @@ class ConfigController extends Controller
         }
 
         $seller = Seller::get();
+        $productModel = ProductModel::all();
+        $color = Color::all();
 
-        return view("config.product", array('user' => $user, 'seller' => $seller));
+        return view("config.product", array('user' => $user, 'seller' => $seller, 'productModel' => $productModel, 'color' => $color));
     }
 
     public function getProduct(Request $request){
-        $product = ProductDetail::select(['id', 'name', 'description', 'price', 'unit'])->orderBy('updated_at', 'desc')->get();
+        $product = ProductDetail::join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->selectRaw('product_details.id, product_models.name, product_details.color, product_details.description, product_details.price, product_details.unit, product_models.id as model_id')->orderBy('product_details.updated_at', 'desc')->get();
      
         return Datatables::of($product)->make();
     }
@@ -125,7 +128,8 @@ class ConfigController extends Controller
     public function storeProduct(Request $request){
         $product = new ProductDetail;
 
-        $product->name = $request->name;
+        $product->product_model_id = $request->productModelId;
+        $product->color = $request->color;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->unit = $request->unit;
@@ -138,7 +142,8 @@ class ConfigController extends Controller
     public function updateProduct(Request $request){
         $product = ProductDetail::find($request->id);
         
-        $product->name = $request->name;
+        $product->product_model_id = $request->productModelId;
+        $product->color = $request->color;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->unit = $request->unit;
@@ -197,5 +202,50 @@ class ConfigController extends Controller
         $paymentType->delete();
 
         return redirect('/config/payment-type')->with('success', 'Sukses menghapus tipe pembayaran');
+    }
+
+    public function productModel(Request $request){
+        $user = array();
+        if($request->has('user')){
+            $user = $request->user;
+        }
+
+        $seller = Seller::get();
+
+        return view("config.product-model", array('user' => $user, 'seller' => $seller));
+    }
+
+    public function getProductModel(Request $request){
+        $product = ProductModel::select(['id', 'name'])->orderBy('updated_at', 'desc')->get();
+     
+        return Datatables::of($product)->make();
+    }
+
+    public function storeProductModel(Request $request){
+        $product = new ProductModel;
+
+        $product->name = $request->name;
+
+        $product->save();
+
+        return redirect('/config/product-model')->with('success', 'Sukses menambah Model');
+    }
+
+    public function updateProductModel(Request $request){
+        $product = ProductModel::find($request->id);
+        
+        $product->name = $request->name;
+
+        $product->save();
+
+        return redirect('/config/product-model')->with('success', 'Sukses mengubah Model');
+    }
+
+    public function destroyProductModel(Request $request){
+        $product = ProductModel::find($request->id);
+
+        $product->delete();
+
+        return redirect('/config/product-model')->with('success', 'Sukses menghapus Model');
     }
 }

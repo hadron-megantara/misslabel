@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Data Produk</h3>
+            <h3>Data Detail Produk</h3>
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#modalAdd" class="btn btn-success btnAdd" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Produk</a>
             </div>
@@ -30,6 +30,7 @@
         		<thead>
         			<tr>
         				<th>Nama Produk</th>
+                        <th>Warna</th>
                         <th>Deskripsi</th>
                         <th>Harga</th>
                         <th>Satuan</th>
@@ -59,7 +60,25 @@
                         <label for="name" class="col-md-4 control-label">Nama Produk</label>
 
                         <div class="col-md-6">
-                            <input id="name" type="text" class="form-control" name="name" required>
+                            <select id="productModelId" class="form-control" name="productModelId" required>
+                                <option value="">--- Pilih Model ---</option>
+                                @foreach($productModel as $productModel2)
+                                    <option value="{{$productModel2->id}}">{{$productModel2->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="color" class="col-md-4 control-label">Warna</label>
+
+                        <div class="col-md-6">
+                            <select id="color" class="form-control" name="color" required>
+                                <option value="">--- Pilih Warna ---</option>
+                                @foreach($color as $color2)
+                                    <option value="{{$color2->name}}">{{$color2->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -115,11 +134,30 @@
                     {!! csrf_field() !!}
 
                     <div class="form-group">
-                        <label for="editName" class="col-md-4 control-label">Nama Produk</label>
+                        <label for="name" class="col-md-4 control-label">Nama Produk</label>
 
                         <div class="col-md-6">
-                            <input id="editName" type="text" class="form-control" name="name" required>
+                            <select id="editProductModelId" class="form-control" name="productModelId" required>
+                                <option value="">--- Pilih Model ---</option>
+                                @foreach($productModel as $productModel2)
+                                    <option value="{{$productModel2->id}}">{{$productModel2->name}}</option>
+                                @endforeach
+                            </select>
+
                             <input id="editId" type="hidden" name="id" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="color" class="col-md-4 control-label">Warna</label>
+
+                        <div class="col-md-6">
+                            <select id="editColor" class="form-control" name="color" required>
+                                <option value="">--- Pilih Warna ---</option>
+                                @foreach($color as $color2)
+                                    <option value="{{$color2->name}}">{{$color2->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -196,6 +234,7 @@
             ajax: '{{ route('config.product.get') }}',
             columns: [
                 { data: 'name', name: 'name' },
+                { data: 'color', name: 'color' },
                 { data: 'description', name: 'description' },
                 { data: 'price', name: 'price', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -204,7 +243,7 @@
                 },
                 { data: 'unit', name: 'unit' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        return '<a class="btn btn-success editBtn" id="edit_'+data+'" href="#modalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteBtn" id="delete_'+data+'" href="#modalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="name_'+data+'" value="'+full.name+'" /><input type="hidden" id="price_'+data+'" value="'+full.price+'" /><input type="hidden" id="unit_'+data+'" value="'+full.unit+'" /><input type="hidden" id="description_'+data+'" value="'+full.description+'" />';
+                        return '<a class="btn btn-success editBtn" id="edit_'+data+'" href="#modalEdit" data-toggle="modal"><span class="fa fa-pencil"></span></a> <a class="btn btn-danger deleteBtn" id="delete_'+data+'" href="#modalDelete" data-toggle="modal"><span class="fa fa-trash"></span></a></div><input type="hidden" id="name_'+data+'" value="'+full.name+'" /><input type="hidden" id="price_'+data+'" value="'+full.price+'" /><input type="hidden" id="unit_'+data+'" value="'+full.unit+'" /><input type="hidden" id="description_'+data+'" value="'+full.description+'" /><input type="hidden" id="modelId_'+data+'" value="'+full.model_id+'"><input type="hidden" id="color_'+data+'" value="'+full.color+'">';
                     }
                 }
             ],
@@ -227,7 +266,8 @@
             id = id.substring(5);
 
             $("#editId").val(id);
-            $("#editName").val($('#name_'+id).val());
+            $("#editProductModelId").val($('#modelId_'+id).val());
+            $("#editColor").val($('#color_'+id).val());
             $("#editDescription").val($('#description_'+id).val());
             $("#editPrice").val($('#price_'+id).val());
             $("#editPriceHidden").val($('#price_'+id).val());

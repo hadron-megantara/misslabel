@@ -103,24 +103,6 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="convertMaterialPrice" class="col-md-4 control-label">Harga</label>
-                            <div class="col-md-8">
-                                <input id="convertMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required placeholder="Masukkan Harga" required="">
-                                <input id="convertMaterialPriceHidden" type="hidden" name="materialPrice">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-6">
-                            <label for="convertMaterialLengthUsed" class="col-md-4 control-label">Panjang (digunakan)</label>
-                            <div class="col-md-8">
-                                <input id="convertMaterialLengthUsed" type="text" class="form-control" placeholder="Dalam yard" required="" />
-                                <input id="convertMaterialLengthUsedHidden" name="materialLength" type="hidden" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
                             <label for="convertMaterialTotal" class="col-md-4 control-label">Total Produk</label>
                             <div class="col-md-4">
                                 <input id="convertMaterialTotal" type="text" class="form-control number" name="materialTotalShow" required placeholder="Total">
@@ -137,31 +119,54 @@
 
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label for="convertMaterialProductName" class="col-md-4 control-label">Nama Produk</label>
+                            <label for="convertMaterialLengthUsed" class="col-md-4 control-label">Panjang (digunakan)</label>
                             <div class="col-md-8">
-                                <select id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required>
-                                    <option value="">--- Pilih Nama/Model Produk ---</option>
-                                    @foreach($productDetailList as $productDetailList2)
-                                        <option value="{{$productDetailList2->id}}">{{$productDetailList2->name}}</option>
-                                    @endforeach
-                                </select>
+                                <input id="convertMaterialLengthUsed" type="text" class="form-control" placeholder="Dalam yard" required="" />
+                                <input id="convertMaterialLengthUsedHidden" name="materialLength" type="hidden" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="convertMaterialProductName" class="col-md-4 control-label">Keterangan</label>
+                            <label for="convertMaterialPrice" class="col-md-4 control-label">Harga</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" name="description" id="convertMaterialProductDescription" required="" style="resize: none;" rows="3"></textarea>
+                                <input id="convertMaterialPrice" type="text" class="form-control number" name="materialPriceShow" required placeholder="Masukkan Harga" required="">
+                                <input id="convertMaterialPriceHidden" type="hidden" name="materialPrice">
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label for="convertMaterialDate" class="col-md-4 control-label">Tanggal</label>
+                            <label for="convertMaterialProductName" class="col-md-4 control-label">Nama Produk</label>
+                            <div class="col-md-8">
+                                <select id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required>
+                                    <option value="">--- Pilih Nama/Model Produk ---</option>
+                                    @foreach($productDetailList as $productDetailList2)
+                                        <option value="{{$productDetailList2->id}}">{{$productDetailList2->name}} - {{$productDetailList2->color}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="convertPaymentType" class="col-md-4 control-label">Tipe Bayar</label>
 
                             <div class="col-md-8">
-                                <input id="convertMaterialDate" type="text" class="form-control number" name="materialDate" placeholder="Masukkan Tanggal" required>
+                                <select class="form-control" id="convertPaymentType" name="paymentType" required="">
+                                    <option>--- Pilih Tipe Pembayaran ---</option>
+                                    @foreach($paymentTypeList as $paymentTypeList2)
+                                        <option value="{{$paymentTypeList2->id}}">{{$paymentTypeList2->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label for="convertMaterialProductName" class="col-md-4 control-label">Keterangan</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" name="description" id="convertMaterialProductDescription" required="" style="resize: none;" rows="3"></textarea>
                             </div>
                         </div>
 
@@ -177,6 +182,12 @@
                                     </label>
                                     <input type="text" id="convertMaterialNoteShow" class="form-control" readonly placeholder="Lampirkan nota" required="">
                                 </div>
+                            </div>
+
+                            <label for="convertMaterialDate" class="col-md-4 control-label" style="margin-top:10px">Tanggal</label>
+
+                            <div class="col-md-8" style="margin-top:10px">
+                                <input id="convertMaterialDate" type="text" class="form-control number" name="materialDate" placeholder="Masukkan Tanggal" required>
                             </div>
                         </div>
                     </div>

@@ -55,7 +55,8 @@
         		<thead>
         			<tr>
                         <th>Tanggal</th>
-        				<th>Nama Produk</th>
+        				<th>Nama Model</th>
+                        <th>Bahan</th>
                         <th>Keterangan</th>
                         <th>Biaya</th>
                         <th>Status</th>
@@ -208,38 +209,46 @@
         var t = $('#materialInTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('convection.getMaterialIn') }}'+'?convection={{$convection}}'+'&status='+{{$status}},
+            ajax: '{{ route('convection.note.get') }}'+'?convection={{$convection}}'+'&status='+{{$status}},
             columns: [
-                { data: 'material_type', name: 'material_type' },
-                { data: 'color', name: 'color' },
-
-                @if($status != 1)
-                    { data: 'length', name: 'length', render: function(data, type, full) {
-                            data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                            return data+' yard';
-                        }
-                    },
-
-                    { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                            var html = '';
-
-                            html = html+'<div class="text-center"><a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+data+'" value="'+full.convection_id+'" />';
-
-                            return html;
-                        }
+                { data: 'date', name: 'date', render: function(data, type, full){
+                        var year = data.substring(0,4);
+                        var month = data.substring(5,7);
+                        var date = data.substring(8,10);
+                        var dateTime = new Date(Date.UTC(year, month - 1, date));
+                        var options = {weekday: "long", year: "numeric", month: "long", day: "numeric"};
+                        data = dateTime.toLocaleString("in-ID", options);
+                        return data;
                     }
-                @else
-                    { data: 'length', name: 'length', render: function(data, type, full) {
-                            data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                            return data+' yard <input type="hidden" id="materialType_'+full.id+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+full.id+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+full.id+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+full.id+'" value="'+full.convection_id+'" />';
+                },
+                { data: 'model_name', name: 'model_name' },
+                { data: 'material_type', name: 'material_type' },
+                { data: 'description', name: 'description' },
+                { data: 'price', name: 'price', render: function(data, type, full) {
+                        data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                        return 'Rp '+data;
+                    } 
+                },
+                { data: 'status', name: 'status', render: function(data, type, full){
+                        var statusPaid = "Lunas";
+
+                        if(full.status == 0){
+                            statusPaid 
                         }
-                    },
-                @endif
+
+                        return statusPaid;
+                    }
+                },
+                { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
+                        return '<div class="text-center"><a href="/convection/note/download-note?id='+data+'" style="text-decoration: underline" target="_blank">download</a></div>';
+                    } 
+                },
             ],
             "oLanguage": {
                 "sProcessing": "Memproses...",
                 "sZeroRecords": "Tidak ada data untuk ditampilkan..."
             },
+            "order": [[ 1, "desc" ]]
         });
 
         $("#materialInTable").on("click", ".convertConvectionBtn", function(){

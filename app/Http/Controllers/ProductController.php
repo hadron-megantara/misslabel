@@ -9,6 +9,8 @@ use App\MaterialIn;
 use App\ConvectionList;
 use App\ConvectionMaterialIn;
 use App\Product;
+use App\ProductDetail;
+use App\ProductModel;
 use App\DeliveryNote;
 use Carbon\Carbon;
 

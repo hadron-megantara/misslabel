@@ -35,7 +35,7 @@ class ConvectionController extends Controller
         }
 
         $convectionList = ConvectionList::all();
-        $productDetailList = ProductDetail::all();
+        $productDetailList = ProductDetail::join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->selectRaw('product_models.name, product_details.id, product_details.color')->get();
 
         $convection = 0;
         if($request->has('convection') || session::has('convection')){
@@ -54,7 +54,9 @@ class ConvectionController extends Controller
             $status = $request->status;
         }
 
-        return view("convection.material-in", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection, 'status' => $status, 'productDetailList' => $productDetailList));
+        $paymentTypeList = PaymentType::all();
+
+        return view("convection.material-in", array('user' => $user, 'convectionList' => $convectionList, 'convection' => $convection, 'status' => $status, 'productDetailList' => $productDetailList, 'paymentTypeList' => $paymentTypeList));
     }
 
     public function getMaterialIn(Request $request){
@@ -101,6 +103,7 @@ class ConvectionController extends Controller
         $convectionList->description = $request->convectionListDescription;
 
         $convectionList->save();
+        
 
         return redirect('/convection/list');
     }
@@ -148,6 +151,7 @@ class ConvectionController extends Controller
         $convectionProduct->description  = $request->description;
         $convectionProduct->price = $request->materialPrice;
         $convectionProduct->date = $request->materialDate;
+        $convectionProduct->payment_type_id = $request->paymentType;
 
         if($request->hasFile('materialNote'))
         {
@@ -430,12 +434,19 @@ class ConvectionController extends Controller
         }
 
         if(!$request->has('convection') || $request->convection == '' || $request->convection == 0){
-            $note = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->join('convection_products', 'products.id', '=', 'convection_products.product_id')->selectRaw('product_details.id as id, ')->where('convection_products.convection_id', $request->convection)->where('convection_products.status', $status)->orderBy('product_details.updated_at')->get();
+            $note = ConvectionProduct::join('products', 'convection_products.product_id', '=', 'products.id')->join('product_details', 'products.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('convection_lists', 'convection_products.convection_id', '=', 'convection_lists.id')->selectRaw('convection_products.date, convection_products.id, convection_products.description, convection_products.price, convection_products.file_path, convection_lists.name as convection_name, product_models.name as model_name, products.material_type')->orderBy('convection_products.date', 'desc')->get();
         } else{
-            $note = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->join('convection_products', 'products.id', '=', 'convection_products.product_id')->selectRaw('product_details.id as id, ')->where('convection_products.status', $status)->orderBy('product_details.updated_at')->get();
+            $note = ConvectionProduct::join('products', 'convection_products.product_id', '=', 'products.id')->join('product_details', 'products.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('convection_lists', 'convection_products.convection_id', '=', 'convection_lists.id')->selectRaw('convection_products.date, convection_products.description, convection_products.id, convection_products.description, convection_products.price, convection_products.file_path, convection_lists.name as convection_name, product_models.name as model_name, products.material_type')->orderBy('convection_products.date', 'desc')->get();
         }
         
-        return Datatables::of($convectionMaterialIn)->make();
+        return Datatables::of($note)->make();
+    }
+
+    public function downloadNote(Request $request){
+        if($request->has('id')){
+            $file = ConvectionProduct::find($request->id);
+            return response()->download(storage_path("app/".$file->file_path));
+        }
     }
 
 }

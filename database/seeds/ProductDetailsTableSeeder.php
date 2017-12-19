@@ -13,7 +13,8 @@ class ProductDetailsTableSeeder extends Seeder
     public function run()
     {
         $productDetail = new ProductDetail();
-	    $productDetail->name = 'Atayya Khimar';
+	    $productDetail->product_model_id = '1';
+        $productDetail->color = 'Atayya Khimar';
         $productDetail->description = 'Detail model Atayya';
         $productDetail->price = '80000';
         $productDetail->unit = 'pcs';
