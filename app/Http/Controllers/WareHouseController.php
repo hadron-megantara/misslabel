@@ -54,9 +54,9 @@ class WareHouseController extends Controller
 
     public function getStock(Request $request){
         if($request->has('warehouse') && $request->warehouse != 0){
-            $product = WarehouseStock::join('product_details', 'warehouse_stocks.product_detail_id', '=', 'product_details.id')->select(['product_details.id', 'product_details.name', 'warehouse_stocks.material_type', 'warehouse_stocks.color', 'product_details.description', 'warehouse_stocks.total'])->where('warehouse_stocks.warehouse_id', $request->warehouse)->where('warehouse_stocks.total', '>', 0)->orderBy('warehouse_stocks.updated_at', 'desc')->get();
+            $product = WarehouseStock::join('product_details', 'warehouse_stocks.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('colors', 'product_details.color_id', '=', 'colors.id')->selectRaw('product_details.id, product_models.name, warehouse_stocks.material_type, colors.name as color, colors.id as color_id, product_details.description, warehouse_stocks.total')->where('warehouse_stocks.warehouse_id', $request->warehouse)->where('warehouse_stocks.total', '>', 0)->orderBy('warehouse_stocks.updated_at', 'desc')->get();
         } else{
-            $product = WarehouseStock::join('product_details', 'warehouse_stocks.product_detail_id', '=', 'product_details.id')->select(['product_details.id', 'product_details.name', 'warehouse_stocks.material_type', 'warehouse_stocks.color', 'product_details.description', 'warehouse_stocks.total'])->where('warehouse_stocks.total', '>', 0)->orderBy('warehouse_stocks.updated_at', 'desc')->get();
+            $product = WarehouseStock::join('product_details', 'warehouse_stocks.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('colors', 'product_details.color_id', '=', 'colors.id')->select(['product_details.id', 'product_models.name', 'warehouse_stocks.material_type', 'colors.name', 'product_details.description', 'warehouse_stocks.total'])->where('warehouse_stocks.total', '>', 0)->orderBy('warehouse_stocks.updated_at', 'desc')->get();
         }
 
         return Datatables::of($product)->make();

@@ -21,7 +21,7 @@
                 @foreach($convectionList as $convectionList)
                     <option value="{{$convectionList->id}}" @if($convection == $convectionList->id) selected="" @endif>{{$convectionList->name}}</option>
                 @endforeach
-                <option value="" @if($convection == 0) selected="" @endif >Semua Konveksi</option>
+                {{-- <option value="" @if($convection == 0) selected="" @endif >Semua Konveksi</option> --}}
             </select>
 
             <select id="searchMaterialUsed" name="searchMaterialUsed">
@@ -142,7 +142,7 @@
                                 <select id="convertMaterialProductName" type="text" class="form-control" name="materialProductName" required>
                                     <option value="">--- Pilih Nama/Model Produk ---</option>
                                     @foreach($productDetailList as $productDetailList2)
-                                        <option value="{{$productDetailList2->id}}">{{$productDetailList2->name}} - {{$productDetailList2->color}}</option>
+                                        <option value="{{$productDetailList2->id}}" class="color_{{$productDetailList2->color_id}}">{{$productDetailList2->name}} - {{$productDetailList2->color}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -164,7 +164,7 @@
 
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label for="convertMaterialProductName" class="col-md-4 control-label">Keterangan</label>
+                            <label for="convertMaterialProductDescription" class="col-md-4 control-label">Keterangan</label>
                             <div class="col-md-8">
                                 <textarea class="form-control" name="description" id="convertMaterialProductDescription" required="" style="resize: none;" rows="3"></textarea>
                             </div>
@@ -226,7 +226,7 @@
                     { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
                             var html = '';
 
-                            html = html+'<div class="text-center"><a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+data+'" value="'+full.convection_id+'" />';
+                            html = html+'<div class="text-center"><a class="btn btn-primary convertConvectionBtn" id="convert_'+data+'" href="#materialModalConvert" data-toggle="modal" title="Konversi ke Produk"><span class="fa fa-sign-out"></span></a></div><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialColorId_'+full.id+'" value="'+full.color_id+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+data+'" value="'+full.convection_id+'" />';
 
                             return html;
                         }
@@ -234,7 +234,7 @@
                 @else
                     { data: 'length', name: 'length', render: function(data, type, full) {
                             data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                            return data+' yard <input type="hidden" id="materialType_'+full.id+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+full.id+'" value="'+full.color+'" /><input type="hidden" id="materialLength_'+full.id+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+full.id+'" value="'+full.convection_id+'" />';
+                            return data+' yard <input type="hidden" id="materialType_'+full.id+'" value="'+full.material_type+'" /><input type="hidden" id="materialColor_'+full.id+'" value="'+full.color+'" /><input type="hidden" id="materialColorId_'+full.id+'" value="'+full.color_id+'" /><input type="hidden" id="materialLength_'+full.id+'" value="'+full.length+'" /><input type="hidden" id="materialConvectionId_'+full.id+'" value="'+full.convection_id+'" />';
                         }
                     },
                 @endif
@@ -253,7 +253,7 @@
             $("#convertMaterialType").val($('#materialType_'+id).val());
             $("#convertMaterialColor").val($('#materialColor_'+id).val());
             $("#convertMaterialTypeHidden").val($('#materialType_'+id).val());
-            $("#convertMaterialColorHidden").val($('#materialColor_'+id).val());
+            $("#convertMaterialColorHidden").val($('#materialColorId_'+id).val());
             $("#convertMaterialLengthHidden").val($('#materialLength_'+id).val());
             $("#convertMaterialConvectionIdHidden").val($('#materialConvectionId_'+id).val());
             $('#convertMaterialDate').val('');
@@ -261,6 +261,13 @@
             var length = $('#materialLength_'+id).val();
             length = length.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             $("#convertMaterialLength").val(length);
+
+            $("#convertMaterialProductName > option").each(function() {
+                if($(this).attr('class') != 'color_'+$('#materialColorId_'+id).val() && $(this).attr('value') != ''){
+                    $(this).hide();
+                }
+            });
+            
         });
 
         $('#convertMaterialLengthUsed').keyup(function(){

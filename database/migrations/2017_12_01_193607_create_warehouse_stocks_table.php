@@ -18,7 +18,7 @@ class CreateWarehouseStocksTable extends Migration
             $table->integer('warehouse_id');
             $table->integer('product_detail_id');
             $table->string('material_type');
-            $table->string('color');
+            $table->integer('color_id');
             $table->integer('total');
             $table->timestamps();
         });

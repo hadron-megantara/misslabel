@@ -18,7 +18,7 @@ class CreateConvectionMaterialInTable extends Migration
             $table->char('status')->default('0');
             $table->string('description')->nullable();
             $table->string('material_type');
-            $table->string('color');
+            $table->integer('color_id');
             $table->integer('length');
             $table->integer('convection_id');
             $table->timestamps();

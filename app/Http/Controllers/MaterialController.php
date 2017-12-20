@@ -66,17 +66,15 @@ class MaterialController extends Controller
             $dateTo = $request->dateTo;
         }
 
-        $materialTransaction = MaterialTransaction::join('sellers', 'material_transactions.seller_id', '=', 'sellers.id')->select(['material_transactions.id', 'material_transactions.seller_id', 'sellers.name', 'material_transactions.description', 'material_transactions.price', 'material_transactions.date_purchase'])->orderBy('material_transactions.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
-
         if($request->has('status')){
             if($request->status != 2){
                 $status = $request->status;
-                $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->select(['materials.id', 'materials.material_type', 'materials.length', 'materials.color', 'materials.price', 'materials.status', 'material_transactions.date_purchase'])->orderBy('materials.updated_at', 'desc')->where('materials.status', $request->status)->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+                $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->join('colors', 'materials.color_id', '=', 'colors.id')->selectRaw('materials.id, materials.material_type, materials.length, colors.name as color, colors.id as color_id, materials.price, materials.status, material_transactions.date_purchase')->orderBy('materials.updated_at', 'desc')->where('materials.status', $request->status)->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
             } else{
-                $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->select(['materials.id', 'materials.material_type', 'materials.length', 'materials.color', 'materials.price', 'materials.status', 'material_transactions.date_purchase'])->orderBy('materials.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+                $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->join('colors', 'materials.color_id', '=', 'colors.id')->selectRaw('materials.id, materials.material_type, materials.length, materials.color, materials.price, materials.status, material_transactions.date_purchase, colors.name as color, colors.id as color_id')->orderBy('materials.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
             }
         } else{
-            $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->select(['materials.id', 'materials.material_type', 'materials.length', 'materials.color', 'materials.price', 'materials.status', 'material_transactions.date_purchase'])->orderBy('materials.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
+            $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->join('colors', 'materials.color_id', '=', 'colors.id')->selectRaw('materials.id, materials.material_type, materials.length, materials.color, materials.price, materials.status, material_transactions.date_purchase, colors.name as color, colors.id as color_id')->orderBy('materials.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
         }
      
         return Datatables::of($material)->make();
@@ -128,12 +126,12 @@ class MaterialController extends Controller
         $material->date_convection = date('Y-m-d');
         $material->save();
 
-        $materialIn = MaterialIn::where('material_type', $request->materialType)->where('color', $request->materialColor)->where('convection_id', $request->convectionId)->first();
+        $materialIn = MaterialIn::where('material_type', $request->materialType)->where('color_id', $request->materialColor)->where('convection_id', $request->convectionId)->first();
 
         if($materialIn == null){
             $materialIn = new MaterialIn;
             $materialIn->material_type = $request->materialType;
-            $materialIn->color = $request->materialColor;
+            $materialIn->color_id = $request->materialColor;
             $materialIn->length = $request->materialLength;
             $materialIn->convection_id = $request->convectionId;
         } else{
@@ -279,7 +277,7 @@ class MaterialController extends Controller
             $material->transaction_id = $materialTransaction->id;
             $material->material_type = $request->materialName[$i];
             $material->length = $request->materialLength[$i];
-            $material->color = $request->materialColor[$i];
+            $material->color_id = $request->materialColor[$i];
             $material->price = $request->materialPrice[$i];
             $material->save();
 

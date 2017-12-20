@@ -76,7 +76,7 @@
                             <select id="color" class="form-control" name="color" required>
                                 <option value="">--- Pilih Warna ---</option>
                                 @foreach($color as $color2)
-                                    <option value="{{$color2->name}}">{{$color2->name}}</option>
+                                    <option value="{{$color2->id}}">{{$color2->name}}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -248,7 +248,7 @@
                 "sProcessing": "Memproses...",
                 "sZeroRecords": "Tidak ada data untuk ditampilkan..."
             },
-            "order": [[ 1, "desc" ]]
+            "order": [[ 0, "desc" ]]
         });
 
         $("#materialInTable").on("click", ".convertConvectionBtn", function(){

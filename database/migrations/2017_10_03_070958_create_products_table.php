@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->integer('product_detail_id');
             $table->string('material_type');
-            $table->string('color');
+            $table->integer('color_id');
             $table->integer('length');
             $table->integer('total');
             $table->string('unit');

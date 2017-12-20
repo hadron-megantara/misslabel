@@ -114,13 +114,13 @@ class ConfigController extends Controller
 
         $seller = Seller::get();
         $productModel = ProductModel::all();
-        $color = Color::all();
+        $color = Color::orderBy('name', 'asc')->get();
 
         return view("config.product", array('user' => $user, 'seller' => $seller, 'productModel' => $productModel, 'color' => $color));
     }
 
     public function getProduct(Request $request){
-        $product = ProductDetail::join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->selectRaw('product_details.id, product_models.name, product_details.color, product_details.description, product_details.price, product_details.unit, product_models.id as model_id')->orderBy('product_details.updated_at', 'desc')->get();
+        $product = ProductDetail::join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('colors', 'product_details.color_id', '=', 'colors.id')->selectRaw('product_details.id, product_models.name, colors.name as color, product_details.description, product_details.price, product_details.unit, product_models.id as model_id')->orderBy('product_details.updated_at', 'desc')->get();
      
         return Datatables::of($product)->make();
     }
@@ -129,7 +129,7 @@ class ConfigController extends Controller
         $product = new ProductDetail;
 
         $product->product_model_id = $request->productModelId;
-        $product->color = $request->color;
+        $product->color_id = $request->color;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->unit = $request->unit;
@@ -143,7 +143,7 @@ class ConfigController extends Controller
         $product = ProductDetail::find($request->id);
         
         $product->product_model_id = $request->productModelId;
-        $product->color = $request->color;
+        $product->color_id = $request->color;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->unit = $request->unit;

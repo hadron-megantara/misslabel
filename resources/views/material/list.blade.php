@@ -198,7 +198,7 @@
                     }
                 },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
-                        var dataReturn = '<div class="text-center"><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
+                        var dataReturn = '<div class="text-center"><input type="hidden" id="materialType_'+data+'" value="'+full.material_type+'" /><input type="hidden" id="materialLength_'+data+'" value="'+full.length+'" /><input type="hidden" id="materialColor_'+data+'" value="'+full.color+'" /><input type="hidden" id="materialColorId_'+data+'" value="'+full.color_id+'" /><input type="hidden" id="materialPrice_'+data+'" value="'+full.price+'" /><input type="hidden" id="materialDatePurchase_'+data+'" value="'+full.date_purchase+'" />';
 
                         if(full.status == 0){
                             dataReturn = dataReturn + ' <a class="btn btn-primary sendMaterialBtn" id="send_'+data+'" href="#materialModalSend" data-toggle="modal" title="Kirim ke Konveksi"><span class="fa fa-sign-out"></span></a>';
@@ -233,7 +233,7 @@
             $("#sendMaterialLength").val(length+' yard');
 
             $("#sendMaterialColor").val($('#materialColor_'+id).val());
-            $("#sendMaterialColorHidden").val($('#materialColor_'+id).val());
+            $("#sendMaterialColorHidden").val($('#materialColorId_'+id).val());
 
             var price = $('#materialPrice_'+id).val();
             price = 'Rp '+price.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
