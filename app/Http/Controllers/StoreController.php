@@ -62,9 +62,9 @@ class StoreController extends Controller
 
     public function getStock(Request $request){
         if($request->has('store') && $request->store != ''){
-            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->selectRaw('store_stocks.id, product_details.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, store_stocks.color, store_stocks.total_product')->where('store_stocks.store_id', $request->store)->where('store_stocks.total_product', '>', '0')->orderBy('product_details.name', 'asc')->get();
+            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('colors', 'store_stocks.color_id', '=', 'colors.id')->selectRaw('store_stocks.id, product_models.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, colors.name as color, store_stocks.total_product')->where('store_stocks.store_id', $request->store)->where('store_stocks.total_product', '>', '0')->orderBy('product_models.name', 'asc')->get();
         } else{
-            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->selectRaw('product_details.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, store_stocks.color, store_stocks.total_product')->where('store_stocks.total_product', '>', '0')->orderBy('product_details.name', 'asc')->get();
+            $product = StoreStock::join('product_details', 'store_stocks.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('colors', 'store_stocks.color_id', '=', 'colors.id')->selectRaw('product_models.name, product_details.description, product_details.price, product_details.unit, store_stocks.material_type, colors.name as color, store_stocks.total_product')->where('store_stocks.total_product', '>', '0')->orderBy('product_models.name', 'asc')->get();
         }
 
         return Datatables::of($product)->make();
@@ -150,13 +150,13 @@ class StoreController extends Controller
 
     public function getIncomingProduct(Request $request){
         if(($request->has('store') && $request->store != 0) && ($request->has('warehouse') && $request->warehouse != 0)){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouse_stores.store_id', $request->store)->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_models.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouse_stores.store_id', $request->store)->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         } else if($request->has('store') && $request->store != 0){
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouse_stores.store_id', $request->store)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_models.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouse_stores.store_id', $request->store)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         } else if($request->has('warehouse') && $request->warehouse != 0){
             $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('warehouses.id', $request->warehouse)->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         } else{
-            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_details.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
+            $product = StoreIn::join('product_details', 'store_in.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('warehouse_stores', 'store_in.warehouse_store_id', '=', 'warehouse_stores.id')->join('warehouses', 'warehouse_stores.warehouse_id', '=', 'warehouses.id')->join('stores', 'warehouse_stores.store_id', '=', 'stores.id')->selectRaw('warehouses.name as warehouse_name, store_in.id, product_models.name, warehouse_stores.description, warehouse_stores.date_delivery, store_in.total_product, stores.name as store_name')->where('store_in.status', 0)->orderBy('warehouse_stores.date_delivery', 'desc')->get();
         }
 
         return Datatables::of($product)->make();
@@ -172,14 +172,14 @@ class StoreController extends Controller
 
                 $warehouseStore = WarehouseStore::find($storeIn->warehouse_store_id);
 
-                $storeStock = StoreStock::where('store_id', $warehouseStore->store_id)->where('product_detail_id', $storeIn->product_detail_id)->where('material_type', $storeIn->material_type)->where('color', $storeIn->color)->first();
+                $storeStock = StoreStock::where('store_id', $warehouseStore->store_id)->where('product_detail_id', $storeIn->product_detail_id)->where('material_type', $storeIn->material_type)->where('color_Id', $storeIn->color_id)->first();
 
                 if($storeStock == null){
                     $storeStock = new StoreStock;
                     $storeStock->product_detail_id = $storeIn->product_detail_id;
                     $storeStock->store_id = $warehouseStore->store_id;
                     $storeStock->material_type = $storeIn->material_type;
-                    $storeStock->color = $storeIn->color;
+                    $storeStock->color_id = $storeIn->color_id;
                     $storeStock->total_product = $storeIn->total_product;
                 } else{
                     $storeStock->total_product = (int) $storeStock->total_product + (int) $storeIn->total_product;

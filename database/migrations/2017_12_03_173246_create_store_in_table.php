@@ -19,7 +19,7 @@ class CreateStoreInTable extends Migration
             $table->integer('warehouse_store_id');
             $table->integer('total_product');
             $table->string('material_type');
-            $table->string('color');
+            $table->integer('color_id');
             $table->char('status')->default(0);
             $table->timestamps();
         });

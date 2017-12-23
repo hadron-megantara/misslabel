@@ -187,7 +187,7 @@ class WareHouseController extends Controller
                 $storeIn->warehouse_store_id = $warehouseStore->id;
                 $storeIn->total_product = $request->productTotal[$i];
                 $storeIn->material_type = $warehouseStock->material_type;
-                $storeIn->color = $warehouseStock->color;
+                $storeIn->color_id= $warehouseStock->color_id;
                 $storeIn->status = 0;
                 $storeIn->save();
             }

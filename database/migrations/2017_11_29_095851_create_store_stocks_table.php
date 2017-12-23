@@ -18,7 +18,7 @@ class CreateStoreStocksTable extends Migration
             $table->integer('store_id');
             $table->integer('product_detail_id');
             $table->string('material_type');
-            $table->string('color');
+            $table->integer('color_id');
             $table->integer('total_product');
             $table->timestamps();
         });
