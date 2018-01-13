@@ -6,8 +6,10 @@
     <div class="content">
         <div class="page-title">
             <h3>Report - Penjualan Bulanan</h3>
+        </div>
 
-            <div class="pull-right" style="margin-top: 5px">
+        <div class="col-md-12" style="margin-top: -20px;margin-bottom: 10px;padding-right: 0px">
+        	<div class="pull-right" style="margin-top: 5px">
                 <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
                     <span class="fa fa-print"> </span>Print
                 </a>
@@ -20,9 +22,9 @@
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
         	<div class="col-md-3">
-	            <label style="font-weight: bold; margin-right: 10px">Filter Toko</label>
+		        <label style="font-weight: bold; margin-right: 10px">Filter Toko</label>
 
-	            <select id="searchMaterialBy" name="searchMaterialBy" class="pull-right">
+		        <select id="searchMaterialBy" name="searchMaterialBy" class="pull-right">
 	                @foreach($storeList as $storeList2)
 	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
 	                @endforeach
