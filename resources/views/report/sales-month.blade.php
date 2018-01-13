@@ -22,8 +22,6 @@
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
         	<div class="col-md-3">
-		        <label style="font-weight: bold; margin-right: 10px">Filter Toko</label>
-
 		        <select id="searchMaterialBy" name="searchMaterialBy" class="pull-right">
 	                @foreach($storeList as $storeList2)
 	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
@@ -33,8 +31,6 @@
 	        </div>
 
 	        <div class="col-md-3">
-	            <label style="font-weight: bold;">Filter Pembayaran</label>
-
 	            <select id="searchMaterialByPaymentType" name="searchMaterialByPaymentType" class="pull-right">
 	                @foreach($paymentType as $paymentType2)
 	                    <option value="{{$paymentType2->id}}" @if($payment == $paymentType2->id) selected="" @endif>{{$paymentType2->name}}</option>
@@ -44,8 +40,6 @@
 	        </div>
 
 	        <div class="col-md-3">
-	            <label style="font-weight: bold; margin-right: 10px">Filter Tahun</label>
-
 	            <select id="searchMaterialByYear" name="searchMaterialByYear" class="pull-right">
 	                @foreach($yearList as $yearList2)
 	                    <option value="{{$yearList2}}" @if($year == $yearList2) selected="" @endif>{{$yearList2}}</option>
@@ -54,7 +48,7 @@
 	        </div>
 
             <div class="col-md-3">
-            	<button type="button" id="filterProcess" class="btn btn-primary" style="width: 100%;margin-top:15px"><span class="fa fa-search"> </span>Cari</button>
+            	<button type="button" id="filterProcess" class="btn btn-primary" style="width: 100%;"><span class="fa fa-search"> </span>Cari</button>
             </div>
         </div>
 
