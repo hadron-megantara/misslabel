@@ -20,6 +20,8 @@
             </div>
         </div>
 
+        <div class="row"></div>
+
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
         	<div class="col-md-3">
 		        <label style="font-weight: bold; margin-right: 10px">Filter Toko</label>
