@@ -8,16 +8,14 @@
             <h3>Report - Penjualan Bulanan</h3>
         </div>
 
-        <div class="col-md-12" style="margin-top: -20px;margin-bottom: 10px;padding-right: 0px">
-        	<div class="pull-right" style="margin-top: 5px">
-                <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
-                    <span class="fa fa-print"> </span>Print
-                </a>
+        <div class="col-md-12" style="margin-top: -20px;margin-bottom: 10px;padding-right: 0px;text-align: right;">
+            <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
+                <span class="fa fa-print"> </span>Print
+            </a>
 
-                <a href="#materialModalExport" class="btn btn-danger" data-toggle="modal">
-                    <span class="fa fa-cloud-download"> </span>Download
-                </a>
-            </div>
+            <a href="#materialModalExport" class="btn btn-danger" data-toggle="modal">
+                <span class="fa fa-cloud-download"> </span>Download
+            </a>
         </div>
 
         <div class="row"></div>
