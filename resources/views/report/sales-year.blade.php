@@ -42,14 +42,14 @@
 	        </div>
 
 	        <div class="col-md-3">
-	            <span style="font-weight: bold; margin-right: 10px">Filter Toko</span>
+	            {{-- <span style="font-weight: bold; margin-right: 10px">Filter Toko</span>
 
 	            <select id="searchMaterialBy" name="searchMaterialBy">
 	                @foreach($storeList as $storeList2)
 	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
 	                @endforeach
 	                <option value="" @if($store == 0) selected="" @endif >Semua Toko</option>
-	            </select>
+	            </select> --}}
 	        </div>
 
             <div class="col-md-3">

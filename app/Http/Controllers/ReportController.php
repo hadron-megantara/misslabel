@@ -142,13 +142,13 @@ class ReportController extends Controller
         }
 
         if($store != 0 && $payment != 0){
-            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('store_id', $store)->where('payment_type_id', $payment)->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('store_id', $store)->where('payment_type_id', $payment)->whereYear('date', '=', $year)->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
         } else if($store != 0 && $payment == 0){
-            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('store_id', $store)->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('store_id', $store)->whereYear('date', '=', $year)->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
         } else if($store == 0 && $payment != 0){
-            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('payment_type_id', $payment)->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->where('payment_type_id', $payment)->whereYear('date', '=', $year)->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
         } else{
-            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->whereYear('date', '=', date('Y'))->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
+            $transactionData = StoreTransaction::selectRaw('MONTHNAME(date) as month, SUM(final_price) AS value')->whereYear('date', '=', $year)->orderBy('date')->groupBy(DB::raw("MONTHNAME(date)"))->get();
         }
 
         if(count($transactionData) > 0){

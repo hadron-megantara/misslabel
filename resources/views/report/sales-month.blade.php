@@ -46,7 +46,7 @@
 
 	            <select id="searchMaterialByYear" name="searchMaterialByYear">
 	                @foreach($yearList as $yearList2)
-	                    <option value="{{$yearList2}}" @if($store == $yearList2) selected="" @endif>{{$yearList2}}</option>
+	                    <option value="{{$yearList2}}" @if($year == $yearList2) selected="" @endif>{{$yearList2}}</option>
 	                @endforeach
 	            </select>
 	        </div>
