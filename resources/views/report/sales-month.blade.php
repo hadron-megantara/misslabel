@@ -22,7 +22,7 @@
         	<div class="col-md-3">
 	            <span style="font-weight: bold; margin-right: 10px">Filter Toko</span>
 
-	            <select id="searchMaterialBy" name="searchMaterialBy">
+	            <select id="searchMaterialBy" name="searchMaterialBy" class="pull-right">
 	                @foreach($storeList as $storeList2)
 	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
 	                @endforeach
@@ -33,7 +33,7 @@
 	        <div class="col-md-3">
 	            <span style="font-weight: bold;">Filter Pembayaran</span>
 
-	            <select id="searchMaterialByPaymentType" name="searchMaterialByPaymentType">
+	            <select id="searchMaterialByPaymentType" name="searchMaterialByPaymentType" class="pull-right">
 	                @foreach($paymentType as $paymentType2)
 	                    <option value="{{$paymentType2->id}}" @if($payment == $paymentType2->id) selected="" @endif>{{$paymentType2->name}}</option>
 	                @endforeach
@@ -44,7 +44,7 @@
 	        <div class="col-md-3">
 	            <span style="font-weight: bold; margin-right: 10px">Filter Tahun</span>
 
-	            <select id="searchMaterialByYear" name="searchMaterialByYear">
+	            <select id="searchMaterialByYear" name="searchMaterialByYear" class="pull-right">
 	                @foreach($yearList as $yearList2)
 	                    <option value="{{$yearList2}}" @if($year == $yearList2) selected="" @endif>{{$yearList2}}</option>
 	                @endforeach
