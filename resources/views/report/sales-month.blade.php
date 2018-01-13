@@ -42,7 +42,7 @@
             </select>
 
             <div class="col-md-3">
-            	<button type="button" id="filterProcess" class="btn btn-primary" style="width: 100%;"><span class="fa fa-search"> </span>Cari</button>
+            	<button type="button" id="filterProcess" class="btn btn-primary form-control" style="width: 100%;"><span class="fa fa-search"> </span>Cari</button>
             </div>
         </div>
 
