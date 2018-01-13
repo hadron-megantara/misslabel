@@ -8,7 +8,7 @@
             <h3>Report - Penjualan Bulanan</h3>
         </div>
 
-        <div class="col-md-12" style="margin-top: -20px;margin-bottom: 10px;padding-right: 0px;text-align: right;">
+        <div class="col-md-12" style="margin-top: -15px;margin-bottom: 10px;padding-right: 0px;text-align: right;">
             <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
                 <span class="fa fa-print"> </span>Print
             </a>
