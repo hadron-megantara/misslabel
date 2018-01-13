@@ -20,7 +20,7 @@
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
         	<div class="col-md-3">
-	            <span style="font-weight: bold; margin-right: 10px">Filter Toko</span>
+	            <label style="font-weight: bold; margin-right: 10px">Filter Toko</label>
 
 	            <select id="searchMaterialBy" name="searchMaterialBy" class="pull-right">
 	                @foreach($storeList as $storeList2)
@@ -31,7 +31,7 @@
 	        </div>
 
 	        <div class="col-md-3">
-	            <span style="font-weight: bold;">Filter Pembayaran</span>
+	            <label style="font-weight: bold;">Filter Pembayaran</label>
 
 	            <select id="searchMaterialByPaymentType" name="searchMaterialByPaymentType" class="pull-right">
 	                @foreach($paymentType as $paymentType2)
@@ -42,7 +42,7 @@
 	        </div>
 
 	        <div class="col-md-3">
-	            <span style="font-weight: bold; margin-right: 10px">Filter Tahun</span>
+	            <label style="font-weight: bold; margin-right: 10px">Filter Tahun</label>
 
 	            <select id="searchMaterialByYear" name="searchMaterialByYear" class="pull-right">
 	                @foreach($yearList as $yearList2)
