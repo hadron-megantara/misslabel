@@ -21,31 +21,25 @@
         <div class="row"></div>
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
-        	<div class="col-md-3">
-		        <select id="searchMaterialBy" name="searchMaterialBy" class="pull-right">
-	                @foreach($storeList as $storeList2)
-	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
-	                @endforeach
-	                <option value="0" @if($store == 0) selected="" @endif >Semua Toko</option>
-	            </select>
-	        </div>
+	        <select id="searchMaterialBy" name="searchMaterialBy" class="col-md-3 form-control">
+                @foreach($storeList as $storeList2)
+                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
+                @endforeach
+                <option value="0" @if($store == 0) selected="" @endif >Semua Toko</option>
+            </select>
 
-	        <div class="col-md-3">
-	            <select id="searchMaterialByPaymentType" name="searchMaterialByPaymentType" class="pull-right">
-	                @foreach($paymentType as $paymentType2)
-	                    <option value="{{$paymentType2->id}}" @if($payment == $paymentType2->id) selected="" @endif>{{$paymentType2->name}}</option>
-	                @endforeach
-	                <option value="0" @if($payment == 0) selected="" @endif >Semua Tipe Pembayaran</option>
-	            </select>
-	        </div>
+            <select id="searchMaterialByPaymentType" name="searchMaterialByPaymentType" class="col-md-3 form-control">
+                @foreach($paymentType as $paymentType2)
+                    <option value="{{$paymentType2->id}}" @if($payment == $paymentType2->id) selected="" @endif>{{$paymentType2->name}}</option>
+                @endforeach
+                <option value="0" @if($payment == 0) selected="" @endif >Semua Tipe Pembayaran</option>
+            </select>
 
-	        <div class="col-md-3">
-	            <select id="searchMaterialByYear" name="searchMaterialByYear" class="pull-right">
-	                @foreach($yearList as $yearList2)
-	                    <option value="{{$yearList2}}" @if($year == $yearList2) selected="" @endif>{{$yearList2}}</option>
-	                @endforeach
-	            </select>
-	        </div>
+            <select id="searchMaterialByYear" name="searchMaterialByYear" class="col-md-3 form-control">
+                @foreach($yearList as $yearList2)
+                    <option value="{{$yearList2}}" @if($year == $yearList2) selected="" @endif>{{$yearList2}}</option>
+                @endforeach
+            </select>
 
             <div class="col-md-3">
             	<button type="button" id="filterProcess" class="btn btn-primary" style="width: 100%;"><span class="fa fa-search"> </span>Cari</button>
