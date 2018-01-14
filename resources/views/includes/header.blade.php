@@ -126,10 +126,11 @@
                       <ul class="sub-menu" @if(\Request::is('report') || \Request::is('report/*')) style="display: block;" @endif>
                           <li @if(\Request::is('report/sales-month') || \Request::is('report/sales-month/*')) class="active" @endif><a href="/report/sales-month">Penjualan - Bulanan</a></li>
                           <li @if(\Request::is('report/sales-year') || \Request::is('report/sales-year/*')) class="active" @endif><a href="/report/sales-year">Penjualan - Tahunan</a></li>
-                          <li @if(\Request::is('report/turn-over') || \Request::is('report/turn-over/*')) class="active" @endif><a href="/report/turn-over">Omset</a></li>
-                          <li @if(\Request::is('report/customer') || \Request::is('report/customer/*')) class="active" @endif><a href="/report/customer">Langganan</a></li>
-                          <li @if(\Request::is('report/transaction') || \Request::is('report/transaction/*')) class="active" @endif><a href="/report/transaction">Nota Penjualan</a></li>
-                          <li @if(\Request::is('report/delivery-order') || \Request::is('report/delivery-order/*')) class="active" @endif><a href="/report/delivery-order">Surat Jalan</a></li>
+                          {{-- <li @if(\Request::is('report/turn-over-month') || \Request::is('report/turn-over-month/*')) class="active" @endif><a href="/report/turn-over-month">Omset - Bulanan</a></li>
+                          <li @if(\Request::is('report/turn-over-year') || \Request::is('report/turn-over-year/*')) class="active" @endif><a href="/report/turn-over-year">Omset - Tahunan</a></li> --}}
+                          {{-- <li @if(\Request::is('report/customer') || \Request::is('report/customer/*')) class="active" @endif><a href="/report/customer">Langganan</a></li>
+                          <li @if(\Request::is('report/transaction') || \Request::is('report/transaction/*')) class="active" @endif><a href="/report/transaction">Nota Penjualan</a></li> --}}
+                          {{-- <li @if(\Request::is('report/delivery-order') || \Request::is('report/delivery-order/*')) class="active" @endif><a href="/report/delivery-order">Surat Jalan</a></li> --}}
                           <li @if(\Request::is('report/attendance') || \Request::is('report/attendance/*')) class="active" @endif><a href="/report/attendance">Absensi</a></li>
                       </ul>
                   </li>

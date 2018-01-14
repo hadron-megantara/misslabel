@@ -6,10 +6,15 @@
     <div class="content">
         <div class="page-title">
             <h3>Konveksi - List Konveksi</h3>
-            <div class="pull-right" style="margin-top: 5px">
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
+            <div class="pull-right">
                 <a href="#convectionListModalAdd" class="btn btn-success btnAddConvectionList" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Konveksi</a>
             </div>
         </div>
+
+        <div class="row"></div>
 
         <div class="table-responsive">
         	<table id="convectionListTable" class="table-bordered">

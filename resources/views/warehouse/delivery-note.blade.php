@@ -10,7 +10,10 @@
     <div class="content">
         <div class="page-title">
             <h3>Nota Barang Masuk</h3>
-            <div class="pull-right" style="margin-top: 5px">
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
+            <div class="pull-right">
                 <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
                     <span class="fa fa-print"> </span>Print
                 </a>
@@ -20,6 +23,8 @@
                 </a>
             </div>
         </div>
+
+        <div class="row"></div>
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
             <div class="row">

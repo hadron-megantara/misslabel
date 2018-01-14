@@ -202,7 +202,8 @@ Route::middleware(['userAuth'])->group(function () {
 	// Report
 		Route::get('/report/sales-year', 'ReportController@salesYear')->name('report.salesYear');
 		Route::get('/report/sales-month', 'ReportController@salesMonth')->name('report.salesMonth');
-		Route::get('/report/turn-over', 'ReportController@turnOver')->name('report.turn-over');
+		Route::get('/report/turn-over-year', 'ReportController@turnOverYear')->name('report.turn-over-year');
+		Route::get('/report/turn-over-month', 'ReportController@turnOverMonth')->name('report.turn-over-month');
 		Route::get('/report/profit', 'ReportController@profit')->name('report.profit');
 		Route::get('/report/cash', 'ReportController@cash')->name('report.cash');
 		Route::get('/report/free-cash', 'ReportController@freeCash')->name('report.free-cash');

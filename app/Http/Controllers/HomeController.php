@@ -32,9 +32,13 @@ class HomeController extends Controller
         $stockStore = StoreStock::selectRaw('SUM(total_product) as total')->first();
         $stockStoreDetail = StoreStock::join('stores', 'store_stocks.store_id', '=', 'stores.id')->selectRaw('stores.name, SUM(store_stocks.total_product) as total')->groupBy('stores.name')->get();
 
-        $omset = StoreTransaction::selectRaw('SUM(final_price) as total')->whereMonth('date', '=', date('m'))->where('payment_type_id', '<>', '3')->first();
-        $expense = Expense::selectRaw('SUM(value) as total')->first();
-        $receivable = StoreTransaction::selectRaw('SUM(final_price) as total')->where('payment_type_id', '3')->first();
+        // $omset = StoreTransaction::selectRaw('SUM(final_price) as total')->whereMonth('date', '=', date('m'))->whereYear('date', '=', date('Y'))->where('payment_type_id', '<>', '3')->first();
+        $omset = StoreTransaction::selectRaw('SUM(final_price) as total')->whereYear('date', '=', '2017')->whereMonth('date', '=', date('m'))->where('payment_type_id', '<>', '3')->first();
+        // $expense = Expense::selectRaw('SUM(value) as total')->whereYear('date', '=', date('Y'))->whereMonth('date', '=', date('m'))->first();
+        $expense = Expense::selectRaw('SUM(value) as total')->whereYear('date', '=', '2017')->whereMonth('date', '=', date('m'))->first();
+        $debt = StoreTransaction::selectRaw('SUM(final_price) as total')->where('payment_type_id', '3')->whereYear('date', '=', '2017')->whereMonth('date', '=', date('m'))->first();
+        // $receivable = StoreTransaction::selectRaw('SUM(final_price) as total')->where('payment_type_id', '3')->whereYear('date', '=', date('Y'))->whereMonth('date', '=', date('m'))->first();
+        $receivable = StoreTransaction::selectRaw('SUM(final_price) as total')->where('payment_type_id', '3')->whereYear('date', '=', '2017')->whereMonth('date', '=', date('m'))->first();
         $profit = (int) $omset->total - (int) $expense->total;
 
         return view("home", array('user' => $user, 'expense' => $expense, 'stockWarehouse' => $stockWarehouse, 'stockStore' => $stockStore, 'stockStoreDetail' => $stockStoreDetail, 'omset' => $omset, 'receivable' => $receivable, 'profit' => $profit));

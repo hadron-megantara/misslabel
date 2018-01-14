@@ -6,10 +6,15 @@
     <div class="content">
         <div class="page-title">
             <h3>Pembelian Bahan</h3>
-            <div class="pull-right" style="margin-top: 5px">
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
+            <div class="pull-right">
                 <a href="#materialModalAdd" class="btn btn-success btnAddMaterial" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Pembelian</a>
             </div>
         </div>
+
+        <div class="row"></div>
 
         <div class="table-responsive">
         	<table id="materialTable" class="table-bordered">

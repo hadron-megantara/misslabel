@@ -6,22 +6,20 @@
     <div class="content">
         <div class="page-title">
             <h3>Report - Penjualan Tahunan</h3>
+        </div>
 
-            <div class="pull-right" style="margin-top: 5px">
-                <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
-                    <span class="fa fa-print"> </span>Print
-                </a>
+        <div class="col-md-12" style="margin-top: -15px;margin-bottom: 10px;padding-right: 0px;text-align: right;">
+            <a href="#materialModalPrint" class="btn btn-danger" data-toggle="modal">
+                <span class="fa fa-print"> </span>Print
+            </a>
 
-                <a href="#materialModalExport" class="btn btn-danger" data-toggle="modal">
-                    <span class="fa fa-cloud-download"> </span>Download
-                </a>
-            </div>
+            <a href="#materialModalExport" class="btn btn-danger" data-toggle="modal">
+                <span class="fa fa-cloud-download"> </span>Download
+            </a>
         </div>
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
         	<div class="col-md-3">
-	            <span style="font-weight: bold; margin-right: 10px">Filter Toko</span>
-
 	            <select id="searchMaterialBy" name="searchMaterialBy">
 	                @foreach($storeList as $storeList2)
 	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
@@ -31,8 +29,6 @@
 	        </div>
 
 	        <div class="col-md-3">
-	            <span style="font-weight: bold;">Filter Pembayaran</span>
-
 	            <select id="searchMaterialByPaymentType" name="searchMaterialByPaymentType">
 	                @foreach($paymentType as $paymentType2)
 	                    <option value="{{$paymentType2->id}}" @if($payment == $paymentType2->id) selected="" @endif>{{$paymentType2->name}}</option>
@@ -41,19 +37,8 @@
 	            </select>
 	        </div>
 
-	        <div class="col-md-3">
-	            {{-- <span style="font-weight: bold; margin-right: 10px">Filter Toko</span>
-
-	            <select id="searchMaterialBy" name="searchMaterialBy">
-	                @foreach($storeList as $storeList2)
-	                    <option value="{{$storeList2->id}}" @if($store == $storeList2->id) selected="" @endif>{{$storeList2->name}}</option>
-	                @endforeach
-	                <option value="" @if($store == 0) selected="" @endif >Semua Toko</option>
-	            </select> --}}
-	        </div>
-
             <div class="col-md-3">
-            	<button type="button" id="filterProcess" class="btn btn-primary" style="width: 100%;margin-top:15px"><span class="fa fa-search"> </span>Cari</button>
+            	<button type="button" id="filterProcess" class="btn btn-primary" style="width: 100%;"><span class="fa fa-search"> </span>Cari</button>
             </div>
         </div>
 
@@ -61,7 +46,7 @@
 
         <div class="row">
 	    	<div class="col-md-12">
-		    	<div id="chartExpense" style="height:300px;">
+		    	<div id="chartOmset" style="height:300px;">
 		    		
 		    	</div>
 		    </div>
@@ -71,38 +56,53 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		var month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-		var expenseValue = [670000000, 720000000, 650000000, 710000000, 800000000, 750000000, 680000000, 720000000, 760000000];
-		var income = [1000000000, 1300000000, 1250000000, 1400000000, 1800000000, 1350000000, 1400000000, 1430000000, 1480000000];
+		var year = [];
+		var omset = [];
+		@if(count($transactionDataArray) > 0)
+			@foreach($transactionDataArray as $transactionDataArray2)
+				year.push('{{$transactionDataArray2["year"]}}');
+				omset.push({{$transactionDataArray2["value"]}});
+			@endforeach
+		@endif
 
 		$(function () { 
-		    var myChart = Highcharts.chart('chartExpense', {
+		    var myChart = Highcharts.chart('chartOmset', {
 		        chart: {
 		            type: 'column'
 		        },
 		        title: {
-		            text: 'Penjualan'
+		            text: 'Omset Toko {{$storeName}}'
 		        },
 		        xAxis: {
 		        	title: {
-		                text: 'Tahun 2017'
+		                text: 'Tahun'
 		            },
-		            categories: month
+		            categories: year
 		        },
 		        yAxis: {
+		            tickInterval: 20,
+		            lineColor: '#FF0000',
+		            lineWidth: 1,
 		            title: {
 		                text: 'Dalam rupiah'
-		            }
+
+		            },
+		            plotLines: [{
+		                value: 0,
+		                width: 10,
+		                color: '#808080'
+		            }]
 		        },
 		        series: [{
-		            name: 'Pengeluaran',
-		            data: expenseValue,
-		        },{
 		            name: 'Omset',
-		            data: income,
+		            data: omset,
 		        }]
 		    });
 		});
+
+		$('#filterProcess').click(function(){
+            window.location = "{{ route('report.salesYear')}}" + '?store='+$("#searchMaterialBy").val()+'&payment='+$("#searchMaterialByPaymentType").val();
+        });
 
 	});
 </script>

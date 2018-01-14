@@ -6,10 +6,15 @@
     <div class="content">
         <div class="page-title">
             <h3>Penjual Bahan</h3>
-            <div class="pull-right" style="margin-top: 5px">
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
+            <div class="pull-right">
                 <a href="#materialSellerModalAdd" class="btn btn-success btnAddMaterialSeller" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Penjual Bahan</a>
             </div>
-        </div>`
+        </div>
+
+        <div class="row"></div>
 
         <div class="table-responsive">
         	<table id="materialSellerTable" class="table-bordered">

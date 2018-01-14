@@ -6,10 +6,15 @@
     <div class="content">
         <div class="page-title">
             <h3>Tipe Bahan</h3>
-            <div class="pull-right" style="margin-top: 5px">
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
+            <div class="pull-right">
                 <a href="#materialTypeModalAdd" class="btn btn-success btnAddMaterialType" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Tipe Bahan</a>
             </div>
         </div>
+
+        <div class="row"></div>
 
         <div class="table-responsive">
         	<table id="materialTypeTable" class="table-bordered">

@@ -5,7 +5,7 @@
 <div class="page-content">
     <div class="content">
         <div class="page-title">
-            <h3>Dashboard</h3>
+            <h3>Omset - Tahunan</h3>
         </div>
 
         <div class="row">

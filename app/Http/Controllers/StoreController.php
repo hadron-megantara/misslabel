@@ -253,10 +253,11 @@ class StoreController extends Controller
             } else{
                 $store = session('store');
             }
-        } else{
-            $firstStore = Store::first();
-            $store = $firstStore->id;
         }
+        // } else{
+        //     $firstStore = Store::first();
+        //     $store = $firstStore->id;
+        // }
 
         $payment = 0;
         if($request->has('payment') || session::has('payment')){
@@ -296,9 +297,9 @@ class StoreController extends Controller
             $dateTo = $request->dateTo;
         }
 
-        if($request->has('store') && $request->store != '' && $request->has('payment') && $request->payment != ''){
+        if($request->has('store') && $request->store != '' && $request->store != 0 && $request->has('payment') && $request->payment != ''){
             $transaction = StoreTransaction::join('payment_types', 'store_transactions.payment_type_id', '=', 'payment_types.id')->join('stores', 'store_transactions.store_id', '=', 'stores.id')->selectRaw('store_transactions.id, payment_types.name, store_transactions.final_price, store_transactions.description, store_transactions.file_path, stores.name as store_name, store_transactions.date')->where('store_transactions.store_id', $request->store)->where('store_transactions.payment_type_id', $request->payment)->orderBy('store_transactions.date', 'desc')->whereBetween('store_transactions.date', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
-        } else if($request->has('store') && $request->store != ''){
+        } else if($request->has('store') && $request->store != '' && $request->store != 0){
             $transaction = StoreTransaction::join('payment_types', 'store_transactions.payment_type_id', '=', 'payment_types.id')->join('stores', 'store_transactions.store_id', '=', 'stores.id')->selectRaw('store_transactions.id, payment_types.name, store_transactions.final_price, store_transactions.description, store_transactions.file_path, stores.name as store_name, store_transactions.date')->where('store_transactions.store_id', $request->store)->orderBy('store_transactions.date', 'desc')->whereBetween('store_transactions.date', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
         } else if($request->has('payment') && $request->payment != ''){
             $transaction = StoreTransaction::join('payment_types', 'store_transactions.payment_type_id', '=', 'payment_types.id')->join('stores', 'store_transactions.store_id', '=', 'stores.id')->selectRaw('store_transactions.id, payment_types.name, store_transactions.final_price, store_transactions.description, store_transactions.file_path, stores.name as store_name, store_transactions.date')->where('store_transactions.payment_type_id', $request->payment)->orderBy('store_transactions.date', 'desc')->whereBetween('store_transactions.date', [new Carbon($dateFrom), new Carbon($dateTo)])->get();

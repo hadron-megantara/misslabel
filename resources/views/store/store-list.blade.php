@@ -6,10 +6,15 @@
     <div class="content">
         <div class="page-title">
             <h3>Toko - List Toko</h3>
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionListModalAdd" class="btn btn-success btnAddConvectionList" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Toko</a>
             </div>
         </div>
+
+        <div class="row"></div>
 
         @if(session('success'))
             <div class="row"></div>

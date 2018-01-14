@@ -6,13 +6,18 @@
     <div class="content">
         <div class="page-title">
             <h3>Data Pelanggan</h3>
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#userModalAdd" class="btn btn-success btnAddCustomer" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Pelanggan</a>
             </div>
         </div>
 
+        <div class="row"></div>
+
         <div class="table-responsive">
-        	<table id="customerTable" class="table-bordered">
+        	<table id="customerTable" class="table-bordered" style="width: 100%">
         		<thead>
         			<tr>
         				<th>Nama Pelanggan</th>

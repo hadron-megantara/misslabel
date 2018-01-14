@@ -6,10 +6,15 @@
     <div class="content">
         <div class="page-title">
             <h3>Data Model Produk</h3>
+        </div>
+
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#modalAdd" class="btn btn-success btnAdd" data-toggle="modal"><span class="fa fa-plus"></span> Tambah Model</a>
             </div>
         </div>
+
+        <div class="row"></div>
 
         @if(session('success'))
             <div class="panel panel-success">

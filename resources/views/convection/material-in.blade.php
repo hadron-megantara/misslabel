@@ -6,13 +6,17 @@
     <div class="content">
         <div class="page-title">
             <h3>Konveksi - Bahan Masuk</h3>
+        </div>
 
+        <div class="col-md-12 pull-right" style="margin-bottom: 20px; padding-right: 0px">
             <div class="pull-right" style="margin-top: 5px">
                 <a href="#convectionModalExport" class="btn btn-danger" data-toggle="modal">
                     <span class="fa fa-cloud-download"> </span>Download
                 </a>
             </div>
         </div>
+
+        <div class="row"></div>
 
         <div class="col-md-12" style="margin-bottom: 15px;padding: 10px; background-color: #fff">
             <span style="font-weight: bold; margin-right: 10px">Filter Berdasar Konveksi</span>
