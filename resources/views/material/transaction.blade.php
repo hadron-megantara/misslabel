@@ -159,14 +159,14 @@
 
                             <div class="col-md-9">
                                 <div id="materialInputArea" class="inputArea">
-                                    
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <div class="col-md-12">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
@@ -242,7 +242,7 @@
                     <input id="materialId" type="hidden" class="form-control" name="materialId">
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="deleteForm"><span class="fa fa-trash"></span> Hapus</button>
@@ -289,7 +289,7 @@
                 { data: 'price', name: 'price', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         return 'Rp '+data;
-                    } 
+                    }
                 },
                 { data: 'date_purchase', name: 'date_purchase', render: function(data, type, full){
                         var year = data.substring(0,4);
@@ -303,7 +303,7 @@
                 },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
                         return '<div class="text-center"><a href="/material/transaction/download-note?id='+data+'" style="text-decoration: underline" target="_blank">download</a></div>';
-                    } 
+                    }
                 },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
                         var dataReturn = '<div class="text-center"><a class="btn btn-success editMaterialBtn" id="edit_'+data+'" href="" data-toggle="modal" title="Ubah Data"><span class="fa fa-pencil"></span></a></div><input type="hidden" id="hidden_datePurchase_'+data+'" value="'+full.date_purchase+'"><input type="hidden" id="hidden_seller_'+data+'" value="'+full.name+'"><input type="hidden" id="hidden_sellerId_'+data+'" value="'+full.seller_id+'"><input type="hidden" id="hidden_description_'+data+'" value="'+full.description+'"><input type="hidden" id="hidden_price_'+data+'" value="'+full.price+'"><input type="hidden" id="hidden_datePurchase_'+data+'" value="'+full.date_purchase+'">';
@@ -337,8 +337,8 @@
         });
 
         $("body").on("click", ".btnAddMaterial", function(e){
-            
-            
+
+
             $('#addForm').attr('action', "{{ route('material.transaction.addTransaction') }}");
             $('#materialId').val("");
 
@@ -369,7 +369,7 @@
                 $('#materialDatePurchase').val($('#hidden_datePurchase_'+id).val());
                 $('#materialSeller').val($('#hidden_sellerId_'+id).val());
                 $('#materialDescription').val($('#hidden_description_'+id).val());
-                
+
                 $("#materialTotalPriceHidden").val($('#hidden_price_'+id).val());
                 $("#materialTotalPrice").val($('#hidden_price_'+id).val());
 
@@ -399,7 +399,7 @@
                         $("#materialModalAdd").closest('.addMoreRegion').html('<button type="button" class="btn btn-danger pull-right deleteBtnAction" title="Hapus Bahan"><span class="fa fa-close deleteBtn"></span></button>');
 
                         addedContent = addedContent+"<div class='col-md-12 border-space' style='margin-top:-20px'><hr></div>";
-                        
+
                     }
 
                     addedContent = addedContent+"<div class='col-md-3'><select class='form-control materialName' name='materialName[]' required><option value=''>Pilih Bahan</option>@foreach($materialType as $materialType2)<option value='{{$materialType2->name}}' "+(value.material_type == '{{$materialType2->name}}' ? "selected=''" : "")  +" >{{$materialType2->name}}</option>@endforeach</select></div><div class='col-md-2' style='padding-right: 5px'><input type='text' class='form-control materialLength' required placeholder='Panjang bahan' value='"+tempLength+"'><input type='hidden' class='materialLengthHidden' name='materialLength[]' required></div><div class='col-md-1' style='padding-left: 0'><select name='materialLengthUnit[]' class='form-control materialLengthUnit'><option value='yard'>yard</option><option value='meter'>meter</option></select></div><div class='col-md-2' style='padding-right: 0'><select class='form-control materialColor' name='materialColor[]' required><option value=''>Pilih Warna</option>@foreach($color as $color3)<option value='{{$color3->id}}' "+(value.color == '{{$color3->name}}' ? "selected=''" : "")  +">{{$color3->name}}</option>@endforeach</select></div><div class='col-md-3' style='padding-right: 0'><input type='text' class='form-control number materialPrice' required placeholder='Masukkan Harga' value='"+tempMaterialPriceFormated+"'><input type='hidden' name='materialPrice[]' class='materialPriceHidden' value='"+tempMaterialPrice+"' required></div><div class='col-md-1 addMoreRegion' style='padding-right: 0'><button type='button' class='btn btn-success pull-right' id='addMore'><span class='fa fa-plus addBtn' title='Tambah Bahan'></span></button></div></div>";
@@ -418,7 +418,7 @@
                 spinner.stop();
                 $.unblockUI();
             });
-        }); 
+        });
 
         $("#materialTable").on("click", ".sendMaterialBtn", function(){
             var id = this.id;
@@ -501,7 +501,7 @@
 
                 totalPrice = parseInt(totalPrice) + parseInt(number2);
             });
-            
+
             $("#materialTotalPriceHidden").val(totalPrice);
             $("#materialTotalPrice").val(totalPrice);
 
