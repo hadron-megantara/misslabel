@@ -49,6 +49,7 @@
                         <label class="col-md-6">Total Barang Jadi</label>
                         <div class="col-md-6">
                             <input type="text" class="form-control" id="productTotal" value="0" />
+                            <input type="hidden" class="form-control" id="productTotalHidden" value="0" />
                         </div>
                     </div>
                 </div>
@@ -205,8 +206,17 @@
             countFund();
         });
 
+        $('#productTotal').priceFormat({
+            prefix: '',
+            centsLimit: 0,
+            thousandsSeparator: '.'
+        });
+
         $('#productTotal').keyup(function(){
-            productTotal = $(this).val();
+            var number = $(this).val().split('.').join("");
+            $('#productPriceKodiHidden').val(number);
+
+            productTotal = number;
 
             countFund();
         });
