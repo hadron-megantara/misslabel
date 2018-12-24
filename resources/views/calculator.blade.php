@@ -253,9 +253,13 @@
                 thousandsSeparator: '.'
             });
 
-            var productPricePcs = $('#productPricePcsHidden').val();
-
-            var profit = (parseInt(productPricePcs) - fundPerPcs) * value ;
+            if(isPcs == 1){
+                var productPricePcs = $('#productPricePcsHidden').val();
+                var profit = (parseInt(productPricePcs) - fundPerPcs) * value ;
+            } else{
+                var productPriceKodi = $('#productPriceKodiHidden').val();
+                var profit = (parseInt(productPriceKodi) - fundPerKodi) * value ;
+            }
 
             $('#profit').val(profit);
 
