@@ -56,7 +56,7 @@ table .btn{
 }
 
 .containerAutocomplete {
-    display: block; 
+    display: block;
     position:relative
 }
 
@@ -229,4 +229,9 @@ table.selectedItems tr td{
 
 .transaction-add-form .control-label{
   text-align: left;
+}
+
+input[type="text"].input-disabled{
+    background-color: #DDD;
+    color: #999;
 }

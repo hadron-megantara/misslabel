@@ -81,7 +81,7 @@
                     <div class="col-md-6">
                         <label class="col-md-6">Harga Jual Barang Kodian</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="productPriceKodi" value="0" />
+                            <input type="text" class="form-control input-disabled" id="productPriceKodi" value="0" />
                             <input type="hidden" class="form-control" id="productPriceKodiHidden" value="0" />
                         </div>
                     </div>
@@ -95,9 +95,9 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 text-center">
+                    {{-- <div class="col-md-6 text-center">
                         <button class="btn btn-primary form-control" style="width:80%">Hitung</button>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -107,6 +107,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
         var productTotal = 0;
+        var isPcs = 1;
 
         $('#materialPrice').priceFormat({
             prefix: 'Rp ',
@@ -186,6 +187,8 @@
             var number = $(this).val().split('.').join("");
             number = number.replace(/Rp /gi,'');
             $('#productPricePcsHidden').val(number);
+
+            countFund();
         });
 
         $('#productPriceKodi').priceFormat({
@@ -198,6 +201,8 @@
             var number = $(this).val().split('.').join("");
             number = number.replace(/Rp /gi,'');
             $('#productPriceKodiHidden').val(number);
+
+            countFund();
         });
 
         $('#productTotal').keyup(function(){
@@ -210,6 +215,18 @@
             prefix: 'Rp ',
             centsLimit: 0,
             thousandsSeparator: '.'
+        });
+
+        $('#productPricePcs').click(function(){
+            $(this).removeClass("input-disabled");
+            $("#productPriceKodi").addClass("input-disabled");
+            isPcs = 1;
+        });
+
+        $('#productPriceKodi').click(function(){
+            $(this).removeClass("input-disabled");
+            $("#productPricePcs").addClass("input-disabled");
+            isPcs = 0;
         });
 
         function countFund(){
@@ -231,6 +248,18 @@
             });
 
             $('#productModalKodi').priceFormat({
+                prefix: 'Rp ',
+                centsLimit: 0,
+                thousandsSeparator: '.'
+            });
+
+            var productPricePcs = $('#productPricePcsHidden').val();
+
+            var profit = (parseInt(productPricePcs) - fundPerPcs) * value ;
+
+            $('#profit').val(profit);
+
+            $('#profit').priceFormat({
                 prefix: 'Rp ',
                 centsLimit: 0,
                 thousandsSeparator: '.'
