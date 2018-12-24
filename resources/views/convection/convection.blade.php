@@ -103,7 +103,7 @@
                     </div>
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="addForm"><span class="fa fa-save"></span> Simpan</button>
@@ -180,7 +180,7 @@
                     </div>
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Simpan</button>
@@ -205,7 +205,7 @@
                     <input id="materialId" type="hidden" class="form-control" name="materialId">
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="deleteForm"><span class="fa fa-trash"></span> Hapus</button>
@@ -237,7 +237,7 @@
                 { data: 'price', name: 'price', render: function(data, type, full) {
                         data = data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         return 'Rp '+data;
-                    } 
+                    }
                 },
                 { data: 'date_purchase', name: 'date_purchase' },
                 { data: 'id', name: 'id', orderable: false, render: function(data, type, full) {
