@@ -67,13 +67,13 @@ class ConvectionController extends Controller
         }
 
         $convectionMaterialIn = MaterialIn::join('colors', 'convection_material_in.color_id', '=', 'colors.id')->selectRaw('convection_material_in.id, convection_material_in.material_type, colors.name as color, colors.id as color_id, SUM(convection_material_in.length) AS length, convection_material_in.convection_id')->groupBy('convection_material_in.id', 'convection_material_in.convection_id', 'convection_material_in.material_type', 'colors.name', 'colors.id')->orderBy('convection_material_in.material_type')->where('convection_material_in.status', $status)->where('convection_material_in.length', '<>', 0)->where('convection_material_in.convection_id', $request->convection)->get();
-        
+
         return Datatables::of($convectionMaterialIn)->make();
     }
 
     public function getMaterialInDetail(){
         $convectionMaterialIn = ConvectionMaterialIn::select(['id', 'material_type', 'length'])->orderBy('updated_at', 'desc');
-     
+
         return Datatables::of($convectionMaterialIn)->make();
     }
 
@@ -88,7 +88,7 @@ class ConvectionController extends Controller
 
     public function getConvectionList(){
         $convectionList = ConvectionList::select(['id', 'name', 'description'])->orderBy('updated_at', 'desc');
-     
+
         return Datatables::of($convectionList)->make();
     }
 
@@ -99,14 +99,14 @@ class ConvectionController extends Controller
         $convectionList->description = $request->convectionListDescription;
 
         $convectionList->save();
-        
+
 
         return redirect('/convection/list');
     }
 
     public function updateConvectionList(Request $request){
         $convectionList = ConvectionList::find($request->convectionListId);
-        
+
         $convectionList->name = $request->convectionListName;
         $convectionList->description = $request->convectionListDescription;
 
@@ -294,7 +294,7 @@ class ConvectionController extends Controller
                 $warehouseProduct->product_id = $explodedId[$j];
                 $warehouseProduct->save();
             }
-            
+
             return redirect('/convection/product')->with('success', 'Sukses mengirim Produk ke Gudang');
         }
     }
@@ -339,7 +339,7 @@ class ConvectionController extends Controller
         } else{
             $convectionProductIn = Product::join('product_details', 'products.product_detail_id', '=', 'product_details.id')->select(['products.id', 'product_details.name', 'products.material_type', 'products.color', 'products.length', 'product_details.description', 'products.total', 'products.unit'])->where('products.status', 2)->where('products.convection_id', $request->convection)->orderBy('products.updated_at', 'desc')->get();
         }
-        
+
         return Datatables::of($convectionProductIn)->make();
     }
 
@@ -434,7 +434,7 @@ class ConvectionController extends Controller
         } else{
             $note = ConvectionProduct::join('products', 'convection_products.product_id', '=', 'products.id')->join('product_details', 'products.product_detail_id', '=', 'product_details.id')->join('product_models', 'product_details.product_model_id', '=', 'product_models.id')->join('convection_lists', 'convection_products.convection_id', '=', 'convection_lists.id')->selectRaw('convection_products.date, convection_products.description, convection_products.id, convection_products.description, convection_products.price, convection_products.file_path, convection_lists.name as convection_name, product_models.name as model_name, products.material_type')->orderBy('convection_products.date', 'desc')->get();
         }
-        
+
         return Datatables::of($note)->make();
     }
 

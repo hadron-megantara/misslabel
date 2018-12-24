@@ -28,7 +28,7 @@ class CustomerController extends Controller
 
     public function getCustomer(){
         $customers = Customer::select(['name', 'phone', 'store', 'city', 'description', 'id'])->orderBy('updated_at', 'desc');
-     
+
         return Datatables::of($customers)->make();
     }
 
@@ -43,8 +43,8 @@ class CustomerController extends Controller
         $customer = new Customer;
 
         $customer->name = $request->customerName;
-        $customer->phone = $request->customerStore;
-        $customer->store = $request->customerPhone;
+        $customer->phone = $request->customerPhone;
+        $customer->store = $request->customerStore;
         $customer->city = $request->customerCity;
         $customer->description = $request->customerDescription;
 
@@ -85,7 +85,7 @@ class CustomerController extends Controller
     public function update(Request $request)
     {
         $customer = Customer::find($request->customerId);
-        
+
         $customer->name = $request->customerName;
         $customer->store = $request->customerStore;
         $customer->phone = $request->customerPhone;

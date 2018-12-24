@@ -16,13 +16,13 @@
                       </a>
                 </li>
               </ul>
-        
+
               <div class="text-center"></div>
               <a href="#" class="text-center">
                   <img src="/img/icon/logo.png" class="logo text-center text-center" alt="" data-src="/img/icon/logo.png" />
               </a>
           </div>
-      
+
           <div class="header-quick-nav">
               <div class="pull-left">
                   <ul class="nav quick-section">
@@ -54,7 +54,7 @@
                       </li>
                   </ul>
               </div>
-        
+
               <div class="pull-right" style="margin-top: 3px;margin-right: 20px">
                   <div class="chat-toggler dropdown" style="min-width: 110px">
                       <div class="profile-pic">
@@ -134,7 +134,7 @@
                           <li @if(\Request::is('report/attendance') || \Request::is('report/attendance/*')) class="active" @endif><a href="/report/attendance">Absensi</a></li>
                       </ul>
                   </li>
-                  
+
                 	<li @if(\Request::is('customer') || \Request::is('customer/*')) class="active" @endif>
                     	<a href="/customer">
                         	<i class="fa fa-users"></i>
@@ -218,15 +218,15 @@
                       </ul>
                   </li>
 
-                	<li class="">
+                	{{-- <li class="">
                     	<a href="#">
                         	<i class="fa fa-dollar"></i>
                         	<span class="title">Penjualan</span>
                     	</a>
-                	</li>
+                	</li> --}}
 
                   <li @if(\Request::is('expense/list') || \Request::is('expense/list/*')) class="active" @endif>
-                      <a href="/expense">
+                      <a href="/expense/list">
                           <i class="fa fa-money"></i>
                           <span class="title">Pengeluaran</span>
                       </a>
@@ -252,7 +252,7 @@
                       </ul>
                   </li>
 
-                  <li class="">
+                  {{-- <li class="">
                       <a href="javascript:;">
                           <i class="fa fa-users"></i>
                           <span class="title">Karyawan</span>
@@ -266,10 +266,10 @@
                           <li @if(\Request::is('employee/list') || \Request::is('employee/list/*')) class="active" @endif><a href="/employee/list">List Karyawan</a></li>
                           <li @if(\Request::is('employee/attendance') || \Request::is('employee/attendance/*')) class="active" @endif><a href="/employee/attendance">Absensi Karyawan</a></li>
                       </ul>
-                  </li>
+                  </li> --}}
         		</ul>
     		</div>
   	</div>
 @else
-    
+
 @endif

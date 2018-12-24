@@ -76,7 +76,7 @@ class MaterialController extends Controller
         } else{
             $material = Material::join('material_transactions', 'material_transactions.id', '=', 'materials.transaction_id')->join('colors', 'materials.color_id', '=', 'colors.id')->selectRaw('materials.id, materials.material_type, materials.length, materials.color, materials.price, materials.status, material_transactions.date_purchase, colors.name as color, colors.id as color_id')->orderBy('materials.updated_at', 'desc')->whereBetween('material_transactions.date_purchase', [new Carbon($dateFrom), new Carbon($dateTo)])->get();
         }
-     
+
         return Datatables::of($material)->make();
     }
 
@@ -100,7 +100,7 @@ class MaterialController extends Controller
 
     public function updateMaterial(Request $request){
         $material = Material::find($request->materialId);
-        
+
         $material->material_type = $request->materialName;
         $material->length = $request->materialLength;
         $material->color = $request->materialColor;
@@ -162,7 +162,7 @@ class MaterialController extends Controller
 
     public function getMaterialType(){
         $materialType = MaterialType::select(['id', 'name'])->orderBy('updated_at', 'desc');
-     
+
         return Datatables::of($materialType)->make();
     }
 
@@ -178,7 +178,7 @@ class MaterialController extends Controller
 
     public function updateMaterialType(Request $request){
         $materialType = MaterialType::find($request->materialTypeId);
-        
+
         $materialType->name = $request->materialTypeName;
 
         $materialType->save();
@@ -352,7 +352,7 @@ class MaterialController extends Controller
 
     public function getMaterialSeller(Request $request){
         $materialSeller = MaterialSeller::select(['id', 'name', 'description'])->orderBy('updated_at', 'desc')->get();
-     
+
         return Datatables::of($materialSeller)->make();
     }
 
@@ -369,7 +369,7 @@ class MaterialController extends Controller
 
     public function updateMaterialSeller(Request $request){
         $materialSeller = MaterialSeller::find($request->sellerId);
-        
+
         $materialSeller->name = $request->sellerName;
         $materialSeller->description = $request->sellerDescription;
 

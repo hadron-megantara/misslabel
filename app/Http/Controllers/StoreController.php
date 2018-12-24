@@ -81,7 +81,7 @@ class StoreController extends Controller
 
     public function getStoreList(){
         $storeList = Store::select(['id', 'name', 'description'])->orderBy('updated_at', 'desc');
-     
+
         return Datatables::of($storeList)->make();
     }
 
@@ -98,7 +98,7 @@ class StoreController extends Controller
 
     public function updateStoreList(Request $request){
         $storeList = Store::find($request->storeListId);
-        
+
         $storeList->name = $request->storeListName;
         $storeList->description = $request->storeListDescription;
 
@@ -343,14 +343,14 @@ class StoreController extends Controller
             $storeStock->total_product = (int) $storeStock->total_product - (int) $request->storeStockTotal[$i];
             $storeStock->save();
 
-            $storeStockTo = StoreStock::where('store_id', $request->storeTo)->where('product_detail_id', $storeStock->product_detail_id)->where('material_type', $storeStock->material_type)->where('color', $storeStock->color)->first();
+            $storeStockTo = StoreStock::where('store_id', $request->storeTo)->where('product_detail_id', $storeStock->product_detail_id)->where('material_type', $storeStock->material_type)->where('color_id', $storeStock->color_id)->first();
 
             if($storeStockTo == null){
                 $storeStockSave = new StoreStock;
                 $storeStockSave->store_id = $request->storeTo;
-                $storeStockSave->product_detail_id = $storeStockTo->product_detail_id;
-                $storeStockSave->material_type = $storeStockTo->material_type;
-                $storeStockSave->color = $storeStockTo->color;
+                $storeStockSave->product_detail_id = $storeStock->product_detail_id;
+                $storeStockSave->material_type = $storeStock->material_type;
+                $storeStockSave->color_id = $storeStock->color_id;
                 $storeStockSave->total_product = $request->storeStockTotal[$i];
                 $storeStockSave->save();
             } else{
@@ -401,7 +401,7 @@ class StoreController extends Controller
 
     public function getTransferStockHistory(Request $request){
         $stockHistory = StoreTransfer::join('stores as store_from', 'store_transfers.store_from_id', '=', 'store_from.id')->join('stores as store_to', 'store_transfers.store_to_id', '=', 'store_to.id')->selectRaw('store_from.name as stock_from, store_to.name as stock_to, store_transfers.date, store_transfers.description')->orderBy('store_transfers.updated_at', 'desc')->get();
-        
+
         return Datatables::of($stockHistory)->make();
     }
 }

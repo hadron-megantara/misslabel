@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Tutup</button>
             </div>
@@ -149,7 +149,7 @@
 
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="addForm"><span class="fa fa-save"></span> Simpan</button>
@@ -214,7 +214,7 @@
 
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="editForm"><span class="fa fa-save"></span> Simpan</button>
@@ -239,7 +239,7 @@
                     <input id="customerId" type="hidden" class="form-control" name="customerId">
                 </form>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span> Batal</button>
                 <button type="submit" class="btn btn-success" form="deleteForm"><span class="fa fa-trash"></span> Hapus</button>
