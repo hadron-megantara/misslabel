@@ -225,6 +225,13 @@
                     	</a>
                 	</li> --}}
 
+                    <li class="">
+                    	<a href="/calculator">
+                        	<i class="fa fa-calculator"></i>
+                        	<span class="title">Kalkulator</span>
+                    	</a>
+                	</li>
+
                   <li @if(\Request::is('expense/list') || \Request::is('expense/list/*')) class="active" @endif>
                       <a href="/expense/list">
                           <i class="fa fa-money"></i>

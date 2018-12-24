@@ -56,7 +56,7 @@
 
 	    			<div class="info-box-content">
 		              	<span class="info-box-text">Hutang</span>
-		              	<span class="info-box-number">Rp 250.000.000</span>
+		              	<span class="info-box-number">Rp 0,00</span>
 		            </div>
 	    		</div>
 	    	</div>
@@ -77,7 +77,7 @@
 	    	<div class="col-md-4 col-sm-6 col-xs-12">
 	    		<div class="info-box">
 	    			<span class="info-box-icon bg-yellow">
-	    				<span class="fa fa-google "></span>
+	    				<span class="fa fa-home "></span>
 	    			</span>
 
 	    			<div class="info-box-content">
@@ -123,7 +123,7 @@
 
 	    	<div class="col-md-12">
 		    	<div id="chartExpense" style="height:300px;">
-		    		
+
 		    	</div>
 		    </div>
 
@@ -141,7 +141,7 @@
 		var omset = [1000000000, 1300000000, 1250000000, 1400000000, 1800000000, 1350000000, 1400000000, 1430000000, 1480000000, 1520000000, 1550000000];
 		var profit = [200000000, 250000000, 300000000, 350000000, 420000000, 470000000, 480000000, 490000000, 530000000, 550000000, 590000000];
 
-		$(function () { 
+		$(function () {
 		    var myChart = Highcharts.chart('chartExpense', {
 		        chart: {
 		            type: 'column'

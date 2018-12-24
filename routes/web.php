@@ -212,4 +212,7 @@ Route::middleware(['userAuth'])->group(function () {
 		Route::get('/report/expense', 'ReportController@expense')->name('report.expense');
 	// End of Report
 
+
+	Route::get('/calculator', 'CalculatorController@index')->name('calculator.index');
+
 });
